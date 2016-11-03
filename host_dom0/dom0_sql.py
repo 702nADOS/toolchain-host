@@ -23,6 +23,7 @@ def xml2sql(xml_file=script_dir+'log.xml', sql_file=script_dir+'dom0.db'):
 	(
 	id INT NOT NULL PRIMARY KEY,
 	name STRING,
+	execution_time INT,
 	critical_time INT,
 	priority INT,
 	period INT,
@@ -38,10 +39,10 @@ def xml2sql(xml_file=script_dir+'log.xml', sql_file=script_dir+'dom0.db'):
 		if a['id'] == '0':
 			name = 'task-manager'
 		else:
-			name = "%.2d.%s" % (int(a['id']), a['binary']);
-		task_inserts.append((a['id'], name, a['critical-time'], a['priority'], a['period'], a['quota'], a['binary']))
+			name = "%s.%s" % (int(a['id']), a['binary']);
+		task_inserts.append((a['id'], name, a['execution-time'], a['critical-time'], a['priority'], a['period'], a['quota'], a['binary']))
 
-	c.executemany('''INSERT INTO tasks VALUES (?,?,?,?,?,?,?)''', task_inserts)
+	c.executemany('''INSERT INTO tasks VALUES (?,?,?,?,?,?,?,?)''', task_inserts)
 
 
 	# Create and fill event table.
@@ -78,18 +79,6 @@ def xml2sql(xml_file=script_dir+'log.xml', sql_file=script_dir+'dom0.db'):
 		FOREIGN KEY (task_id) REFERENCES tasks(id),
 		FOREIGN KEY (event_id) REFERENCES events(id)
 	)''')
-
-	snapshot_inserts = []
-	i = 0
-	for event in events:
-		for task in event:
-			a = task.attrib
-			if a['managed'] == 'yes' and a['state'] != 'DEAD':
-				am = task.find('managed-task').attrib
-				snapshot_inserts.append((am['id'], i, a['execution-time'], am['quota'], am['used'], am['iteration']))
-		i += 1
-
-	c.executemany('''INSERT INTO snapshots VALUES (?,?,?,?,?,?)''', snapshot_inserts)
 
 	conn.commit()
 	conn.close()

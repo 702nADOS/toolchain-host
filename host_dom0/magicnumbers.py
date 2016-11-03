@@ -18,3 +18,6 @@ STOP = 0x514DE6
 
 # Request profiling info as xml.
 GET_PROFILE = 0x159D1
+
+# Request live info as xml
+GET_LIVE = 0x159D2

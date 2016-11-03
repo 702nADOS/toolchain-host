@@ -4,16 +4,17 @@ import struct
 import magicnumbers
 import os
 import re
+import subprocess
 
 script_dir = os.path.dirname(os.path.realpath(__file__)) + '/'
 
 class Dom0_session:
 	"""Manager for a connection to the dom0 server."""
-	def __init__(self, host='192.168.0.14', port=3001):
+	def __init__(self, host='192.168.217.5', port=3001):
 		"""Initialize connection."""
 		self.connect(host, port)
 
-	def connect(self, host='192.168.0.14', port=3001):
+	def connect(self, host='192.168.217.5', port=3001):
 		"""Connect to the Genode dom0 server."""
 		self.conn = socket.create_connection((host, port))
 		print('Connected.')
@@ -96,6 +97,19 @@ class Dom0_session:
 		file = open(log_file, 'w')
 		file.write(xml.decode('utf-8')[:-1])
 		print('Profiling data of size {} saved to {}'.format(size, log_file))
+
+	def live(self):
+		"""Get profiling information about all running tasks."""
+		meta = struct.pack('I', magicnumbers.GET_LIVE)
+		self.conn.send(meta)
+
+		size = int.from_bytes(self.conn.recv(4), 'little')
+		xml = b''
+		while len(xml) < size:
+			xml += self.conn.recv(size)
+		subprocess.call('clear', shell=True)
+		print(xml.decode('utf-8')[:-1])
+
 
 	def close(self):
 		"""Close connection."""
