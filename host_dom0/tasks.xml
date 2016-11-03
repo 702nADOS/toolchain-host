@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Hier kommen die Tasks-->
+<taskset xmlns="http://www.tmsxmlns.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.tmsxmlns.com taskset.xsd">
+
+  <periodictask>
+    <id>2</id>
+    <executiontime>4238</executiontime>
+    <criticaltime>4238</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>32768</priority>
+    <period>5673</period>
+    <offset>0</offset>
+    <quota>512K</quota>
+    <pkg>hey</pkg>
+    <config>
+      <arg1>126546</arg1>
+    </config>
+  </periodictask>
+
+
+  <periodictask>
+    <id>3</id>
+    <executiontime>0</executiontime>
+    <criticaltime>0</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>16384</priority>
+    <period>3796</period>
+    <offset>0</offset>
+    <quota>8M</quota>
+    <pkg>tumatmul</pkg>
+    <config>
+      <arg1>148276</arg1>
+    </config>
+  </periodictask>
+
+</taskset>
