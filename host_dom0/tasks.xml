@@ -4,17 +4,17 @@
 
   <periodictask>
     <id>2</id>
-    <executiontime>4238</executiontime>
-    <criticaltime>4238</criticaltime>
+    <executiontime>999999999999</executiontime>
+    <criticaltime>0</criticaltime>
     <ucfirmrt/>
     <uawmean>
       <size>10</size>
     </uawmean>
     <priority>32768</priority>
-    <period>5673</period>
+    <period>0</period>
     <offset>0</offset>
     <quota>512K</quota>
-    <pkg>hey</pkg>
+    <pkg>test_simple</pkg>
     <config>
       <arg1>126546</arg1>
     </config>
@@ -23,14 +23,14 @@
 
   <periodictask>
     <id>3</id>
-    <executiontime>0</executiontime>
+    <executiontime>9999999999</executiontime>
     <criticaltime>0</criticaltime>
     <ucfirmrt/>
     <uawmean>
       <size>10</size>
     </uawmean>
     <priority>16384</priority>
-    <period>3796</period>
+    <period>0</period>
     <offset>0</offset>
     <quota>8M</quota>
     <pkg>tumatmul</pkg>

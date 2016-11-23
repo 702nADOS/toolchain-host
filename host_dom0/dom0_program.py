@@ -4,19 +4,21 @@ from dom0_client import *
 from dom0_sql import *
 import time
 
-session = Dom0_session('192.168.217.5', 3001)
+session = Dom0_session('192.168.217.21', 3001)
 session.read_tasks(script_dir + 'tasks.xml')
 session.send_descs()
 session.send_bins()
 session.start()
 
-#print('Waiting for 10 seconds...')
-#time.sleep(10)
+print('Waiting for 10 seconds...')
+i=0
+while i<1000:
+	session.live()
+	time.sleep(0.01)
 
-#session.stop()
+session.stop()
 
-#time.sleep(1)
-while True:
+while TRUE:
 	session.live()
 	time.sleep(0.01)
 
