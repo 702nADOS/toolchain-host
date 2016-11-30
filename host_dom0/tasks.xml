@@ -14,46 +14,9 @@
     <period>0</period>
     <offset>0</offset>
     <quota>1M</quota>
-    <pkg>test_simple</pkg>
+    <pkg>fp-edf-test</pkg>
     <config>
       <arg1>126546</arg1>
-    </config>
-  </periodictask>
-
-
-  <periodictask>
-    <id>3</id>
-    <executiontime>9999999999</executiontime>
-    <criticaltime>0</criticaltime>
-    <ucfirmrt/>
-    <uawmean>
-      <size>10</size>
-    </uawmean>
-    <priority>16384</priority>
-    <period>0</period>
-    <offset>0</offset>
-    <quota>1M</quota>
-    <pkg>servo_control</pkg>
-    <config>
-      <arg1>148276</arg1>
-    </config>
-  </periodictask>
-
-  <periodictask>
-    <id>4</id>
-    <executiontime>9999999999</executiontime>
-    <criticaltime>0</criticaltime>
-    <ucfirmrt/>
-    <uawmean>
-      <size>10</size>
-    </uawmean>
-    <priority>16384</priority>
-    <period>0</period>
-    <offset>0</offset>
-    <quota>2M</quota>
-    <pkg>usb_terminal</pkg>
-    <config>
-      <arg1>148276</arg1>
     </config>
   </periodictask>
 
