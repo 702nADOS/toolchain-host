@@ -14,7 +14,7 @@
     <period>0</period>
     <offset>0</offset>
     <quota>1M</quota>
-    <pkg>fp-edf-test</pkg>
+    <pkg>idle</pkg>
     <config>
       <arg1>126546</arg1>
     </config>
