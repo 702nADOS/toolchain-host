@@ -24,11 +24,7 @@ def xml2sql(xml_file=script_dir+'log.xml', sql_file=script_dir+'dom0.db'):
 	id INT NOT NULL PRIMARY KEY,
 	name STRING,
 	execution_time INT,
-	critical_time INT,
-	priority INT,
-	period INT,
-	quota INT,
-	binary VARCHAR
+	priority INT
 	)''')
 
 	tasks = root.find('task-descriptions')
@@ -37,48 +33,48 @@ def xml2sql(xml_file=script_dir+'log.xml', sql_file=script_dir+'dom0.db'):
 		a = task.attrib
 		# see Task::_make_name()
 		if a['id'] == '0':
+			continue # TODO: handle separately 
 			name = 'task-manager'
 		else:
-			name = "%s.%s" % (int(a['id']), a['binary']);
-		task_inserts.append((a['id'], name, a['execution-time'], a['critical-time'], a['priority'], a['period'], a['quota'], a['binary']))
+			name = "%s" % (int(a['id']));
+		task_inserts.append((a['id'], name, a['execution-time'], a['priority']))
 
-	c.executemany('''INSERT INTO tasks VALUES (?,?,?,?,?,?,?,?)''', task_inserts)
+	c.executemany('''INSERT INTO tasks VALUES (?,?,?,?)''', task_inserts)
 
 
 	# Create and fill event table.
-	c.execute('''CREATE TABLE events
-	(
-		id INT NOT NULL PRIMARY KEY,
-		time_stamp INT,
-		type VARCHAR,
-		task_id INT,
-		FOREIGN KEY (task_id) REFERENCES tasks(id)
-	)''')
+	#c.execute('''CREATE TABLE events
+	#(
+	#	id INT NOT NULL PRIMARY KEY,
+	#	time_stamp INT,
+	#	type VARCHAR,
+	#	task_id INT,
+	#	FOREIGN KEY (task_id) REFERENCES tasks(id)
+	#)''')
 
-	events = root.find('events')
-	event_inserts = []
-	i = 0
-	for event in events:
-			a = event.attrib
-			id = a['task-id'] if int(a['task-id']) >= 0 else ''
-			event_inserts.append((i, a['time-stamp'], a['type'], id))
-			i += 1
-
-	c.executemany('''INSERT INTO events VALUES (?,?,?,?)''', event_inserts)
+	#events = root.find('events')
+	#event_inserts = []
+	#i = 0
+	#for event in events:
+	#		a = event.attrib
+	#		id = a['task-id'] if int(a['task-id']) >= 0 else ''
+	#		event_inserts.append((i, a['time-stamp'], a['type'], id))
+	#		i += 1
+	#
+	#c.executemany('''INSERT INTO events VALUES (?,?,?,?)''', event_inserts)
 
 
 	# Create and fill managed task tables (performance snapshots).
-	c.execute('''CREATE TABLE snapshots
-	(
-		task_id INT NOT NULL,
-		event_id INT NOT NULL,
-		execution_time INT NOT NULL,
-		quota INT NOT NULL,
-		used INT NOT NULL,
-		iteration INT NOT NULL,
-		FOREIGN KEY (task_id) REFERENCES tasks(id),
-		FOREIGN KEY (event_id) REFERENCES events(id)
-	)''')
+	#c.execute('''CREATE TABLE snapshots
+	#(
+	#	task_id INT NOT NULL,
+	#	event_id INT NOT NULL,
+	#	execution_time INT NOT NULL,
+	#	quota INT NOT NULL,
+	#	used INT NOT NULL,
+	#	iteration INT NOT NULL,
+	#	FOREIGN KEY (task_id) REFERENCES tasks(id)
+	#)''')
 
 	conn.commit()
 	conn.close()

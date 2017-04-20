@@ -98,7 +98,7 @@ class Dom0_session:
 		file.write(xml.decode('utf-8')[:-1])
 		print('Profiling data of size {} saved to {}'.format(size, log_file))
 
-	def live(self):
+	def live(self, log_file=script_dir+'log.xml'):
 		"""Get profiling information about all running tasks."""
 		meta = struct.pack('I', magicnumbers.GET_LIVE)
 		self.conn.send(meta)
@@ -107,8 +107,11 @@ class Dom0_session:
 		xml = b''
 		while len(xml) < size:
 			xml += self.conn.recv(size)
-		subprocess.call('clear', shell=True)
-		print(xml.decode('utf-8')[:-1])
+		file = open(log_file, 'w')
+		file.write(xml.decode('utf-8')[:-1])
+		#subprocess.call('clear', shell=True)
+		#print(xml.decode('utf-8')[:-1])
+		print('Live data of size {} saved to {}'.format(size, log_file))
 
 
 	def close(self):
