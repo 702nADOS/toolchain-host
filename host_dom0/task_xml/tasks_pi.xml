@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Hier kommen die Tasks-->
+<taskset xmlns="http://www.tmsxmlns.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.tmsxmlns.com taskset.xsd">
+
+  <periodictask>
+    <id>2</id>
+    <executiontime>999999999999</executiontime>
+    <criticaltime>0</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>32768</priority>
+    <period>10000</period>
+    <offset>0</offset>
+    <quota>10M</quota>
+    <pkg>pi</pkg>
+    <config>
+      <arg1>126546</arg1>
+    </config>
+  </periodictask>
+
+
+</taskset>
