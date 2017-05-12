@@ -1,7 +1,6 @@
 import socket
 import code
 import struct
-import magicnumbers
 import os
 import re
 import subprocess
@@ -9,6 +8,15 @@ import subprocess
 script_dir = os.path.dirname(os.path.realpath(__file__)) + '/'
 
 class Dom0_session:
+	SEND_DESCS = 0xDE5 # Packet contains task descriptions as XML. uint32_t after tag indicates size in bytes.
+	CLEAR = 0xDE6 # Clear and stop all tasks currently managed on the server.
+	SEND_BINARIES = 0xDE5F11E # Multiple binaries are to be sent. uint32_t after tag indicates number of binaries. Each binary packet contains another leading uint32_t indicating binary size.
+	GO_SEND = 0x90 # Binary received, send next one.
+	START = 0x514DE5 # Start queued tasks.
+	STOP = 0x514DE6 # Stop all tasks.
+	GET_PROFILE = 0x159D1 # Request profiling info as xml.
+	GET_LIVE = 0x159D2 # Request live info as xml
+	
 	"""Manager for a connection to the dom0 server."""
 	def __init__(self, host='192.168.217.20', port=3001):
 		"""Initialize connection."""
@@ -35,21 +43,21 @@ class Dom0_session:
 
 	def send_descs(self):
 		"""Send task descriptions to the dom0 server."""
-		meta = struct.pack('II', magicnumbers.SEND_DESCS, len(self.tasks))
+		meta = struct.pack('II', self.SEND_DESCS, len(self.tasks))
 		print('Sending tasks description.')
 		self.conn.send(meta)
 		self.conn.send(self.tasks)
 
 	def send_bins(self):
 		"""Send binary files to the dom0 server."""
-		meta = struct.pack('II', magicnumbers.SEND_BINARIES, len(self.binaries))
+		meta = struct.pack('II', self.SEND_BINARIES, len(self.binaries))
 		print('Sending {} binar{}.'.format(len(self.binaries), 'y' if len(self.binaries) == 1 else 'ies'))
 		self.conn.send(meta)
 
 		for name in self.binaries:
 			# Wait for 'go' message.
 			msg = int.from_bytes(self.conn.recv(4), 'little')
-			if msg != magicnumbers.GO_SEND:
+			if msg != self.GO_SEND:
 				print('Invalid answer received, aborting: {}'.format(msg))
 				break
 
@@ -63,7 +71,7 @@ class Dom0_session:
 	def start(self):
 		"""Send message to start the tasks on the server."""
 		print('Starting tasks on server.')
-		meta = struct.pack('I', magicnumbers.START)
+		meta = struct.pack('I', self.START)
 		self.conn.send(meta)
 
 	def start_ex(self):
@@ -75,19 +83,19 @@ class Dom0_session:
 	def stop(self):
 		"""Send message to kill all tasks."""
 		print('Stopping tasks on server.')
-		meta = struct.pack('I', magicnumbers.STOP)
+		meta = struct.pack('I', self.STOP)
 		self.conn.send(meta)
 
 	def clear(self):
 		"""Send command to stop all tasks and clear the current task set."""
 		print('Resetting all tasks on server.')
-		meta = struct.pack('I', magicnumbers.CLEAR)
+		meta = struct.pack('I', self.CLEAR)
 		self.conn.send(meta)
 
 	def profile(self, log_file=script_dir+'log.xml'):
 		"""Get profiling information about all running tasks."""
 		print('Requesting profile data.')
-		meta = struct.pack('I', magicnumbers.GET_PROFILE)
+		meta = struct.pack('I', self.GET_PROFILE)
 		self.conn.send(meta)
 
 		size = int.from_bytes(self.conn.recv(4), 'little')
@@ -98,17 +106,20 @@ class Dom0_session:
 		file.write(xml.decode('utf-8')[:-1])
 		print('Profiling data of size {} saved to {}'.format(size, log_file))
 
-	def live(self):
+	def live(self, log_file=script_dir+'log.xml'):
 		"""Get profiling information about all running tasks."""
-		meta = struct.pack('I', magicnumbers.GET_LIVE)
+		meta = struct.pack('I', self.GET_LIVE)
 		self.conn.send(meta)
 
 		size = int.from_bytes(self.conn.recv(4), 'little')
 		xml = b''
 		while len(xml) < size:
 			xml += self.conn.recv(size)
-		subprocess.call('clear', shell=True)
-		print(xml.decode('utf-8')[:-1])
+		file = open(log_file, 'w')
+		file.write(xml.decode('utf-8')[:-1])
+		#subprocess.call('clear', shell=True)
+		#print(xml.decode('utf-8')[:-1])
+		print('Live data of size {} saved to {}'.format(size, log_file))
 
 
 	def close(self):
