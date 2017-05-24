@@ -62,8 +62,8 @@ class Dom0_session:
 				break
 
 			print('Sending {}.'.format(name))
-			file = open(script_dir + name, 'rb').read()
-			size = os.stat(script_dir + name).st_size
+			file = open(script_dir+"bin/" + name, 'rb').read()
+			size = os.stat(script_dir +"bin/"+ name).st_size
 			meta = struct.pack('15scI', name.encode('ascii'), b'\0', size)
 			self.conn.send(meta)
 			self.conn.send(file)
