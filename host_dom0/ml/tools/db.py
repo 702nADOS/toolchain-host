@@ -127,7 +127,7 @@ class db:
         
         return data
         
-    def read_input(self):
+    def read_task_input(self):
         self.check_file()
         if(not(os.path.isfile(self.filename))):
             raise Exception("Cannot reach file!")
@@ -144,7 +144,7 @@ class db:
         
         command += self.attr[len(self.attr) - 2] + " FROM " + self.table_name
         
-        self.sql_exec(c, command, True)
+        self.sql_exec(c, command, False)
             
         start = time.time()
         data = c.fetchall()
@@ -158,7 +158,7 @@ class db:
         return data
     
     
-    def read_output(self):
+    def read_deadline_reached(self):
         self.check_file()
         if(not(os.path.isfile(self.filename))):
             raise Exception("Cannot reach file!")
@@ -175,11 +175,65 @@ class db:
         start = time.time()
         data = c.fetchall()
         end = time.time()
-        
 
         conn.commit()
         conn.close()
         self.output("Reading done! Time needed: " + str(end - start))
         
         return data
+    
+    def append(self, tmp_tuple):
+        self.check_file()
+        
+        if(not(os.path.isfile(self.filename))):
+            self.output("Database do not exists. Creating...")
+            
+            # establish db connection
+            conn = sqlite3.connect(self.filename)
+            c = conn.cursor()
+            
+            # rdy for commands
+            command = """CREATE TABLE """ + self.table_name + """
+                         ("""
+            for i in range(len(self.attr) - 1):
+                command += self.attr[i] + " " + self.attr_type[i] + ","
+                
+            command += self.attr[len(self.attr) - 1] + " " + self.attr_type[len(self.attr) - 1] + ")"
+                
+            
+            self.sql_exec(c, command, False)
+            
+        else:
+            # establish db connection
+            conn = sqlite3.connect(self.filename)
+            c = conn.cursor() 
+        
+
+        self.output("Append data to database " + self.filename)
+    
+        
+        start = time.time()
+        
+        command = "INSERT INTO " + self.table_name + "('"
+        for i in range(len(self.attr) - 1):
+            command += self.attr[i] + "', '"
+        
+        command += self.attr[len(self.attr) - 1] + "')VALUES ("
+        for i in range(len(self.attr) - 1):
+            command += "?, "
+            
+        command += "?)"
+        
+        
+        c.executemany(command, tmp_tuple)
+
+        end = time.time()
+        conn.commit()
+        
+        self.output("Done! Time needed: " + str(end - start))
+        
+        self.output("Close connection to database")
+        conn.commit()
+        conn.close()
+        self.output("Append data done!")
     

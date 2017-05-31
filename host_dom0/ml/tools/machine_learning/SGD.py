@@ -32,16 +32,7 @@ class SGD(data_holder):
             average=True
         )
         
-        # split data
-        input_set1 = data_holder.input_2dvector[:len(data_holder.input_2dvector) / 2]
-        input_set2 = data_holder.input_2dvector[len(data_holder.input_2dvector) / 2:]
-        
-        output_set1 = data_holder.output_1dvector[:len(data_holder.output_1dvector) / 2]
-        output_set2 = data_holder.output_1dvector[len(data_holder.output_1dvector) / 2:]
-        
-        
-        self.ml_algo.partial_fit(input_set1, output_set1, np.unique(output_set1))
-        self.ml_algo.partial_fit(input_set2, output_set2)
+        self.fit()
         
         indv_end = time.time()
         

@@ -50,4 +50,5 @@ __pycache__
 /dom0_client/dom0.db
 /host_dom0/ml/logfiles
 *.pyc
-
+host_dom0/task_xml/task*
+host_dom0/task_xml/log_task*

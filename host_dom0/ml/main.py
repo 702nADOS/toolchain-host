@@ -1,7 +1,5 @@
-import random
-import time
-import os.path, sys
-from tools.db import db
+from ml import ml
+import os
 from tools.machine_learning.SGD import SGD
 from tools.machine_learning.SVC_dummy import SVC_dummy
 from tools.machine_learning.SVC_linear import SVC_linear
@@ -17,126 +15,78 @@ from tools.machine_learning.Pas_agg_class import Pas_agg_class
 from tools.machine_learning.KNeighborsClassifier import KNeighborsClassifier
 from tools.machine_learning.Pipe_LinearSVC_KBest import Pipe_LinearSVC_KBest
 
-# from tools import machinelearning as ml
-def output(msg):
-    for line in msg.splitlines():
-        print "Main: " + line
-        
-        
-def check_db_data(tmp_tuple, db_data):
-    if(len(tmp_tuple) != len(db_data)):
-        output("Length not equal!\nGenerated data length " + str(len(tmp_tuple)) + "\nDB data " + str(len(db_data)))
-        raise Exception("Length not equal!")
-        return
-        
-    if(len(tmp_tuple) == 0):
-        raise Exception("Tuple list empty!")
-        return
-    
-    if(len(db_data) == 0):
-        raise Exception("DB list empty!")
-        return
-    
-    for i in range(len(tmp_tuple)):
-        tmp = tmp_tuple[i]
-        for j in range(len(tmp)):
-            if(db_output[i][j] != tmp[j]):
-                output("Mismatch! \n DB:" + str(db_output[i][j]) + "\n but should be " + str(tmp[j]) + "\n")
-            
-    output("Lists are equivalent")
-    
-    
-#
-# Start of main program
-#                
 
-my_db = db("test_db.db",
-           ["Period1", "Period2", "Deadline_Reached"],
-           ["int", "int", "bool"])
-# ["ID","Priority","Period","ID2","Deadline_Reached"],
-# ["int", "int", "int", "int", "bool"])
+print "Welcome to main"
+#Generate machine learning database
+ml = ml("ml_db.db")
 
 
-# total number of sets
-num_sets1 = 30
-# num_sets2 = 50
-num_trainingsets = num_sets1  # + num_sets2
-data_per_set = len(my_db.attr)
+files = []
+#pattern for input and output files
+input_file_pattern="../task_xml/task"
+output_file_pattern="../task_xml/log_task"
+
+counter=0
+#generate tubles of input and output files
+while (os.path.isfile(input_file_pattern+str(counter)+".xml") and os.path.isfile(output_file_pattern+str(counter)+".xml")):
+    tmp_tuple = (input_file_pattern+str(counter)+".xml", output_file_pattern+str(counter)+".xml")
+    files.append( tmp_tuple )
+    counter+=1
+
+#save all input and output files to database
+ml.save_into_db(files)
 
 
-tmp_tuple = []
 
-start = time.time()
-
-
-# change to 2 for more test data
-num_tests = 1
-
-# fill tuple data
-for i in range(int(num_sets1 * 0.5 * num_tests)):
-    for j in range(int(num_sets1 * 0.5 * num_tests)):
-        period1 = 200 + i * 20 / num_tests + int(random.random() * 50)
-        period2 = 240 + j * 20 / num_tests + int(random.random() * 50) 
-        
-        tmp_tuple.append((period1, period2, period1 * i * period1 + period2 * period2 * j < 2500000.0 * num_tests + random.random() * 500000))
-        # tmp_tuple.append((period1, period2, period1 + period2  <  750.0 * num_tests + random.random() * 10))
-
-end = time.time()
-output("Test data generated! Total number: "+str(num_sets1*num_sets1)+" Time needed: " + str(end - start))
-    
+print "\n###########"
+print "Train data"
+print "###########"
+#train the database from the written db
+ml.read_from_db()
 
 
-# Write tmp_data to db
-output("Write tmp data to database!")
-my_db.write(tmp_tuple)
-
-db_output = []
-
-# Read values from db
-output("Read data from database!")
-# db_output = my_db.read()
-
-# check_db_data(tmp_tuple, db_output)
-
-
-# Machine Learning and output
-
-# Get data from database 
-output_data = my_db.read_output()
-input_data = my_db.read_input()
-
-output("Create machinelearning")
-
-
-# old stuff
-# machine_learning = ml.machinelearning(data_per_set, num_trainingsets)
-# machine_learning.training_phase(input_data, output_data)
-# machine_learning.save_training("ml")
-# machine_learning.load_training("ml")
-# machine_learning.plot(h=5)    
-
-data_holder = data_holder(data_per_set, num_trainingsets, input_data, output_data)       
-
-# create machine learning algorithmns
+ml_algo = []
+#generate a list of all ml algorithmen
 svc_linear = SVC_linear()
-svc_poly = SVC_poly()
 svc_rbf = SVC_rbf()
-#svc_dummy = SVC_dummy()
 svc_sigmoid = SVC_sigmoid()
 sgd = SGD()
 bay_reg = Bayes_Ridge_Reg()
 log_reg = Logistic_Reg()
-#ard_reg = ARD_Reg()
 percep = Perceptron()
 pas_agg_class = Pas_agg_class()
 k_neigh = KNeighborsClassifier()
 
+#append ml algorithms to a list
+ml_algo.append(svc_linear)
+ml_algo.append(svc_rbf)
+ml_algo.append(svc_sigmoid)
+ml_algo.append(sgd)
+ml_algo.append(bay_reg)
+ml_algo.append(log_reg)
+ml_algo.append(percep)
+ml_algo.append(pas_agg_class)
+ml_algo.append(k_neigh)
 
-#pipe = Pipe_LinearSVC_KBest()
+#save the lis
+ml.set_ml_algos(ml_algo)
+
+#save trained ml algorithms to file
+#ml.save_pickle("pickle_")
 
 
+print "\n#############"
+print "Load pickle files"
+print "#############"
+#load already traubed ml algorithmens fromfile
+#ml.load_pickle("pickle_")
 
-# Create list
-data_holder.plot([svc_linear, svc_poly, svc_rbf,svc_sigmoid,sgd, bay_reg, log_reg, percep, pas_agg_class, k_neigh], 3, 1)
+print "\n#############"
+print "Predict data"
+print "#############"
+#predict an input xml files
+ml.predict("../task_xml/task_test.xml")
+
+
 
 

@@ -8,8 +8,8 @@
     <uawmean>
       <size>10</size>
     </uawmean>
-    <priority>3276</priority>
-    <period>0</period>
+    <priority>100</priority>
+    <period>changehere</period>
     <offset>0</offset>
     <quota>5M</quota>
     <pkg>namaste</pkg>

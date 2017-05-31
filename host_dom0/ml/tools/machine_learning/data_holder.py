@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.cbook import Null
 from sklearn.externals import joblib
+from pyanaconda.iutil import DataHolder
+import os
 
 
 if False: plt=None
@@ -41,6 +43,7 @@ class data_holder:
             self.output("ML algorithm not initialized! Abort saving... ")
             return
         
+        file_path+=self.algo_name
         #correct dataype if .pkl is missing
         if not(file_path[-4:]==".pkl"):
             file_path+=".pkl"
@@ -49,10 +52,15 @@ class data_holder:
         joblib.dump(self.ml_algo, file_path)
         
     def load(self, file_path):
+        file_path+=self.algo_name
+        
         #correct dataype if .pkl is missing
         if not(file_path[-4:]==".pkl"):
             file_path+=".pkl"
             
+        if(not(os.path.isfile(file_path))):
+            raise Exception("Cannot reach pickle file! "+file_path)
+        
         self.output("Load training set")
         self.ml_algo = joblib.load(file_path) 
         
@@ -64,7 +72,8 @@ class data_holder:
         return self.ml_algo
     
     def fit(self):
-        self.ml_algo.fit(data_holder.input_2dvector,  data_holder.output_1dvector)
+        if(not(data_holder.output_1dvector is None)):
+            self.ml_algo.fit(data_holder.input_2dvector,  data_holder.output_1dvector)
         
     def partial_fit(self, input_2dvector, output_1dvector):
         try:
@@ -72,7 +81,15 @@ class data_holder:
         except: 
             self.output("Can not partially fit data to this ml algorithm")
         
-    def plot(self, algo_list, plot_columns = 4, h=1):
+        
+        
+    """
+    This function is obsolete
+    """
+    def plot(self, algo_list, plot_columns = 4, h=1, x_list_value=0, y_list_value=1):
+        if(x_list_value==y_list_value):
+            raise Exception("x_list_value must be different from y_list_value")        
+        
         if not(isinstance(self, data_holder)):
             self.output("Plot can only be executed from data_holder!")
             return
@@ -96,16 +113,32 @@ class data_holder:
         # Prepare the data 
         #
         # create a mesh to plot in, only if |input_2dvector data|==2
-        x_min, x_max = data_holder.input_2dvector[:, 0].min() - 50, data_holder.input_2dvector[:, 0].max() + 50
-        y_min, y_max = data_holder.input_2dvector[:, 1].min() - 50, data_holder.input_2dvector[:, 1].max() + 50
+        
+        
+        #print "input_vector "+str(data_holder.input_2dvector)
+        
+        #input_vector = data_holder.input_2dvector[:, [x_list_value,y_list_value]]
+        
+        #for task in data_holder.input_2dvector:
+        #    tmp_input_list = []
+        #    tmp_input_list.append(data_holder.input_2dvector[x_list_value])
+        #    tmp_input_list.append(data_holder.input_2dvector[y_list_value])
+            #input_vector.append(tmp_input_list)
+            
+           
+        print data_holder.input_2dvector[:, [x_list_value,y_list_value]]
+        #print data_holder.output_1dvector
+        
+        x_min, x_max = input_vector[:, 0].min() - 50, input_vector[:, 0].max() + 50
+        y_min, y_max = input_vector[:, 1].min() - 50, input_vector[:, 1].max() + 50
         
         #only plot results, if data equals 2. In other cases no proper visualisation is possible
-        if(self.data_per_set==2):
-            xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
-        else:
-            data_holder.output("data_per_set not equal 2. Abort plotting")
-            return
-                
+        #if(self.data_per_set==2):
+        #    xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
+        #else:
+            #data_holder.output("data_per_set not equal 2. Abort plotting")
+            #return
+        xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
         
         #loop over the list
         for i in range(0, algo_list_length):
@@ -126,7 +159,7 @@ class data_holder:
                     plt.ylim(yy.min(), yy.max())
               
                     # Plot also the training points
-                    plt.scatter(data_holder.input_2dvector[:, 0], data_holder.input_2dvector[:, 1], c=data_holder.output_1dvector, cmap=plt.cm.coolwarm_r, alpha=0.5)  
+                    plt.scatter(input_vector[:, 0], input_vector[:, 1], c=data_holder.output_1dvector, cmap=plt.cm.coolwarm_r, alpha=0.5)  
                   
         
                     plt.xlabel("Period Task 1")
@@ -143,5 +176,11 @@ class data_holder:
     
         plt.show()
         self.output("Plotting done!")
+        
+    def predict(self, input):
+        ml_input = np.ravel(np.array(input)).reshape(1, -1)
+               
+        return self.ml_algo.predict(ml_input)
+    
         
         
