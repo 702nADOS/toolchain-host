@@ -9,11 +9,16 @@ class db:
     filename = ""
     table_name = "training_set"
     
+    """
+    Open db and set attributes and types
+    attr and attr_type must be lists
+    """
     def __init__(self, filename, attr, attr_type):
         self.attr = attr
         self.attr_type = attr_type
         self.filename = filename
         
+        #check if parameters are more or less correct
         if(len(self.attr) != len(self.attr_type)):
             raise Exception("Attribute length is not equal to attribute type length!")
         
@@ -23,10 +28,16 @@ class db:
                 
         self.output(tmp_str)
                 
+    """
+    Output function for db
+    """
     def output(self, msg):
         for line in msg.splitlines():
             print "DB: " + line
         
+    """
+    check if db file is correct
+    """
     def check_file(self):
         if(self.filename == ""):
             raise Exception("Filename is empty!")
@@ -34,7 +45,12 @@ class db:
         if(not(self.filename.endswith(".db"))):
             raise Exception("Not a database file format!")
         
-        
+    """
+    Excecute sql query 
+    c:= db connection
+    command:=sql query
+    debug:=display the query before execution
+    """
     def sql_exec(self, c, command , debug):
         if(debug):
             self.output("""SQL-DEBUG: Executing statement: \nSQL-DEBUG: """ + command)
@@ -45,7 +61,9 @@ class db:
             self.output("SQL-DEBUG: Done!")
     
     
-    
+    """
+    Write all entries into db
+    """
     def write(self, tmp_tuple):
         self.check_file()
                 
@@ -101,7 +119,9 @@ class db:
         self.output("Writing done!")
         
         
-        
+    """
+    Return all data in DB
+    """    
     def read(self):
         self.check_file()
         if(not(os.path.isfile(self.filename))):
@@ -127,6 +147,9 @@ class db:
         
         return data
         
+    """
+    Return all genode input parameters from DB 
+    """    
     def read_task_input(self):
         self.check_file()
         if(not(os.path.isfile(self.filename))):
@@ -157,7 +180,9 @@ class db:
         
         return data
     
-    
+    """
+    Return all genode output parameter from DB
+    """
     def read_deadline_reached(self):
         self.check_file()
         if(not(os.path.isfile(self.filename))):
@@ -182,6 +207,9 @@ class db:
         
         return data
     
+    """
+    Append all datasets into DB
+    """
     def append(self, tmp_tuple):
         self.check_file()
         

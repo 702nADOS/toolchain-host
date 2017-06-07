@@ -2,7 +2,6 @@ import random
 import time
 import os.path, sys
 from tools.db import db
-from tools.task import task
 import xml.etree.ElementTree
 from dns.rdatatype import NULL
 from tools.machine_learning.data_holder import data_holder
@@ -139,6 +138,11 @@ class ml:
                         if "1" in att_list['state']:                            
                             print "Task: "+element+" arrival_time: "+str(att_list['arrival-time'])+" execution_time: "+str(att_list['execution-time'])+" state: "+str(att_list['state'])
                             
+                            
+                            """
+                            TODO:
+                            Auslesen der finishing time und setzen von deadline reached
+                            """
                             if(int(att_list['execution-time'])>1000):
                                 return False
             

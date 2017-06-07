@@ -53,3 +53,4 @@ __pycache__
 host_dom0/task_xml/task*
 host_dom0/task_xml/log_task*
 *.db
+*.pkl

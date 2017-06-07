@@ -8,11 +8,17 @@ import os
 
 if False: plt=None
 
+
+"""
+Holds overy data for each machine learning algorithm.
+How to use:
+Generate new class which inherit from data_holder. Then set self.ml_algo with you favorite scikit learn
+algorithm and call self.fit(). After that you can use the predict function to forecast the results.
+"""
 class data_holder:
-    #static variables
     input_2dvector = None# Input parameter
     output_1dvector = None # Output parameter
-    data_per_set = 0 # amount of values per training tuple
+    data_per_set = 0 #Amount of values per training tuple
     X_new = None
     algo_name="Data_holder"
     
@@ -21,23 +27,28 @@ class data_holder:
     
     
     def __init__(self, data_per_set, AmountRows, data_input, data_output):
-        #define static variables which are equal to all algorithmns
+        #define static variables which are equal to all algorithms
         data_holder.input_2dvector = np.ndarray(shape=(AmountRows,data_per_set-1)) # Input parameter
         data_holder.output_1dvector = np.ndarray(shape=[AmountRows]) # Output parameter
         data_holder.data_per_set = data_per_set-1 # dimensions of plot and data
         data_holder.X_new = Null
         
         self.output("Load training data")
-        # get data
+        #Transform data do numpy objects
         data_holder.input_2dvector = np.array(data_input)
         data_holder.output_1dvector = np.ravel(np.array(data_output))
         
         
-        # output method
+    """
+    output method
+    """
     def output(self, msg):
         for line in msg.splitlines():
             print self.algo_name+": "+line
         
+    """
+    Save current training state in a pkl file
+    """
     def save(self, file_path):
         if self.ml_algo==Null:
             self.output("ML algorithm not initialized! Abort saving... ")
@@ -50,7 +61,11 @@ class data_holder:
             
         self.output("Save training set to "+file_path)
         joblib.dump(self.ml_algo, file_path)
-        
+
+
+    """
+    Load pkl into this data_holder object
+    """        
     def load(self, file_path):
         file_path+=self.algo_name
         
@@ -64,17 +79,28 @@ class data_holder:
         self.output("Load training set")
         self.ml_algo = joblib.load(file_path) 
         
-    #toString method
+    """
+    toString method for this object returns string representation of machine learning algorithm 
+    """
     def __repr__(self):
         return self.algo_name
     
+    """
+    Return this machine learning algorithm
+    """
     def get_ml_algo(self):
         return self.ml_algo
     
+    """
+    Fit the current state into this machine learning algorithm
+    """
     def fit(self):
         if(not(data_holder.output_1dvector is None)):
             self.ml_algo.fit(data_holder.input_2dvector,  data_holder.output_1dvector)
         
+    """
+    Partially fit the current state into this machine learning algorithm
+    """
     def partial_fit(self, input_2dvector, output_1dvector):
         try:
             self.ml_algo.partial_fit(input_2dvector,  output_1dvector)
@@ -84,9 +110,11 @@ class data_holder:
         
         
     """
-    This function is obsolete
+    Prints two variables into a 2D plot. This function is obsolete
     """
     def plot(self, algo_list, plot_columns = 4, h=1, x_list_value=0, y_list_value=1):
+        raise Exception("This function is obsolete")
+        
         if(x_list_value==y_list_value):
             raise Exception("x_list_value must be different from y_list_value")        
         
@@ -177,6 +205,10 @@ class data_holder:
         plt.show()
         self.output("Plotting done!")
         
+        
+    """
+    Predict the value of input with this machine learning algorithm
+    """
     def predict(self, input):
         ml_input = np.ravel(np.array(input)).reshape(1, -1)
                

@@ -1,4 +1,4 @@
-from ml import ml
+from tools.machine_learning.ml import ml
 import os
 from tools.machine_learning.SGD import SGD
 from tools.machine_learning.SVC_dummy import SVC_dummy
@@ -72,14 +72,14 @@ ml_algo.append(k_neigh)
 ml.set_ml_algos(ml_algo)
 
 #save trained ml algorithms to file
-#ml.save_pickle("pickle_")
+ml.save_pickle("pickle_")
 
 
 print "\n#############"
 print "Load pickle files"
 print "#############"
 #load already traubed ml algorithmens fromfile
-#ml.load_pickle("pickle_")
+ml.load_pickle("pickle_")
 
 print "\n#############"
 print "Predict data"
