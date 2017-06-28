@@ -14,10 +14,10 @@ while i<1:
 	time.sleep(3)
 	i=i+1
 
-#session.read_tasks(script_dir + 'tasks.xml')
-#session.send_descs()
-#session.send_bins()
-#session.start()
+session.read_tasks(script_dir + 'tasks.xml')
+session.send_descs()
+session.send_bins()
+session.start()
 
 
 while i<10:
