@@ -14,49 +14,51 @@ def kill_sig(signal, frame):
 
 #check input argument
 if len(sys.argv)<2:
-	print("You need to specify a task.xml file")
+	print("You need to specify the path to task*.xml file")
 	sys.exit(1)
 elif len(sys.argv)>2:
-	print("Only one task.xml file allowed")
+	print("Only one path is allowed")
 	sys.exit(1)
-elif not(os.path.isfile(sys.argv[1])):
-	print("Cannot reach task.xml")
-	sys.exit(1) 
 
-print("Using xml file "+ sys.argv[1])
 
 try:
 	session = Dom0_session('192.168.217.21', 3001)
-	session.read_tasks(script_dir + sys.argv[1])
-	session.send_descs()
-	session.send_bins()
-	session.start()
-
-	#Used to catch the kill signal
-	signal.signal(signal.SIGINT, kill_sig)
-
-	print("Init done waiting 2 seconds to go...")
-
-	time.sleep(2)
-	print("")
-	print("Write logfile")
+	input_file_pattern = sys.argv[1]
 	
-	session.profile("log_profile.xml");
-	#session.live("log_live.xml");
-	print("Done! Parse logfile to DB")
+	#Used to catch the kill signal
+	signal.signal(signal.SIGINT, kill_sig)	
+	
+	counter=0
+	if os.path.isfile(input_file_pattern+str(counter)+".xml"):
+		session.read_tasks(input_file_pattern+str(counter)+".xml")
+		session.send_descs()
+		session.send_bins()
+		session.start()
+		time.sleep(1)
+		print("Write logfile")
+		session.live(input_file_pattern+str(counter)+"_output.xml");
+		session.clear()
+		counter+=1
+	else:
+		raise Exception("Cannot load taskfile")
+		
+	#generate tubles of input and output files
+	while (os.path.isfile(input_file_pattern+str(counter)+".xml")):
+		session.read_tasks(input_file_pattern+str(counter)+".xml")
+		session.send_descs()
+		session.start()
+		time.sleep(1)
+		
+		
+		print("Write logfile")
+		session.live(input_file_pattern+str(counter)+"_output.xml");
+		session.clear()
+		counter+=1
+	
+	
+	
+	
 
-	#xml2sql(script_dir + 'log.xml', script_dir + 'dom0.db')
-
-	#while True:
-		#-> get xml log and see if task is still running?!?
-		#-> yes -> break
-		#-> no -> continue
-
-	#Execution loop
-	#while True:
-	#	session.live()
-	#	#xml2sql(script_dir + sys.argv[1], script_dir + 'dom0.db')
-	#	time.sleep(1)
 
 except:
 	print("ERROR!") 

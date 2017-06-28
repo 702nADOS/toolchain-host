@@ -3,7 +3,7 @@
 <taskset xmlns="http://www.tmsxmlns.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.tmsxmlns.com taskset.xsd">
 
   <periodictask>
-    <id>2</id>
+    <id>5</id>
     <executiontime>999999999999</executiontime>
     <criticaltime>0</criticaltime>
     <ucfirmrt/>
@@ -11,14 +11,13 @@
       <size>10</size>
     </uawmean>
     <priority>32768</priority>
-    <period>10000</period>
+    <period>0</period>
     <offset>0</offset>
-    <quota>10M</quota>
+    <quota>changeme2</quota>
     <pkg>pi</pkg>
     <config>
-      <arg1>126546</arg1>
+      <arg1>changeme1</arg1>
     </config>
   </periodictask>
-
 
 </taskset>
