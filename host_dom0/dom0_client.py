@@ -113,6 +113,13 @@ class Dom0_session:
 		#print(xml.decode('utf-8')[:-1])
 		print('Live data of size {} saved to {}'.format(size, log_file))
 
+	def optimize(self):
+		"""Send message to optimize the task scheduling."""
+		print('BN ------------- Optimize task scheduling.')
+		meta = struct.pack('I', magicnumbers.OPTIMIZE)
+		self.conn.send(meta)
+		print('BN ------------- Optimize message is sent.')
+
 
 	def close(self):
 		"""Close connection."""
