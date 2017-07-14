@@ -10,7 +10,7 @@ session = Dom0_session('192.168.217.21', 3001)
 print('Waiting for 10 seconds...')
 i=0
 while i<1:
-	session.live(script_dir + 'log.xml')
+	#session.live(script_dir + 'log.xml')
 	session.read_tasks(script_dir + 'tasks.xml')
 	session.send_descs()
 	session.send_bins()

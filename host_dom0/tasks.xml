@@ -56,6 +56,10 @@
       <arg1>126546</arg1>
     </config>
   </periodictask>
-  <optimize>none</optimize>
+  <optimize>
+  	<none>0</none>
+  	<fairness>1</fairness>
+  	<utilization>0</utilization>
+  </optimize>
 
 </taskset>
