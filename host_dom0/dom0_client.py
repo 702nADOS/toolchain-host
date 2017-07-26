@@ -117,6 +117,7 @@ class Dom0_session:
 			xml += self.conn.recv(size)
 		file = open(log_file, 'w')
 		file.write(xml.decode('utf-8')[:-1])
+		file.close()
 		#subprocess.call('clear', shell=True)
 		#print(xml.decode('utf-8')[:-1])
 		print('Live data of size {} saved to {}'.format(size, log_file))

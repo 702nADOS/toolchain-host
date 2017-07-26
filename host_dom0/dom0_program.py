@@ -36,7 +36,7 @@ try:
 		session.start()
 		time.sleep(1)
 		print("Write logfile")
-		session.live(input_file_pattern+str(counter)+"_output.xml");
+		session.live(input_file_pattern+"_output_"+str(counter)+".xml");
 		session.clear()
 		counter+=1
 	else:
@@ -51,7 +51,7 @@ try:
 		
 		
 		print("Write logfile")
-		session.live(input_file_pattern+str(counter)+"_output.xml");
+		session.live(input_file_pattern+"_output_"+str(counter)+".xml");
 		session.clear()
 		counter+=1
 	
