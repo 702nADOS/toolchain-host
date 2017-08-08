@@ -15,7 +15,7 @@ while i<1:
 	session.send_descs()
 	session.send_bins()
 
-	session.optimize()
+	session.optimize(script_dir + 'opt.xml')
 
 	session.start()
 	time.sleep(3)
