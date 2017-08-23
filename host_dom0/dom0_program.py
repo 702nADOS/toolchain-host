@@ -14,7 +14,8 @@ while i<1:
 	session.read_tasks(script_dir + 'tasks.xml')
 	session.send_descs()
 	session.send_bins()
-
+	
+	time.sleep(1)
 	session.optimize(script_dir + 'opt.xml')
 
 	session.start()
