@@ -1,0 +1,186 @@
+<live>
+	<task-descriptions>
+		<task id="6701056" foc_id="7166" execution-time="1" priority="128" core="0" policy-id="0" state="1" arrival-time="319452" start-time="319525" exit-time="0" session="init -> taskloader" thread="64.pi" ram_quota="26076" ram_used="404"/>
+		<task id="6979584" foc_id="7196" execution-time="1478" priority="127" core="0" policy-id="0" state="1" arrival-time="319489" start-time="319515" exit-time="0" session="init -> taskloader -> 64.pi" thread="64.pi" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="2158191808" execution-time="0" priority="0" core="0" policy-id="0" state="5" arrival-time="9271699799682317" start-time="704913603" exit-time="2158191" session="init -> taskloader" thread="63.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="104" foc_id="2158191516" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932857" session="init -> taskloader -> 63.pi" thread="63.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="103" foc_id="2158191224" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932856" session="init -> taskloader" thread="62.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="102" foc_id="2158190932" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932856" session="init -> taskloader" thread="61.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="101" foc_id="2158190640" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932856" session="init -> taskloader" thread="60.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="100" foc_id="2158169568" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932835" session="init -> taskloader" thread="59.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="99" foc_id="2158169276" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932835" session="init -> taskloader" thread="58.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="98" foc_id="2158168984" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932834" session="init -> taskloader" thread="57.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="97" foc_id="2158168692" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932834" session="init -> taskloader" thread="56.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="96" foc_id="2158168400" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932834" session="init -> taskloader" thread="55.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="95" foc_id="2158168108" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932833" session="init -> taskloader" thread="54.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="94" foc_id="2158167816" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932833" session="init -> taskloader" thread="53.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="93" foc_id="2158167524" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932833" session="init -> taskloader" thread="52.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="92" foc_id="2158167232" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932832" session="init -> taskloader" thread="51.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="91" foc_id="2158166940" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932832" session="init -> taskloader" thread="50.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="90" foc_id="2158166648" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932832" session="init -> taskloader" thread="49.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="89" foc_id="2158166356" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932832" session="init -> taskloader" thread="48.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="88" foc_id="2158166064" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932831" session="init -> taskloader" thread="47.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="87" foc_id="2158112224" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932777" session="init -> taskloader" thread="46.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="86" foc_id="2158111932" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932777" session="init -> taskloader" thread="45.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="85" foc_id="2158111640" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932777" session="init -> taskloader" thread="44.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="84" foc_id="2158111348" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932777" session="init -> taskloader" thread="43.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="83" foc_id="2158111056" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932776" session="init -> taskloader" thread="42.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="82" foc_id="2158110764" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932776" session="init -> taskloader" thread="41.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="81" foc_id="2158110472" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932776" session="init -> taskloader" thread="40.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="80" foc_id="2158110180" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932775" session="init -> taskloader" thread="39.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="79" foc_id="2158109888" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932775" session="init -> taskloader" thread="38.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="78" foc_id="2158109596" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932775" session="init -> taskloader" thread="37.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="77" foc_id="2158109304" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932775" session="init -> taskloader" thread="36.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="76" foc_id="2158109012" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932774" session="init -> taskloader" thread="35.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="75" foc_id="2158108720" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932774" session="init -> taskloader" thread="34.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="74" foc_id="2157981152" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932646" session="init -> taskloader" thread="33.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="73" foc_id="2157980860" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932646" session="init -> taskloader" thread="32.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="72" foc_id="2157980568" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932646" session="init -> taskloader" thread="31.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="71" foc_id="2157980276" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932646" session="init -> taskloader" thread="30.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="70" foc_id="2157979984" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932645" session="init -> taskloader" thread="29.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="69" foc_id="2157979692" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932645" session="init -> taskloader" thread="28.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="68" foc_id="2157979400" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932645" session="init -> taskloader" thread="27.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="67" foc_id="2157979108" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932644" session="init -> taskloader" thread="26.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="66" foc_id="2157978816" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932644" session="init -> taskloader" thread="25.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="65" foc_id="2157978524" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932644" session="init -> taskloader" thread="24.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="64" foc_id="2157978232" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932643" session="init -> taskloader" thread="23.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="63" foc_id="2157977940" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932643" session="init -> taskloader" thread="22.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="62" foc_id="2157977648" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027932643" session="init -> taskloader" thread="21.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="61" foc_id="2156318176" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027930983" session="init -> taskloader" thread="20.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="60" foc_id="2156317884" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027930983" session="init -> taskloader" thread="19.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="59" foc_id="2156317592" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027930983" session="init -> taskloader" thread="18.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="58" foc_id="2156317300" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027930983" session="init -> taskloader" thread="17.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="57" foc_id="2156317008" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027930982" session="init -> taskloader" thread="16.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="56" foc_id="2156316716" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027930982" session="init -> taskloader" thread="15.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="55" foc_id="2156316424" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027930982" session="init -> taskloader" thread="14.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="54" foc_id="2156316132" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027930981" session="init -> taskloader" thread="13.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="53" foc_id="2156315840" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027930981" session="init -> taskloader" thread="12.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="52" foc_id="2156315548" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027930981" session="init -> taskloader" thread="11.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="51" foc_id="2156315256" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027930981" session="init -> taskloader" thread="10.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="50" foc_id="2156314964" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027930980" session="init -> taskloader" thread="09.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="49" foc_id="2156314672" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027930980" session="init -> taskloader" thread="08.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="48" foc_id="2164485600" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027939151" session="init -> taskloader" thread="07.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="47" foc_id="2164485308" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027939151" session="init -> taskloader" thread="06.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="46" foc_id="2164485016" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027939150" session="init -> taskloader" thread="05.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="45" foc_id="2164484724" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027939150" session="init -> taskloader" thread="04.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="44" foc_id="2164484432" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027939150" session="init -> taskloader" thread="03.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="43" foc_id="2164484140" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027939149" session="init -> taskloader" thread="02.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="42" foc_id="2164483848" execution-time="0" priority="2156335116" core="0" policy-id="0" state="5" arrival-time="538967" start-time="704913603" exit-time="9261389027939149" session="init -> taskloader" thread="01.pi" ram_quota="2105796" ram_used="2105796"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="2703360" foc_id="128" execution-time="0" priority="128" core="0" policy-id="0" state="1" arrival-time="540" start-time="0" exit-time="0" session="init -> timer" thread="timer" ram_quota="832" ram_used="336"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="2883584" foc_id="172" execution-time="23" priority="128" core="0" policy-id="0" state="1" arrival-time="564" start-time="571" exit-time="0" session="init -> mon_manager" thread="mon_manager" ram_quota="32420" ram_used="440"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="3051520" foc_id="213" execution-time="32" priority="128" core="0" policy-id="0" state="1" arrival-time="592" start-time="606" exit-time="0" session="init -> utilization" thread="utilization" ram_quota="9888" ram_used="432"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="3231744" foc_id="257" execution-time="78" priority="128" core="0" policy-id="0" state="1" arrival-time="623" start-time="631" exit-time="0" session="init -> dom0-HW" thread="dom0-HW" ram_quota="7412" ram_used="712"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="3411968" foc_id="301" execution-time="22" priority="128" core="0" policy-id="0" state="1" arrival-time="653" start-time="665" exit-time="0" session="init -> taskloader" thread="taskloader" ram_quota="26076" ram_used="404"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="3584000" foc_id="343" execution-time="17" priority="128" core="0" policy-id="0" state="1" arrival-time="684" start-time="756" exit-time="0" session="init -> parser" thread="parser" ram_quota="62112" ram_used="41784"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="3756032" foc_id="385" execution-time="21" priority="128" core="0" policy-id="0" state="1" arrival-time="710" start-time="722" exit-time="995" session="init -> pi" thread="pi" ram_quota="9916" ram_used="404"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="3936256" foc_id="429" execution-time="0" priority="128" core="0" policy-id="0" state="1" arrival-time="735" start-time="0" exit-time="0" session="init -> gpio_drv" thread="gpio_drv" ram_quota="3776" ram_used="280"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="4108288" foc_id="471" execution-time="41" priority="128" core="0" policy-id="0" state="1" arrival-time="767" start-time="2019" exit-time="0" session="init -> usb_drv" thread="usb_drv" ram_quota="11872" ram_used="8976"/>
+		<task id="4227072" foc_id="500" execution-time="2" priority="128" core="0" policy-id="0" state="1" arrival-time="797" start-time="1118" exit-time="0" session="init -> gpio_drv" thread="gpio_drv_ep" ram_quota="3776" ram_used="280"/>
+		<task id="4669440" foc_id="608" execution-time="305" priority="128" core="0" policy-id="0" state="1" arrival-time="861" start-time="907" exit-time="0" session="init -> timer" thread="timer_drv_ep" ram_quota="832" ram_used="336"/>
+		<task id="4829184" foc_id="650" execution-time="16" priority="128" core="0" policy-id="0" state="1" arrival-time="911" start-time="161229" exit-time="0" session="init -> timer" thread="timeout_scheduler" ram_quota="832" ram_used="336"/>
+		<task id="5009408" foc_id="683" execution-time="0" priority="128" core="0" policy-id="0" state="1" arrival-time="954" start-time="0" exit-time="0" session="init -> timer" thread="signal handler" ram_quota="832" ram_used="336"/>
+		<task id="5070848" foc_id="706" execution-time="0" priority="128" core="0" policy-id="0" state="1" arrival-time="1013" start-time="0" exit-time="0" session="init -> gpio_drv" thread="signal handler" ram_quota="3776" ram_used="280"/>
+		<task id="5124096" foc_id="720" execution-time="37" priority="128" core="0" policy-id="0" state="1" arrival-time="1020" start-time="1655" exit-time="0" session="init -> usb_drv" thread="signal handler" ram_quota="11872" ram_used="8976"/>
+		<task id="5197824" foc_id="729" execution-time="459" priority="128" core="0" policy-id="0" state="1" arrival-time="1022" start-time="1380" exit-time="0" session="init -> parser" thread="parser" ram_quota="62112" ram_used="41784"/>
+		<task id="5455872" foc_id="792" execution-time="351" priority="128" core="0" policy-id="0" state="1" arrival-time="1084" start-time="1142" exit-time="0" session="init -> usb_drv" thread="usb_drv_ep" ram_quota="11872" ram_used="8976"/>
+		<task id="5476352" foc_id="805" execution-time="10" priority="128" core="0" policy-id="0" state="1" arrival-time="1097" start-time="168216" exit-time="0" session="init -> taskloader" thread="child_destructor" ram_quota="26076" ram_used="404"/>
+		<task id="5496832" foc_id="810" execution-time="0" priority="128" core="0" policy-id="0" state="1" arrival-time="1099" start-time="0" exit-time="0" session="init -> parser" thread="signal handler" ram_quota="62112" ram_used="41784"/>
+		<task id="5722112" foc_id="865" execution-time="12" priority="128" core="0" policy-id="0" state="1" arrival-time="1121" start-time="166371" exit-time="0" session="init -> taskloader" thread="signal handler" ram_quota="26076" ram_used="404"/>
+		<task id="5832704" foc_id="892" execution-time="0" priority="128" core="0" policy-id="0" state="1" arrival-time="1206" start-time="0" exit-time="0" session="init -> utilization" thread="utilitzation_ep" ram_quota="9888" ram_used="432"/>
+		<task id="5865472" foc_id="900" execution-time="666" priority="128" core="0" policy-id="0" state="1" arrival-time="1220" start-time="1301" exit-time="0" session="init -> taskloader" thread="taskloader" ram_quota="26076" ram_used="404"/>
+		<task id="5984256" foc_id="929" execution-time="230" priority="128" core="0" policy-id="0" state="1" arrival-time="1329" start-time="1363" exit-time="0" session="init -> mon_manager" thread="mon_manager_ep" ram_quota="32420" ram_used="440"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="289029000" execution-time="287325" priority="6086" core="289946000" policy-id="5964" state="0" arrival-time="6" start-time="291696" exit-time="292572" session="" thread="" ram_quota="0" ram_used="5"/>
+		<task id="0" foc_id="6917" execution-time="6" priority="310905000" core="6887" policy-id="310361000" state="0" arrival-time="315908" start-time="7" exit-time="6" session="" thread="" ram_quota="0" ram_used="305757"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+		<task id="0" foc_id="0" execution-time="0" priority="0" core="0" policy-id="0" state="0" arrival-time="0" start-time="0" exit-time="0" session="" thread="" ram_quota="0" ram_used="0"/>
+	</task-descriptions>
+</live>
+<RIP_table RIP_table_size="30">
+	<dead_task foc_id="5808" time="281093"/>
+	<dead_task foc_id="5778" time="282151"/>
+	<dead_task foc_id="5901" time="283771"/>
+	<dead_task foc_id="5871" time="284739"/>
+	<dead_task foc_id="5994" time="286400"/>
+	<dead_task foc_id="5964" time="287325"/>
+	<dead_task foc_id="6086" time="289029"/>
+	<dead_task foc_id="6056" time="289946"/>
+	<dead_task foc_id="6178" time="291696"/>
+	<dead_task foc_id="6148" time="292572"/>
+	<dead_task foc_id="6270" time="294368"/>
+	<dead_task foc_id="6240" time="295169"/>
+	<dead_task foc_id="6362" time="297012"/>
+	<dead_task foc_id="6332" time="297800"/>
+	<dead_task foc_id="6455" time="299692"/>
+	<dead_task foc_id="6425" time="300393"/>
+	<dead_task foc_id="6548" time="302344"/>
+	<dead_task foc_id="6518" time="302989"/>
+	<dead_task foc_id="6640" time="304978"/>
+	<dead_task foc_id="6610" time="305591"/>
+	<dead_task foc_id="6732" time="307682"/>
+	<dead_task foc_id="6702" time="308222"/>
+	<dead_task foc_id="6825" time="310361"/>
+	<dead_task foc_id="6795" time="310905"/>
+	<dead_task foc_id="6917" time="313096"/>
+	<dead_task foc_id="6887" time="313662"/>
+	<dead_task foc_id="7010" time="315908"/>
+	<dead_task foc_id="6980" time="316479"/>
+	<dead_task foc_id="7103" time="318787"/>
+	<dead_task foc_id="7073" time="319297"/>
+</RIP_table>

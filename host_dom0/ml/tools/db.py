@@ -73,7 +73,7 @@ class db:
             os.remove(self.filename)
             
         
-        self.output("Write to database " + self.filename)
+        #self.output("Write to database " + self.filename)
         
         # establish db connection
         conn = sqlite3.connect(self.filename)

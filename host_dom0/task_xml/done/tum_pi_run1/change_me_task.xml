@@ -1,0 +1,36 @@
+<taskset>
+  <periodictask>
+    <id>changeme_id1</id>
+    <executiontime>999999999999</executiontime>
+    <criticaltime>changeme_crit1</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>32768</priority>
+    <period>0</period>
+    <offset>0</offset>
+    <quota>changeme_quota1</quota>
+    <pkg>changeme_bin1</pkg>
+    <config>
+      <arg1>changeme_arg1</arg1>
+    </config>
+  </periodictask>
+  <periodictask>
+    <id>changeme_id2</id>
+    <executiontime>999999999999</executiontime>
+    <criticaltime>changeme_crit2</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>32768</priority>
+    <period>0</period>
+    <offset>0</offset>
+    <quota>changeme_quota2</quota>
+    <pkg>changeme_bin2</pkg>
+    <config>
+      <arg1>changeme_arg2</arg1>
+    </config>
+  </periodictask>
+</taskset>

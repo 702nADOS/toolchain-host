@@ -1,0 +1,18 @@
+<live>
+	<task-descriptions>
+		<task id="6500352" foc_id="1376" execution-time="2" priority="128" core="0" policy-id="0" state="1" arrival-time="18055" start-time="18125" session="init -> taskloader" thread="05.pi" ram_quota="26064" ram_used="516"/>
+		<task id="6766592" foc_id="1406" execution-time="20" priority="127" core="0" policy-id="0" state="1" arrival-time="18095" start-time="18114" session="init -> taskloader -> 05.pi" thread="05.pi" ram_quota="0" ram_used="0"/>
+		<task id="6553600" foc_id="1161" execution-time="0" priority="128" core="0" policy-id="0" state="5" arrival-time="15023" start-time="0" session="init -> taskloader" thread="05.pi" ram_quota="2106412" ram_used="2106412"/>
+		<task id="538967384" foc_id="0" execution-time="0" priority="2156965900" core="0" policy-id="0" state="5" arrival-time="9264098224582780" start-time="9265422584181162" session="init -> taskloader" thread="05.pi" ram_quota="2106412" ram_used="2106412"/>
+		<task id="3428352" foc_id="305" execution-time="17" priority="128" core="0" policy-id="0" state="1" arrival-time="729" start-time="748" session="init -> taskloader" thread="taskloader" ram_quota="26064" ram_used="516"/>
+		<task id="5398528" foc_id="778" execution-time="0" priority="128" core="0" policy-id="0" state="1" arrival-time="1153" start-time="0" session="init -> taskloader" thread="child_destructor" ram_quota="26064" ram_used="1224"/>
+		<task id="5550080" foc_id="823" execution-time="0" priority="128" core="0" policy-id="0" state="1" arrival-time="1227" start-time="0" session="init -> taskloader" thread="signal handler" ram_quota="26064" ram_used="1224"/>
+		<task id="5799936" foc_id="885" execution-time="28" priority="128" core="0" policy-id="0" state="1" arrival-time="1329" start-time="13907" session="init -> taskloader" thread="taskloader" ram_quota="26064" ram_used="1224"/>
+		<task id="6209536" foc_id="1007" execution-time="0" priority="128" core="0" policy-id="0" state="5" arrival-time="1713" start-time="0" session="init -> taskloader" thread="05.pi" ram_quota="2106412" ram_used="2106412"/>
+	</task-descriptions>
+	<RIP_table>
+		<task foc-id: ="1109" Deathtime: ="14808"/>
+		<task foc-id: ="1076" Deathtime: ="15605"/>
+		<task foc-id: ="1229" Deathtime: ="16207"/>
+	</RIP_table>
+</live>

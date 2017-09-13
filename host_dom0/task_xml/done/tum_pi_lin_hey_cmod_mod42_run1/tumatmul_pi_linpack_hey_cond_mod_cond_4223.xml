@@ -1,0 +1,112 @@
+<taskset>
+  <periodictask>
+    <id>23</id>
+    <executiontime>999999999999</executiontime>
+    <criticaltime>1000</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>32768</priority>
+    <period>0</period>
+    <offset>0</offset>
+    <quota>5M</quota>
+    <pkg>tumatmul</pkg>
+    <config>
+      <arg1>231000</arg1>
+    </config>
+  </periodictask>
+  <periodictask>
+    <id>23</id>
+    <executiontime>999999999999</executiontime>
+    <criticaltime>2000</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>32768</priority>
+    <period>0</period>
+    <offset>0</offset>
+    <quota>5M</quota>
+    <pkg>pi</pkg>
+    <config>
+      <arg1>264600</arg1>
+    </config>
+  </periodictask>
+  <periodictask>
+    <id>23</id>
+    <executiontime>999999999999</executiontime>
+    <criticaltime>2000</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>32768</priority>
+    <period>0</period>
+    <offset>0</offset>
+    <quota>5M</quota>
+    <pkg>linpack</pkg>
+    <config>
+      <arg1>115</arg1>
+    </config>
+  </periodictask>
+
+
+  <periodictask>
+    <id>23</id>
+    <executiontime>999999999999</executiontime>
+    <criticaltime>1115</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>32768</priority>
+    <period>0</period>
+    <offset>0</offset>
+    <quota>5M</quota>
+    <pkg>hey</pkg>
+    <config>
+      <arg1>0</arg1>
+    </config>
+  </periodictask>
+
+  <periodictask>
+    <id>23</id>
+    <executiontime>999999999999</executiontime>
+    <criticaltime>100</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>32768</priority>
+    <period>0</period>
+    <offset>0</offset>
+    <quota>5M</quota>
+    <pkg>cond_mod</pkg>
+    <config>
+      <arg1>23023</arg1>
+    </config>
+  </periodictask>
+
+  <periodictask>
+    <id>23</id>
+    <executiontime>999999999999</executiontime>
+    <criticaltime>100</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>32768</priority>
+    <period>0</period>
+    <offset>0</offset>
+    <quota>5M</quota>
+    <pkg>cond_42</pkg>
+    <config>
+      <arg1>46</arg1>
+    </config>
+  </periodictask>
+
+
+
+
+</taskset>

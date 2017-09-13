@@ -1,0 +1,52 @@
+<live>
+	<task-descriptions>
+		<task id="6508544" foc_id="5034" execution-time="1" priority="128" core="0" policy-id="0" state="1" arrival-time="52931" start-time="53008" session="init -> taskloader" thread="45.pi" ram_quota="26068" ram_used="516"/>
+		<task id="6770688" foc_id="5064" execution-time="19" priority="127" core="0" policy-id="0" state="1" arrival-time="52971" start-time="52998" session="init -> taskloader -> 45.pi" thread="45.pi" ram_quota="0" ram_used="0"/>
+		<task id="3428352" foc_id="305" execution-time="19" priority="128" core="0" policy-id="0" state="1" arrival-time="730" start-time="749" session="init -> taskloader" thread="taskloader" ram_quota="26068" ram_used="516"/>
+		<task id="5517312" foc_id="815" execution-time="8" priority="128" core="0" policy-id="0" state="1" arrival-time="1201" start-time="7438" session="init -> taskloader" thread="child_destructor" ram_quota="26068" ram_used="516"/>
+		<task id="5337088" foc_id="840" execution-time="3" priority="128" core="0" policy-id="0" state="1" arrival-time="1299" start-time="7414" session="init -> taskloader" thread="signal handler" ram_quota="26068" ram_used="516"/>
+		<task id="5763072" foc_id="897" execution-time="501" priority="128" core="0" policy-id="0" state="1" arrival-time="1397" start-time="1484" session="init -> taskloader" thread="taskloader" ram_quota="26068" ram_used="516"/>
+	</task-descriptions>
+</live>
+<RIP_table RIP_table size="40">
+	<dead_task foc_id="3328" time="32765000"/>
+	<dead_task foc_id="3298" time="33343000"/>
+	<dead_task foc_id="3418" time="33941000"/>
+	<dead_task foc_id="3388" time="34520000"/>
+	<dead_task foc_id="3507" time="35156000"/>
+	<dead_task foc_id="3477" time="35669000"/>
+	<dead_task foc_id="3595" time="36269000"/>
+	<dead_task foc_id="3565" time="36809000"/>
+	<dead_task foc_id="3683" time="37419000"/>
+	<dead_task foc_id="3653" time="37961000"/>
+	<dead_task foc_id="3771" time="38542000"/>
+	<dead_task foc_id="3741" time="39102000"/>
+	<dead_task foc_id="3859" time="39733000"/>
+	<dead_task foc_id="3829" time="40242000"/>
+	<dead_task foc_id="3948" time="40899000"/>
+	<dead_task foc_id="3918" time="41163000"/>
+	<dead_task foc_id="4036" time="41767000"/>
+	<dead_task foc_id="4006" time="42053000"/>
+	<dead_task foc_id="4120" time="42643000"/>
+	<dead_task foc_id="4090" time="42943000"/>
+	<dead_task foc_id="4204" time="43566000"/>
+	<dead_task foc_id="4174" time="43840000"/>
+	<dead_task foc_id="4289" time="44443000"/>
+	<dead_task foc_id="4259" time="44736000"/>
+	<dead_task foc_id="4373" time="45334000"/>
+	<dead_task foc_id="4343" time="45890000"/>
+	<dead_task foc_id="4462" time="46523000"/>
+	<dead_task foc_id="4432" time="46808000"/>
+	<dead_task foc_id="4551" time="47449000"/>
+	<dead_task foc_id="4521" time="47962000"/>
+	<dead_task foc_id="4639" time="48604000"/>
+	<dead_task foc_id="4609" time="48890000"/>
+	<dead_task foc_id="4727" time="49482000"/>
+	<dead_task foc_id="4697" time="49787000"/>
+	<dead_task foc_id="4809" time="50395000"/>
+	<dead_task foc_id="4779" time="50682000"/>
+	<dead_task foc_id="4892" time="51268000"/>
+	<dead_task foc_id="4862" time="51573000"/>
+	<dead_task foc_id="4975" time="52238000"/>
+	<dead_task foc_id="4945" time="52747000"/>
+</RIP_table>

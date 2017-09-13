@@ -1,0 +1,19 @@
+<taskset>
+  <periodictask>
+    <id>65</id>
+    <executiontime>999999999999</executiontime>
+    <criticaltime>1500</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>32768</priority>
+    <period>0</period>
+    <offset>0</offset>
+    <quota>5M</quota>
+    <pkg>linpack</pkg>
+    <config>
+      <arg1>325</arg1>
+    </config>
+  </periodictask>
+</taskset>

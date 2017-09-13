@@ -1,0 +1,13 @@
+<live>
+	<task-descriptions>
+		<task id="6496256" foc_id="1199" execution-time="1" priority="128" core="0" policy-id="0" state="1" arrival-time="69344" start-time="69411" session="init -> taskloader" thread="01.pi" ram_quota="0" ram_used="516"/>
+		<task id="3428352" foc_id="305" execution-time="19" priority="128" core="0" policy-id="0" state="1" arrival-time="729" start-time="746" session="init -> taskloader" thread="taskloader" ram_quota="0" ram_used="516"/>
+		<task id="5304320" foc_id="769" execution-time="2" priority="128" core="0" policy-id="0" state="1" arrival-time="1214" start-time="67578" session="init -> taskloader" thread="child_destructor" ram_quota="0" ram_used="516"/>
+		<task id="5480448" foc_id="806" execution-time="2" priority="128" core="0" policy-id="0" state="1" arrival-time="1239" start-time="1293" session="init -> taskloader" thread="signal handler" ram_quota="0" ram_used="516"/>
+		<task id="5787648" foc_id="881" execution-time="17" priority="128" core="0" policy-id="0" state="1" arrival-time="1327" start-time="1379" session="init -> taskloader" thread="taskloader" ram_quota="0" ram_used="516"/>
+		<task id="538967384" foc_id="2155753936" execution-time="0" priority="0" core="0" policy-id="0" state="5" arrival-time="3131411272876" start-time="9264118254158209" session="init -> taskloader" thread="00.pi" ram_quota="2106736" ram_used="2106736"/>
+	</task-descriptions>
+	<RIP_table>
+		<task foc-id: ="1109" Deathtime: ="67962"/>
+	</RIP_table>
+</live>

@@ -1,0 +1,19 @@
+Logfile parser
+
+0. Generate tasksetgroups by using task_xml/todo/taskset_default/change_me_task.xml and gen_tasks.sh
+
+1. Generate Logfile from panda:
+	use log_dom0_output.sh to generate dom0_output.log
+
+2. Starting dom0 programm to generate task output files
+	python dom0_program.py task_xml/todo/pi_run1/pi
+
+3. Postprocess the results to generate success table by using dom0_postproc.sh
+
+4.0 (Best practise)
+4.1 Copy suc_tasks.log and dom0_output.log into your run folder(task_xml/todo/pi_run1) for later usage
+4.2 To finalize the run the user may copy task_xml/todo/pi_run1 to task_xml/done
+
+5. Run main machine learning script in ml/main.py
+5.1 You need to change the location of taskset_groups which is an array of tuples. The first element defines the pattern of the tasksetgroup the second element refers to the success table of this run.
+

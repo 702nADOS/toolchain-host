@@ -1,0 +1,36 @@
+<taskset>
+  <periodictask>
+    <id>85</id>
+    <executiontime>999999999999</executiontime>
+    <criticaltime>1000</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>32768</priority>
+    <period>0</period>
+    <offset>0</offset>
+    <quota>5M</quota>
+    <pkg>tumatmul</pkg>
+    <config>
+      <arg1>851000</arg1>
+    </config>
+  </periodictask>
+  <periodictask>
+    <id>85</id>
+    <executiontime>999999999999</executiontime>
+    <criticaltime>2000</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>32768</priority>
+    <period>0</period>
+    <offset>0</offset>
+    <quota>5M</quota>
+    <pkg>pi</pkg>
+    <config>
+      <arg1>3612600</arg1>
+    </config>
+  </periodictask>
+</taskset>

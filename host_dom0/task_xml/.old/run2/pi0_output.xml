@@ -1,0 +1,10 @@
+<live>
+	<task-descriptions>
+		<task id="3428352" foc_id="305" execution-time="19" priority="128" core="0" policy-id="0" state="1" arrival-time="729" start-time="746" session="init -> taskloader" thread="taskloader" ram_quota="0" ram_used="516"/>
+		<task id="5304320" foc_id="769" execution-time="1" priority="128" core="0" policy-id="0" state="1" arrival-time="1214" start-time="67578" session="init -> taskloader" thread="child_destructor" ram_quota="0" ram_used="516"/>
+		<task id="5480448" foc_id="806" execution-time="2" priority="128" core="0" policy-id="0" state="1" arrival-time="1239" start-time="1293" session="init -> taskloader" thread="signal handler" ram_quota="0" ram_used="516"/>
+		<task id="5787648" foc_id="881" execution-time="11" priority="128" core="0" policy-id="0" state="1" arrival-time="1327" start-time="1379" session="init -> taskloader" thread="taskloader" ram_quota="0" ram_used="516"/>
+		<task id="6492160" foc_id="1076" execution-time="4" priority="128" core="0" policy-id="0" state="1" arrival-time="67425" start-time="67657" session="init -> taskloader" thread="00.pi" ram_quota="0" ram_used="516"/>
+	</task-descriptions>
+	<RIP_table/>
+</live>

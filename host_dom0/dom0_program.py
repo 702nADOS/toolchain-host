@@ -5,6 +5,9 @@ import sys
 import signal
 import os
 
+#Delay between tasks must be larger than critical time!!
+delay=1
+
 #Catch STRG+C -> Clear all running tasks and close the connection
 def kill_sig(signal, frame):
 	session.clear()
@@ -34,7 +37,7 @@ try:
 		session.send_descs()
 		session.send_bins()
 		session.start()
-		time.sleep(1)
+		time.sleep(delay)
 		print("Write logfile")
 		session.live(input_file_pattern+"_output_"+str(counter)+".xml");
 		session.clear()
@@ -47,7 +50,7 @@ try:
 		session.read_tasks(input_file_pattern+str(counter)+".xml")
 		session.send_descs()
 		session.start()
-		time.sleep(1)
+		time.sleep(delay)
 		
 		
 		print("Write logfile")

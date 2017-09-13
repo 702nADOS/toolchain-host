@@ -1,0 +1,112 @@
+<taskset>
+  <periodictask>
+    <id>changeme_id1</id>
+    <executiontime>999999999999</executiontime>
+    <criticaltime>changeme_crit1</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>32768</priority>
+    <period>0</period>
+    <offset>0</offset>
+    <quota>changeme_quota1</quota>
+    <pkg>changeme_bin1</pkg>
+    <config>
+      <arg1>changeme_arg1</arg1>
+    </config>
+  </periodictask>
+  <periodictask>
+    <id>changeme_id2</id>
+    <executiontime>999999999999</executiontime>
+    <criticaltime>changeme_crit2</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>32768</priority>
+    <period>0</period>
+    <offset>0</offset>
+    <quota>changeme_quota2</quota>
+    <pkg>changeme_bin2</pkg>
+    <config>
+      <arg1>changeme_arg2</arg1>
+    </config>
+  </periodictask>
+  <periodictask>
+    <id>changeme_id3</id>
+    <executiontime>999999999999</executiontime>
+    <criticaltime>changeme_crit3</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>32768</priority>
+    <period>0</period>
+    <offset>0</offset>
+    <quota>changeme_quota3</quota>
+    <pkg>changeme_bin3</pkg>
+    <config>
+      <arg1>changeme_arg3</arg1>
+    </config>
+  </periodictask>
+
+
+  <periodictask>
+    <id>changeme_id4</id>
+    <executiontime>999999999999</executiontime>
+    <criticaltime>changeme_crit4</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>32768</priority>
+    <period>0</period>
+    <offset>0</offset>
+    <quota>changeme_quota4</quota>
+    <pkg>changeme_bin4</pkg>
+    <config>
+      <arg1>changeme_arg4</arg1>
+    </config>
+  </periodictask>
+
+  <periodictask>
+    <id>changeme_id5</id>
+    <executiontime>999999999999</executiontime>
+    <criticaltime>changeme_crit5</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>32768</priority>
+    <period>0</period>
+    <offset>0</offset>
+    <quota>changeme_quota5</quota>
+    <pkg>changeme_bin5</pkg>
+    <config>
+      <arg1>changeme_arg5</arg1>
+    </config>
+  </periodictask>
+
+  <periodictask>
+    <id>changeme_id6</id>
+    <executiontime>999999999999</executiontime>
+    <criticaltime>changeme_crit6</criticaltime>
+    <ucfirmrt/>
+    <uawmean>
+      <size>10</size>
+    </uawmean>
+    <priority>32768</priority>
+    <period>0</period>
+    <offset>0</offset>
+    <quota>changeme_quota6</quota>
+    <pkg>changeme_bin6</pkg>
+    <config>
+      <arg1>changeme_arg6</arg1>
+    </config>
+  </periodictask>
+
+
+
+
+</taskset>

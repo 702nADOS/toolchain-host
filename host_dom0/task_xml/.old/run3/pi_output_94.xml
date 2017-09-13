@@ -1,0 +1,45 @@
+<live>
+	<task-descriptions>
+		<task id="6529024" foc_id="9340" execution-time="3" priority="128" core="0" policy-id="0" state="1" arrival-time="107233" start-time="107400" session="init -> taskloader" thread="94.pi" ram_quota="0" ram_used="516"/>
+	</task-descriptions>
+</live>
+<RIP_table RIP_table size="38">
+	<dead_task foc_id="7701" time="86406000"/>
+	<dead_task foc_id="7671" time="86712000"/>
+	<dead_task foc_id="7783" time="87353000"/>
+	<dead_task foc_id="7753" time="87637000"/>
+	<dead_task foc_id="7871" time="88255000"/>
+	<dead_task foc_id="7841" time="88796000"/>
+	<dead_task foc_id="7960" time="89408000"/>
+	<dead_task foc_id="7930" time="89991000"/>
+	<dead_task foc_id="8048" time="90602000"/>
+	<dead_task foc_id="8018" time="91145000"/>
+	<dead_task foc_id="8136" time="91761000"/>
+	<dead_task foc_id="8106" time="92301000"/>
+	<dead_task foc_id="8224" time="92914000"/>
+	<dead_task foc_id="8194" time="93456000"/>
+	<dead_task foc_id="8313" time="94069000"/>
+	<dead_task foc_id="8283" time="94648000"/>
+	<dead_task foc_id="8401" time="95261000"/>
+	<dead_task foc_id="8371" time="95844000"/>
+	<dead_task foc_id="8491" time="96470000"/>
+	<dead_task foc_id="8461" time="97010000"/>
+	<dead_task foc_id="8580" time="97631000"/>
+	<dead_task foc_id="8550" time="98213000"/>
+	<dead_task foc_id="8668" time="98830000"/>
+	<dead_task foc_id="8638" time="99372000"/>
+	<dead_task foc_id="8756" time="99994000"/>
+	<dead_task foc_id="8726" time="100575000"/>
+	<dead_task foc_id="8844" time="101227000"/>
+	<dead_task foc_id="8814" time="101737000"/>
+	<dead_task foc_id="8932" time="102392000"/>
+	<dead_task foc_id="8902" time="102669000"/>
+	<dead_task foc_id="9020" time="103299000"/>
+	<dead_task foc_id="8990" time="103572000"/>
+	<dead_task foc_id="9105" time="104187000"/>
+	<dead_task foc_id="9075" time="104730000"/>
+	<dead_task foc_id="9193" time="105376000"/>
+	<dead_task foc_id="9163" time="105889000"/>
+	<dead_task foc_id="9281" time="106508000"/>
+	<dead_task foc_id="9251" time="107049000"/>
+</RIP_table>

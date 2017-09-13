@@ -1,0 +1,49 @@
+<live>
+	<task-descriptions>
+		<task id="6516736" foc_id="7322" execution-time="6" priority="128" core="0" policy-id="0" state="1" arrival-time="81892" start-time="81969" session="init -> taskloader" thread="71.pi" ram_quota="0" ram_used="516"/>
+	</task-descriptions>
+</live>
+<RIP_table RIP_table size="42">
+	<dead_task foc_id="5504" time="58982000"/>
+	<dead_task foc_id="5474" time="59526000"/>
+	<dead_task foc_id="5592" time="60142000"/>
+	<dead_task foc_id="5562" time="60722000"/>
+	<dead_task foc_id="5681" time="61332000"/>
+	<dead_task foc_id="5651" time="61917000"/>
+	<dead_task foc_id="5769" time="62529000"/>
+	<dead_task foc_id="5739" time="63111000"/>
+	<dead_task foc_id="5858" time="63722000"/>
+	<dead_task foc_id="5828" time="64302000"/>
+	<dead_task foc_id="5947" time="64922000"/>
+	<dead_task foc_id="5917" time="65503000"/>
+	<dead_task foc_id="6035" time="66117000"/>
+	<dead_task foc_id="6005" time="66698000"/>
+	<dead_task foc_id="6123" time="67312000"/>
+	<dead_task foc_id="6093" time="67853000"/>
+	<dead_task foc_id="6212" time="68462000"/>
+	<dead_task foc_id="6182" time="69045000"/>
+	<dead_task foc_id="6300" time="69640000"/>
+	<dead_task foc_id="6270" time="70198000"/>
+	<dead_task foc_id="6388" time="70848000"/>
+	<dead_task foc_id="6358" time="71361000"/>
+	<dead_task foc_id="6476" time="72005000"/>
+	<dead_task foc_id="6446" time="72518000"/>
+	<dead_task foc_id="6565" time="73165000"/>
+	<dead_task foc_id="6535" time="73675000"/>
+	<dead_task foc_id="6653" time="74323000"/>
+	<dead_task foc_id="6623" time="74612000"/>
+	<dead_task foc_id="6742" time="75223000"/>
+	<dead_task foc_id="6712" time="75764000"/>
+	<dead_task foc_id="6831" time="76410000"/>
+	<dead_task foc_id="6801" time="76923000"/>
+	<dead_task foc_id="6920" time="77510000"/>
+	<dead_task foc_id="6890" time="77845000"/>
+	<dead_task foc_id="7008" time="78433000"/>
+	<dead_task foc_id="6978" time="78734000"/>
+	<dead_task foc_id="7091" time="79336000"/>
+	<dead_task foc_id="7061" time="79622000"/>
+	<dead_task foc_id="7175" time="80261000"/>
+	<dead_task foc_id="7145" time="80770000"/>
+	<dead_task foc_id="7263" time="81423000"/>
+	<dead_task foc_id="7233" time="81707000"/>
+</RIP_table>

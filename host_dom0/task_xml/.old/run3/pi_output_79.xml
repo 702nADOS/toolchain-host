@@ -1,0 +1,15 @@
+<live>
+	<task-descriptions>
+		<task id="6516736" foc_id="8018" execution-time="3" priority="128" core="0" policy-id="0" state="1" arrival-time="90175" start-time="90342" session="init -> taskloader" thread="79.pi" ram_quota="0" ram_used="516"/>
+	</task-descriptions>
+</live>
+<RIP_table RIP_table size="8">
+	<dead_task foc_id="7701" time="86406000"/>
+	<dead_task foc_id="7671" time="86712000"/>
+	<dead_task foc_id="7783" time="87353000"/>
+	<dead_task foc_id="7753" time="87637000"/>
+	<dead_task foc_id="7871" time="88255000"/>
+	<dead_task foc_id="7841" time="88796000"/>
+	<dead_task foc_id="7960" time="89408000"/>
+	<dead_task foc_id="7930" time="89991000"/>
+</RIP_table>

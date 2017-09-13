@@ -1,0 +1,24 @@
+<live>
+	<task-descriptions>
+		<task id="6500352" foc_id="1642" execution-time="1" priority="128" core="0" policy-id="0" state="1" arrival-time="13055" start-time="13132" session="init -> taskloader" thread="06.pi" ram_quota="26068" ram_used="516"/>
+		<task id="6754304" foc_id="1672" execution-time="27" priority="127" core="0" policy-id="0" state="1" arrival-time="13095" start-time="13116" session="init -> taskloader -> 06.pi" thread="06.pi" ram_quota="0" ram_used="0"/>
+		<task id="3428352" foc_id="305" execution-time="19" priority="128" core="0" policy-id="0" state="1" arrival-time="730" start-time="749" session="init -> taskloader" thread="taskloader" ram_quota="26068" ram_used="516"/>
+		<task id="5517312" foc_id="815" execution-time="1" priority="128" core="0" policy-id="0" state="1" arrival-time="1201" start-time="7438" session="init -> taskloader" thread="child_destructor" ram_quota="26068" ram_used="516"/>
+		<task id="5337088" foc_id="840" execution-time="1" priority="128" core="0" policy-id="0" state="1" arrival-time="1299" start-time="7414" session="init -> taskloader" thread="signal handler" ram_quota="26068" ram_used="516"/>
+		<task id="5763072" foc_id="897" execution-time="58" priority="128" core="0" policy-id="0" state="1" arrival-time="1397" start-time="1484" session="init -> taskloader" thread="taskloader" ram_quota="26068" ram_used="516"/>
+	</task-descriptions>
+</live>
+<RIP_table RIP_table size="12">
+	<dead_task foc_id="1109" time="6063000"/>
+	<dead_task foc_id="1076" time="7166000"/>
+	<dead_task foc_id="1229" time="7753000"/>
+	<dead_task foc_id="1199" time="8354000"/>
+	<dead_task foc_id="1318" time="8920000"/>
+	<dead_task foc_id="1288" time="9479000"/>
+	<dead_task foc_id="1406" time="10098000"/>
+	<dead_task foc_id="1376" time="10608000"/>
+	<dead_task foc_id="1495" time="11221000"/>
+	<dead_task foc_id="1465" time="11734000"/>
+	<dead_task foc_id="1583" time="12362000"/>
+	<dead_task foc_id="1553" time="12871000"/>
+</RIP_table>
