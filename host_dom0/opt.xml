@@ -9,5 +9,6 @@
     <utilization>
       <apply>0</apply>
     </utilization>
-    </goal>
+   </goal>
+   <query_interval>100</query_interval>
 </optimize>
