@@ -244,7 +244,7 @@ class ml:
             ml_input = self.read_input(input_file)[:-1]
             print "Predict data "+str(ml_input)
             for algo in self.ml_algo:
-                print str(algo)+" predicts "+str(self.ml_algo[0].predict(ml_input))
+                print str(algo)+" predicts "+str(algo.predict(ml_input))
         else:
             print "File "+input_file+" do not exists"
 

@@ -20,13 +20,21 @@ import re
 
 
 print "Welcome to main"
+
+db_name="ml_db.db"
+# Delete previous db
+if(os.path.isfile(db_name)):
+    print "Database already exists. Deleting..."
+    os.remove(db_name)
+
 #Generate machine learning database
-ml = ml("ml_db.db")
+ml = ml(db_name)
 
 
 files = []
 
 taskset_groups=[
+                ("../task_xml/done/cond_42_run1/cond_42_","../task_xml/done/cond_42_run1/suc_tasks.log"),
                 ("../task_xml/done/condmod_run1/cond_mod","../task_xml/done/condmod_run1/suc_tasks.log"),
                 ("../task_xml/done/condmod_run2/cond_mod","../task_xml/done/condmod_run2/suc_tasks.log"),
                 ("../task_xml/done/hey_pi_run1/hey_pi","../task_xml/done/hey_pi_run1/suc_tasks.log"),
@@ -36,6 +44,7 @@ taskset_groups=[
                 ("../task_xml/done/linpack_run2/linpack","../task_xml/done/linpack_run2/suc_tasks.log"),
                 ("../task_xml/done/linpack_run3/linpack","../task_xml/done/linpack_run3/suc_tasks.log"),
                 ("../task_xml/done/linpack_run4/linpack","../task_xml/done/linpack_run4/suc_tasks.log"),
+                
                 ("../task_xml/done/hey_lin_run1/hey_linpack","../task_xml/done/hey_lin_run1/suc_tasks.log"),
                 ("../task_xml/done/hey_run1/hey","../task_xml/done/hey_run1/suc_tasks.log"),
                 ("../task_xml/done/lin_pi_run1/linpack_pi","../task_xml/done/lin_pi_run1/suc_tasks.log"),
@@ -46,14 +55,11 @@ taskset_groups=[
                 ("../task_xml/done/tumatmul_run1/tumatmul","../task_xml/done/tumatmul_run1/suc_tasks.log"),
                 ("../task_xml/done/tumatmul_run2/tumatmul","../task_xml/done/tumatmul_run2/suc_tasks.log"),
                 ("../task_xml/done/tum_lin_run1/tumatmul_linpack","../task_xml/done/tum_lin_run1/suc_tasks.log"),
+                
                 ("../task_xml/done/tum_pi_hey_run1/tumatmul_pi_hey","../task_xml/done/tum_pi_hey_run1/suc_tasks.log"),
                 ("../task_xml/done/tum_pi_lin_hey_cmod_mod42_run1/tumatmul_pi_linpack_hey_cond_mod_cond_42","../task_xml/done/tum_pi_lin_hey_cmod_mod42_run1/suc_tasks.log"),
                 ("../task_xml/done/tum_pi_lin_run1/tumatmul_pi_linpack","../task_xml/done/tum_pi_lin_run1/suc_tasks.log"),
                 ("../task_xml/done/tum_pi_run1/tumatmul_pi","../task_xml/done/tum_pi_run1/suc_tasks.log"),
-                
-                
-                
-                
                 ]
 
 print "\n##################"
@@ -85,7 +91,7 @@ print "Done saving all tasksets into db"
 
 
 
-"""
+
 print "\n###########"
 print "Train data"
 print "###########"
@@ -116,7 +122,7 @@ ml_algo.append(percep)
 ml_algo.append(pas_agg_class)
 ml_algo.append(k_neigh)
 
-#save the lis
+#save the lib
 ml.set_ml_algos(ml_algo)
 
 #save trained ml algorithms to file
@@ -129,15 +135,17 @@ print "#############"
 #load already trained ml algorithms from file
 ml.load_pickle("pickle_")
 
+
+
+
 print "\n#############"
 print "Predict data"
 print "#############"
 #predict an input xml files
-for i in range(0, 9999):
-    ml.predict("../task_xml/pi_run_test/pi"+str(i)+".xml")
+for i in range(0, 99):
+    ml.predict("../task_xml/done/hey_run1/hey"+str(i)+".xml")
 
 
-"""
 
 
 
