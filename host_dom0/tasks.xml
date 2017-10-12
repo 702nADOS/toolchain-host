@@ -3,20 +3,20 @@
 <taskset xmlns="http://www.tmsxmlns.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.tmsxmlns.com taskset.xsd">
 
   <periodictask>
-    <id>5</id>
-    <executiontime>1</executiontime>
+    <id>2</id>
+    <executiontime>10000</executiontime>
     <criticaltime>0</criticaltime>
     <ucfirmrt/>
     <uawmean>
       <size>10</size>
     </uawmean>
-    <priority>128</priority>
-    <deadline>1000000</deadline>
-    <period>2000000</period>
+    <priority>12</priority>
+    <deadline>5000</deadline>
+    <period>8000</period>
     <offset>0</offset>
     <numberofjobs>10</numberofjobs> <!-- For a infinite number of jobs, enter 0 here --> 
     <quota>1M</quota>
-    <pkg>idle</pkg>
+    <pkg>gen_load_finite</pkg>
     <config>
       <arg1>126546</arg1>
     </config>

@@ -125,12 +125,10 @@ class Dom0_session:
 		
 	
 		"""Send optimize goal to the dom0 server."""
-		print('BN ------------- Optimize task scheduling.')
 		meta = struct.pack('II', magicnumbers.OPTIMIZE, len(self.opt))
 		print('Sending optimization goal.')
 		self.conn.send(meta)
 		self.conn.send(self.opt)
-		print('BN ------------- Optimize message is sent.')
 		
 
 
