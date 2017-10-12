@@ -14,7 +14,7 @@
     <deadline>1000000</deadline>
     <period>2000000</period>
     <offset>0</offset>
-    <numberofjobs>10</numberofjobs>
+    <numberofjobs>10</numberofjobs> <!-- For a infinite number of jobs, enter 0 here --> 
     <quota>1M</quota>
     <pkg>idle</pkg>
     <config>
