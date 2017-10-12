@@ -4,7 +4,6 @@
   <goal>
     <fairness>
       <apply>1</apply>
-      <acceptance>10</acceptance>
     </fairness>
     <utilization>
       <apply>0</apply>

@@ -10,51 +10,15 @@
     <uawmean>
       <size>10</size>
     </uawmean>
-    <priority>32768</priority>
-    <deadline>29</deadline>
-    <period>20</period>
+    <priority>128</priority>
+    <deadline>1000000</deadline>
+    <period>2000000</period>
     <offset>0</offset>
+    <numberofjobs>10</numberofjobs>
     <quota>1M</quota>
     <pkg>idle</pkg>
     <config>
       <arg1>126546</arg1>
     </config>
   </periodictask>
-  <periodictask>
-    <id>2</id>
-    <executiontime>3</executiontime>
-    <criticaltime>0</criticaltime>
-    <ucfirmrt/>
-    <uawmean>
-      <size>10</size>
-    </uawmean>
-    <priority>32765</priority>
-    <deadline>22</deadline>
-    <period>5</period>
-    <offset>0</offset>
-    <quota>1M</quota>
-    <pkg>idle</pkg>
-    <config>
-      <arg1>126546</arg1>
-    </config>
-  </periodictask>
-  <periodictask>
-    <id>3</id>
-    <executiontime>5</executiontime>
-    <criticaltime>0</criticaltime>
-    <ucfirmrt/>
-    <uawmean>
-      <size>10</size>
-    </uawmean>
-    <priority>32767</priority>
-    <deadline>15</deadline>
-    <period>7</period>
-    <offset>0</offset>
-    <quota>1M</quota>
-    <pkg>idle</pkg>
-    <config>
-      <arg1>126546</arg1>
-    </config>
-  </periodictask>
-
 </taskset>
