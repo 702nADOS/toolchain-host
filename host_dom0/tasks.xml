@@ -10,11 +10,11 @@
     <uawmean>
       <size>10</size>
     </uawmean>
-    <priority>12</priority>
+    <priority>128</priority>
     <deadline>5000</deadline>
     <period>8000</period>
     <offset>0</offset>
-    <numberofjobs>10</numberofjobs> <!-- For a infinite number of jobs, enter 0 here --> 
+    <numberofjobs>10</numberofjobs>
     <quota>1M</quota>
     <pkg>gen_load_finite</pkg>
     <config>
