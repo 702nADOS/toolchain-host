@@ -10,7 +10,7 @@ if False: plt=None
 
 
 """
-Holds overy data for each machine learning algorithm.
+Holds every data for each machine learning algorithm.
 How to use:
 Generate new class which inherit from data_holder. Then set self.ml_algo with you favorite scikit learn
 algorithm and call self.fit(). After that you can use the predict function to forecast the results.
@@ -18,7 +18,7 @@ algorithm and call self.fit(). After that you can use the predict function to fo
 class data_holder:
     input_2dvector = None# Input parameter
     output_1dvector = None # Output parameter
-    data_per_set = 0 #Amount of values per training tuple
+    data_per_set = 0 #Amount of values per training tuple/home/zellner/Documents/workspaces/workspace/IDP/IDP_Latex/Ausarbeitung/Ausarbeitung_IDP.pdf
     X_new = None
     algo_name="Data_holder"
     

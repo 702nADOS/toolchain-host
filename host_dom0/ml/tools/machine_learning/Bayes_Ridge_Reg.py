@@ -10,7 +10,7 @@ class Bayes_Ridge_Reg(data_holder):
         indv_start = time.time()
         self.ml_algo = linear_model.BayesianRidge(
             n_iter=300,
-            tol=0.0000000001,
+            tol=0.01,
             alpha_1=1e-06,
             alpha_2=1e-06,
             lambda_1=1e-06,

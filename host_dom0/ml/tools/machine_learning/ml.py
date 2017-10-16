@@ -235,16 +235,31 @@ class ml:
         
         
     """
-    Predict for each machine learning algorithmen if the task can reach its deadline
+    Predict for each machine learning algorithm if the task can reach its deadline
     """
     def predict(self, input_file):
         if(os.path.isfile(input_file)):
             #Remove true or false after this line
             #This is needed we are using read_input at multiple places
             ml_input = self.read_input(input_file)[:-1]
-            print "Predict data "+str(ml_input)
+               
+            print "Predict data for crit_time "+str(ml_input[2])
             for algo in self.ml_algo:
+                #file_name=str(algo)+"_prediction_hey.data"
+                last_slash = input_file.rfind('/')
+                file_name=input_file[:last_slash]+"_"+str(algo)+".data"
+                
+                if(os.path.isfile(file_name)):
+                   f = open(file_name, 'a')
+                else:
+                    f = open(file_name, 'w')
+                    #Write header
+                    f.write("arg\t\t$deadline_reached$\n")
+                    
                 print str(algo)+" predicts "+str(algo.predict(ml_input))
+                f.write(str(ml_input[18]) + "\t\t"+str(float(algo.predict(ml_input))) +"\n")
+                
+                
         else:
             print "File "+input_file+" do not exists"
 

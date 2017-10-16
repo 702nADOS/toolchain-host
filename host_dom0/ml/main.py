@@ -103,37 +103,39 @@ ml_algo = []
 #generate a list of all ml algorithmen
 svc_linear = SVC_linear()
 svc_rbf = SVC_rbf()
-svc_sigmoid = SVC_sigmoid()
-sgd = SGD()
+svc_poly = SVC_poly()
+#svc_sigmoid = SVC_sigmoid()
+#sgd = SGD()
 bay_reg = Bayes_Ridge_Reg()
-log_reg = Logistic_Reg()
-percep = Perceptron()
-pas_agg_class = Pas_agg_class()
+#log_reg = Logistic_Reg()
+#percep = Perceptron()
+#pas_agg_class = Pas_agg_class()
 k_neigh = KNeighborsClassifier()
 
 #append ml algorithms to a list
 ml_algo.append(svc_linear)
 ml_algo.append(svc_rbf)
-ml_algo.append(svc_sigmoid)
-ml_algo.append(sgd)
+ml_algo.append(svc_poly)
+#ml_algo.append(svc_sigmoid)
+#ml_algo.append(sgd)
 ml_algo.append(bay_reg)
-ml_algo.append(log_reg)
-ml_algo.append(percep)
-ml_algo.append(pas_agg_class)
+#ml_algo.append(log_reg)
+#ml_algo.append(percep)
+#ml_algo.append(pas_agg_class)
 ml_algo.append(k_neigh)
 
 #save the lib
 ml.set_ml_algos(ml_algo)
 
 #save trained ml algorithms to file
-ml.save_pickle("pickle_")
+#ml.save_pickle("pickle_")
 
 
 print "\n#############"
 print "Load pickle files"
 print "#############"
 #load already trained ml algorithms from file
-ml.load_pickle("pickle_")
+#ml.load_pickle("pickle_")
 
 
 
@@ -142,8 +144,9 @@ print "\n#############"
 print "Predict data"
 print "#############"
 #predict an input xml files
-for i in range(0, 99):
-    ml.predict("../task_xml/done/hey_run1/hey"+str(i)+".xml")
+for i in range(0, 499):
+    ml.predict("../task_xml/todo/linpack_test1/linpack"+str(i)+".xml")
+    print ""
 
 
 
