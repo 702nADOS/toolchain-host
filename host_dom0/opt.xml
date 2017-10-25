@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Hier kommen die Optimierungsziele-->
+<optimize xmlns="http://www.tmsxmlns.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.tmsxmlns.com taskset.xsd">
+  <goal>
+    <fairness>
+      <apply>1</apply>
+    </fairness>
+    <utilization>
+      <apply>0</apply>
+    </utilization>
+   </goal>
+   <query_interval>1000</query_interval>
+</optimize>

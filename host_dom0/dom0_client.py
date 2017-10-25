@@ -113,6 +113,25 @@ class Dom0_session:
 		#print(xml.decode('utf-8')[:-1])
 		print('Live data of size {} saved to {}'.format(size, log_file))
 
+	def optimize(self, opt_file=script_dir+'opt.xml'):
+		"""Read XML file to get optimization goal."""
+		# Read XML file and discard meta data.
+		self.opt = open(opt_file, 'rb').read()
+		opt_ascii = self.opt.decode('ascii')
+
+		# Genode XML parser can't handle a lot of header things, so skip them.
+		first_node = re.search('<\w+', opt_ascii)
+		self.opt = self.opt[first_node.start():]
+		
+	
+		"""Send optimize goal to the dom0 server."""
+		meta = struct.pack('II', magicnumbers.OPTIMIZE, len(self.opt))
+		print('Sending optimization goal.')
+		self.conn.send(meta)
+		self.conn.send(self.opt)
+		
+
+
 
 	def close(self):
 		"""Close connection."""

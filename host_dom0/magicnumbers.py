@@ -21,3 +21,6 @@ GET_PROFILE = 0x159D1
 
 # Request live info as xml
 GET_LIVE = 0x159D2
+
+#Initiate task scheduling optimization.
+OPTIMIZE = 0x6F7074
