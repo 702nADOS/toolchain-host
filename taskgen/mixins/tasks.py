@@ -2,12 +2,6 @@ from .mixin import MixinMeta,Mixin
 from collections.abc import Mapping
 from abc import ABCMeta
 
-from collections import Mapping
-from itertools import chain
-from operator import add
-import itertools
-import collections
-
 class CombinedMeta(ABCMeta, MixinMeta):
     pass
 

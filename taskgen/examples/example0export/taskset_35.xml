@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<periodictask>
+	<config>
+		<arg2>5</arg2>
+		<arg1>126546</arg1>
+	</config>
+	<quota>1M</quota>
+	<offset/>
+	<id>test</id>
+	<priority>3</priority>
+	<numberofjobs/>
+	<deadline/>
+	<pkg>gen_load_finite</pkg>
+	<period/>
+</periodictask>

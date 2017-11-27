@@ -8,7 +8,9 @@ sys.path.append('../')
 from mixins.gen_load_finite import GenLoadFiniteBlob
 from mixins.priority import LowPriority, HighPriority
 from mixins.tasks import PeriodicTask
+from taskset import TaskSet
 
+# debugging
 from pprint import pprint as pp
 import time
 
@@ -17,10 +19,12 @@ class SpecialTask(PeriodicTask, LowPriority, GenLoadFiniteBlob):
     pass
 
 
+ts = TaskSet()
+ts.append( SpecialTask())
 
-a = SpecialTask()
+for t in ts.produce():
+    print(t)
 
-start = time.time()
-a.produce2()
-end = time.time()
-print(end - start)
+ts.export("./example0export")
+
+
