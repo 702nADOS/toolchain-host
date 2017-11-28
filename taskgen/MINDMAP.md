@@ -23,3 +23,9 @@
 
 # Periodic Task:
 
+
+
+
+# idea
+ts = new TaskSet
+ts.add( new Task( Periodic, HighFrequency))

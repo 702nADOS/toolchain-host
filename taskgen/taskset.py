@@ -43,7 +43,7 @@ class TaskSet(MutableSequence):
 
     def append(self, val):
         self.insert(len(self._tasks), val)
-
+ 
     def _acl_check(self, val):
         if not isinstance(val, Task):
             raise TypeError(v)
