@@ -18,9 +18,13 @@ import time
 class SpecialTask(PeriodicTask, LowPriority, GenLoadFiniteBlob):
     pass
 
+class SpecialTask2(PeriodicTask, HighPriority, GenLoadFiniteBlob):
+    pass
 
 ts = TaskSet()
 ts.append( SpecialTask())
+ts.append( SpecialTask2())
+
 
 for t in ts.produce():
     print(t)

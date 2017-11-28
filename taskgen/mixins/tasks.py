@@ -19,6 +19,9 @@ class Task(Mapping, Mixin, metaclass=CombinedMeta):
         "config" : None
     }
 
+    def __init__(self, *mixins):
+        __bases__ = mixins
+    
     def is_runnable(self):
         for value in self._task.values():
             if value == None:
