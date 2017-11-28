@@ -1,3 +1,39 @@
+# todos
+[ ] Distributors
+    [ ] MultiDistributor
+        [x] Implementation
+        [ ] Refactoring
+        [ ] Documentation
+    [ ] ScanDistributor
+        [x] Implementation
+        [ ] Refactoring
+        [ ] Documentation
+    [ ] SimpleDistributor
+        [x] Implementation
+        [ ] Refactoring
+        [ ] Documentation
+[ ] TaskSet
+    [x] Proof-Of-Concept Implementation
+    [ ] Full Implementation
+    [ ] Documentation
+[ ] Mixins
+    [x] Proof-Of-Concept Implementation
+    [ ] Documentation
+    [ ] Classes
+        [x] Tasks
+        [ ] Priority
+        [ ] Sizes
+[ ] Examples
+[ ] Unit Tests
+[ ] Makefile Integration
+[ ] GUI
+    [ ] Proof-Of-Concept Implementation
+    [ ] Implementation
+    [ ] Documentation
+[ ] Genode Implementation
+    [ ] Sporadic Tasks
+    [ ] Asyncron Tasks
+    
 # Dynamic TaskSet generation with Mixins 
 
 There are several reasons for using Mixins as main feature for creating
@@ -134,4 +170,3 @@ for period in range(1, 10):
     # machine learning might help...
     c.period = period
 ```
-git push --set-upstream origin taskgen-framework
