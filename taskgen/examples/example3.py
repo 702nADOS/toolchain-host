@@ -13,12 +13,10 @@ from taskset import TaskSet
 class SpecialTask(PeriodicTask, LowPriority, GenLoadFiniteBlob):
     pass
 
-ts = TaskSet()
-ts.append( SpecialTask())
+tasksets = mixed.generate()
 
 md = ScanDistributor(["131.159.197.0/24"], 1024)
-md.connect() # do the scan
-md.read(ts)
+md.tasksets += tasksets
 md.start()
 
 

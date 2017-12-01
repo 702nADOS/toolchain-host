@@ -1,209 +1,244 @@
 import socket
 import code
 import struct
-import magicnumbers
 import re
+import os
+
 import subprocess
 from collections import Iterable
 from taskset import TaskSet
-import os
+import logging
+import xmltodict
+from collections.abc import MutableMapping
+from abc import ABCMeta, abstractmethod
 
-COLORS = ["\033[1;31m","\033[1;34m","\033[1;36m","\033[0;32m"]
-def color():
-    color.counter += 1
-    return  COLORS[color.counter % len(COLORS)]
-color.counter = 0
 
-class StubDistributor:
+
+# capsulation avoids attribute pollution
+class MagicNumber:
+    # Packet contains task descriptions as XML. uint32_t after tag indicates size in
+    # bytes.
+    SEND_DESCS = 0xDE5
+
+    # Clear and stop all tasks currently managed on the server.
+    CLEAR = 0xDE6
+
+    # Multiple binaries are to be sent. uint32_t after tag indicates number of
+    # binaries. Each binary packet contains another leading uint32_t indicating
+    # binary size.
+    SEND_BINARIES = 0xDE5F11E
     
-    def printc(self, s):
-        print(self._color + s + "\033[0;0m")
-        
-    def __init__(self, host, port):
-        self._host = host
-        self._port = port
+    # Binary received, send next one.
+    GO_SEND = 0x90
 
-        # color fun
-        self._color = color()
-        
-        self.printc("StubDistributor({},{})".format(self._host, self._port))
+    # Start queued tasks.
+    START = 0x514DE5
 
-    def connect(self):
-        self.printc("StubDistributor({},{}).connect()".format(self._host, self._port))
+    # Stop all tasks.
+    STOP = 0x514DE6
 
-    def read_file(self, file):
-        if isinstance(path, str) and os.path.isfile(path):
-            self.printc("StubDistributor({},{}).read_file()".format(self._host,
-                                                                self._port, path))
-        else:
-            raise ValueError("file not found")
-        
-    def read(self, dump):
-        if isinstance(dump, str):
-            self.printc("StubDistributor({},{}).read()".format(self._host,
-                                                             self._port))
-        self._dump = dump;
-    def send_descs(self):
-        self.printc("StubDistributor({},{})._send_descs()".format(self._host,
-                                                            self._port))
-        
-    def send_bins(self):
-        self.printc("StubDistributor({},{})._send_bins()".format(self._host,
-                                                           self._port))
-        
-    def start(self):
-        self.printc("StubDistributor({},{}).start()".format(self._host,
-                                                      self._port))
-        self.printc(self._dump)
+    # Request profiling info as xml.
+    GET_PROFILE = 0x159D1
+    
+    # Request live info as xml
+    GET_LIVE = 0x159D2
+    
+    #Initiate task scheduling optimization.
+    OPTIMIZE = 0x6F7074
+
+
+# we need some conventions, to ensure that the MultiDistributor is working
+class AbstractDistributor(metaclass=ABCMeta):
+
+    @abstractmethod
+    def __init__(host, port):
+        pass
+    
+    @abstractmethod
+    def start(self, optimization, taskset):
+        pass
+
+    @abstractmethod
+    def stop(self):
+        pass
+
+    @abstractmethod
+    def live_request(self):
+        pass
+
+    @abstractmethod
+    def close(self):
+        pass
+
+class StubDistributor(AbstractDistributor):
+    def start(self, optimization, taskset):
+        logging.debug("start of taskset")
 
     def stop(self):
-        self.printc("StubDistributor({},{}).stop()".format(self._host,
-                                                     self._port))
+        logging.debug("stop of taskset")
 
-    def clear(self):
-        self.printc("StubDistributor({},{}).clear()".format(self._host,
-                                                      self._port))
+    def live_request(self):
+        logging.debug("live_request")
 
-    def profile(self, log_file='log.xml'):
-        self.printc("StubDistributor({},{}).profile(...)".format(self._host,
-                                                           self._port))
+    def close(self):
+        logging.debug("connection closed")
 
-    def live(self, log_file='log.xml'):
-        self.printc("StubDistributor({},{}).live(...)".format(self._host,
-                                                        self._port))
+        
+# This class is a pretty simple implementation for the communication with a
+# genode::Taskloader instance. There are no error handling mechanism and all
+# errors are passed on to the caller. Furthmore, the communication is not
+# asyncron, which means that every call is blocking. Look at the
+# MultiDistributor and ScanDistributor for a more extended version.
+class SimpleDistributor(AbstractDistributor):
 
-    def optimize(self, opt_file='opt.xml'):
-        self.printc("StubDistributor({},{}).optimize(...)".format(self._host,
-                                                            self._port))
+    def __init__(self, host, port):
+        # it might happen, that creating a connection fails, so __init__
+        # will throw an error. But that is ok.
+        self._socket = socket.create_connection((self._host, self._port))
+
+    def start(self, optimization, taskset):
+        _optimaze(optimization)
+        _clear(self)
+        _send_descs(taskset)
+        _send_bins(taskset)
+        _start(self)
+
+    def stop(self):
+        meta = struct.pack('I', MagicNumber.STOP)
+        logging.debug('Stopping tasks on server.')
+        self._socket.send(meta)
+        _stop(self)
+
+    def live_request(self):
+        logging.debug('Requesting live data.')
+        # send command
+        meta = struct.pack('I', MagicNumber.GET_LIVE)
+        self._socket.send(meta)
+        # receive xml
+        size = int.from_bytes(self._socket.recv(4), 'little')
+        xml = b''
+        while len(xml) < size:
+            xml += self._socket.recv(size)
+            xml.decode('utf-8')[:-1]
+            # convert xml to dictionary
+        return xmltodict.parse(xml)
 	
     def close(self):
-        self.printc("StubDistributor({},{}).close()".format(self._host,
-                                                      self._port))
+        logging.debug('Close connection.')
+        self._socket.close();
 
+    def optimize(self, optimization):
+        if not isinstance(optimiziation, Optimiziation):
+            raise TypeError("optimization must be of type Optimization") 
 
-    
-    
+        logging.debug('Sending optimiziation goal.')
+        # Read XML file and discard meta data.
+        xml = optimiziation.dump()
+        opt_ascii = xml.decode('ascii')
 
-class SimpleDistributor():
-    def __init__(self, host='192.168.217.20', port=3001):
-        self._host = host
-        self._port = port
+        # TODO make use of the new optimiziation class
+        # Genode XML parser can't handle a lot of header things, so skip them.
+        first_node = re.search('<\w+', opt_ascii)
+        xml = xml[first_node.start():]
+        meta = struct.pack('II', MagicNumber.OPTIMIZE, len(xml))
 
-    def connect(self):
-        self.conn = socket.create_connection((self._host, self._port))
+        self.conn.send(meta)
+        self.conn.send(xml)
 
-    def read_file(self, file):
-        if isinstance(path, str) and os.path.isfile(path):
-            # Read XML file and discard meta data.
-            self.read(open(path, 'rb').read())
-        else:
-            raise ValueError("file not found")
+    def _clear(self):
+        logging.debug('Resetting all tasks on server.')
+        meta = struct.pack('I', MagicNumber.CLEAR)
+        self._socket.send(meta)
         
-    def read(self, dump):
-        self.tasks = dump
+    
+    def _send_descs(self, taskset):
+        if not isinstance(taskset, TaskSet):
+            raise TypeError("taskset must be type TaskSet") 
 
-        # do the old magic
-        tasks_ascii = self.tasks.decode('ascii')
-
-        self.binaries = re.findall('<\s*pkg\s*>\s*(.+)\s*<\s*/pkg\s*>', tasks_ascii)
-        self.binaries = list(set(self.binaries))
-
+        tasks = taskset.dump()
+        tasks_ascii = tasks.decode('ascii')
         # Genode XML parser can't handle a lot of header things, so skip them.
         first_node = re.search('<\w+', tasks_ascii)
-        self.tasks = self.tasks[first_node.start():]
+        tasks = tasks[first_node.start():]
+
+        logging.debug("Sending taskset description.")
+        meta = struct.pack('II', MagicNumber.SEND_DESCS, len(self.tasks))
+        self._socket.send(meta)
+        self._socket.send(self.tasks)
         
-    def _send_descs(self):
-        """Send task descriptions to the dom0 server."""
-        meta = struct.pack('II', magicnumbers.SEND_DESCS, len(self.tasks))
-        print('Sending tasks description.')
-        self.conn.send(meta)
-        self.conn.send(self.tasks)
+    def _send_bins(self, taskset):
+        if not isinstance(taskset, TaskSet):
+            raise TypeError("taskset must be type TaskSet") 
+
+        tasks = taskset.dump()
+        tasks_ascii = tasks.decode('ascii')
+        # TODO need some fixing (we have the possibility to parse the dictionary structure)
+        binaries = re.findall('<\s*pkg\s*>\s*(.+)\s*<\s*/pkg\s*>', tasks_ascii)
+        binaries = list(set(binaries))
+
+        logging.debug('Sending {} binar{}.'.format(len(binaries), 'y' if
+                                                   len(binaries) == 1 else 'ies'))
         
-    def _send_bins(self):
-        """Send binary files to the dom0 server."""
-        meta = struct.pack('II', magicnumbers.SEND_BINARIES, len(self.binaries))
-        print('Sending {} binar{}.'.format(len(self.binaries), 'y' if
-                                           len(self.binaries) == 1 else 'ies'))
-        self.conn.send(meta)
+        meta = struct.pack('II', MagicNumber.SEND_BINARIES, len(binaries))
+        self._socket.send(meta)
 
         for name in self.binaries:
             # Wait for 'go' message.
             msg = int.from_bytes(self.conn.recv(4), 'little')
-            if msg != magicnumbers.GO_SEND:
-                print('Invalid answer received, aborting: {}'.format(msg))
+            if msg != GO_SEND:
+                logging.critical('Invalid answer received, aborting: {}'.format(msg))
                 break
-            
-            print('Sending {}.'.format(name))
+
+            # TODO
+            logging.debug('Sending {}.'.format(name))
             file = open(script_dir + name, 'rb').read()
             size = os.stat(script_dir + name).st_size
             meta = struct.pack('15scI', name.encode('ascii'), b'\0', size)
-            self.conn.send(meta)
-            self.conn.send(file)
-            
-    def start(self):
-        """Send message to start the tasks on the server."""
-        print('Starting tasks on server.')
-        meta = struct.pack('I', magicnumbers.START)
-        self.conn.send(meta)
-        
-    def stop(self):
-        """Send message to kill all tasks."""
-        print('Stopping tasks on server.')
-        meta = struct.pack('I', magicnumbers.STOP)
-        self.conn.send(meta)
-        
-    def clear(self):
-        """Send command to stop all tasks and clear the current task set."""
-        print('Resetting all tasks on server.')
-        meta = struct.pack('I', magicnumbers.CLEAR)
-        self.conn.send(meta)
-        
-    def profile(self, log_file='log.xml'):
-        """Get profiling information about all running tasks."""
-        print('Requesting profile data.')
-        meta = struct.pack('I', magicnumbers.GET_PROFILE)
-        self.conn.send(meta)
-        
-        size = int.from_bytes(self.conn.recv(4), 'little')
-        xml = b''
-        while len(xml) < size:
-            xml += self.conn.recv(size)
-            file = open(log_file, 'w')
-            file.write(xml.decode('utf-8')[:-1])
-            print('Profiling data of size {} saved to {}'.format(size, log_file))
+            self._socket.send(meta)
+            self._socket.send(file)
 
-    def live(self, log_file='log.xml'):
-        """Get profiling information about all running tasks."""
-        meta = struct.pack('I', magicnumbers.GET_LIVE)
-        self.conn.send(meta)
+    def _start(self):
+        logging.debug('Starting tasks on server.')
+        meta = struct.pack('I', MagicNumber.START)
+        self._socket.send(meta)
         
-        size = int.from_bytes(self.conn.recv(4), 'little')
-        xml = b''
-        while len(xml) < size:
-            xml += self.conn.recv(size)
-            file = open(log_file, 'w')
-            file.write(xml.decode('utf-8')[:-1])
-            #subprocess.call('clear', shell=True)
-            #print(xml.decode('utf-8')[:-1])
-            print('Live data of size {} saved to {}'.format(size, log_file))
+        
+class Optimization(MutableMapping):
+    def __init__(self):
+        self._optimization = None
 
-    def optimize(self, opt_file='opt.xml'):
-        """Read XML file to get optimization goal."""
-        # Read XML file and discard meta data.
-        self.opt = open(opt_file, 'rb').read()
-        opt_ascii = self.opt.decode('ascii')
-        
-        # Genode XML parser can't handle a lot of header things, so skip them.
-        first_node = re.search('<\w+', opt_ascii)
-        self.opt = self.opt[first_node.start():]
-	
-	
-        """Send optimize goal to the dom0 server."""
-        meta = struct.pack('II', magicnumbers.OPTIMIZE, len(self.opt))
-        print('Sending optimization goal.')
-        self.conn.send(meta)
-        self.conn.send(self.opt)
-	
-    def close(self):
-        """Close connection."""
-        self.conn.close();
+    def dump(self):
+        return xmltodict.unparse(self._optimization, pretty=True)
+
+    def write(self, path):
+        with open(path, 'a') as out:
+            out.write(self.dump())
+
+    def read(self, path):
+        xml = open(path,'rb').read()
+        self._optimzation = xmltodict.parse(xml)
+
+    def __len__(self):
+        return len(self._optimization)
+
+    def __getitem__(self, ii):
+        return self._optimization[ii]
+
+    def __delitem__(self, ii):
+        del self._optimization[ii]
+
+    def __setitem__(self, ii, val):
+        self._optimization[ii] = val
+
+    def __str__(self):
+        return str(self._optimization)
+
+    def insert(self, ii, val):
+        self._optimization.insert(ii, val)
+
+    def append(self, val):
+        self.insert(len(self._optimization), val)
+
+    def __iter__(self):
+        return iter(self._optimization)
+

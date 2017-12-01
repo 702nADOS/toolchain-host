@@ -1,6 +1,4 @@
 from .mixin import Mixin
-# THIS is not the way, how class should be defined. Generally, you use an
-# additional .py file. But we abuse it as configuration file.
 
 class GenLoadFiniteBlob(Mixin):
     _task = {

@@ -9,26 +9,48 @@ from mixins.gen_load_finite import GenLoadFiniteBlob
 from mixins.priority import LowPriority, HighPriority
 from mixins.tasks import PeriodicTask
 from taskset import TaskSet
+from simple_distributor import SimpleDistributor
 
-# debugging
-from pprint import pprint as pp
-import time
+from taskset import TaskSet
+from simple_distributor import SimpleDistributor
 
 
-class SpecialTask(PeriodicTask, LowPriority, GenLoadFiniteBlob):
+import mixins
+
+# mix new taskset with Mixins
+class MixedTask(PeriodicTask, LowPriority, GenLoadFiniteBlob):
     pass
 
-class SpecialTask2(PeriodicTask, HighPriority, GenLoadFiniteBlob):
-    pass
+task = MixedTask()
 
-ts = TaskSet()
-ts.append( SpecialTask())
-ts.append( SpecialTask2())
+# oder
+task = PeriodicTask()
+task["priority"] = range(0, 20)
+# ...
 
 
-for t in ts.produce():
-    print(t)
 
-ts.export("./example0export")
+mixed = MixedTask()
+
+# generate all tasksets
+tasksets = mixed.generate()
+
+# save single taskset
+tasksets[0].save("./taskset.xml")
+
+# save all tasksets
+TaskSet.save(tasksets, "./tasksets/")
+
+taskset = TaskSet()
+taskset.read("./taskset.xml")
+
+# loop over all tasks
+for task in taskset:
+    print task
+
+
+sd = SimpleDistributor().connect()
+
+
 
 

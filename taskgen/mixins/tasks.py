@@ -1,6 +1,10 @@
 from .mixin import MixinMeta,Mixin
 from collections.abc import Mapping
 from abc import ABCMeta
+import flatdict
+import itertools
+from taskset import TaskSet
+from collections import Iterable
 
 class CombinedMeta(ABCMeta, MixinMeta):
     pass
@@ -40,6 +44,23 @@ class Task(Mapping, Mixin, metaclass=CombinedMeta):
 
     def __len__(self):
         return len(self._task)    
+
+    def generate(self):
+        flat = flatdict.FlatDict(dict(self._task))
+
+        # make everything to an iterator, except iterators. Pay attention:
+        # strings are wrapped with an iterator again.
+        iters = map(lambda x: [x] if not isinstance(x, Iterable) or
+                    isinstance(x, str) else x, flat.itervalues())
+        keys = flat.keys()
+
+        # generator for [TaskSet]
+        for values in itertools.product(*iters):
+            # update dictionary with the new combined values. This is done by
+            # mapping all keys to their values.
+            flat.update(dict(zip(keys, values)))
+            yield TaskSet({"taskset" : flat.as_dict()})
+            
     
 class PeriodicTask(Task):
     _task = {
