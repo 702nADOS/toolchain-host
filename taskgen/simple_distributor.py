@@ -11,8 +11,10 @@ import logging
 import xmltodict
 from collections.abc import MutableMapping
 from abc import ABCMeta, abstractmethod
+from live import LiveResult
 
-
+# stub
+import time
 
 # capsulation avoids attribute pollution
 class MagicNumber:
@@ -51,7 +53,7 @@ class MagicNumber:
 class AbstractDistributor(metaclass=ABCMeta):
 
     @abstractmethod
-    def __init__(host, port):
+    def __init__(self, host, port):
         pass
     
     @abstractmethod
@@ -71,14 +73,21 @@ class AbstractDistributor(metaclass=ABCMeta):
         pass
 
 class StubDistributor(AbstractDistributor):
+
+    def __init__(self, host, port):
+        logging.debug("stub created")
+
     def start(self, optimization, taskset):
         logging.debug("start of taskset")
+        self._timestamp = time.clock()
 
     def stop(self):
         logging.debug("stop of taskset")
 
     def live_request(self):
-        logging.debug("live_request")
+        return LiveResult({
+            'running' : time.clock() - self._timestamp < 0.1 # 5 seconds
+        })
 
     def close(self):
         logging.debug("connection closed")
@@ -94,9 +103,9 @@ class SimpleDistributor(AbstractDistributor):
     def __init__(self, host, port):
         # it might happen, that creating a connection fails, so __init__
         # will throw an error. But that is ok.
-        self._socket = socket.create_connection((self._host, self._port))
+        self._socket = socket.create_connection((host, port))
 
-    def start(self, optimization, taskset):
+    def start(self, taskset, optimization):
         _optimaze(optimization)
         _clear(self)
         _send_descs(taskset)

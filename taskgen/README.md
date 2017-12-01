@@ -2,15 +2,15 @@
 - [ ] Distributors
   - [ ] MultiDistributor
     - [x] Implementation
-    - [ ] Refactoring
+    - [x] Refactoring
     - [ ] Documentation
   - [ ] ScanDistributor
     - [x] Implementation
-    - [ ] Refactoring
+    - [x] Refactoring
     - [ ] Documentation
   - [ ] SimpleDistributor
     - [x] Implementation
-    - [ ] Refactoring
+    - [x] Refactoring
     - [ ] Documentation
 - [ ] TaskSet
   - [x] Proof-Of-Concept Implementation
@@ -26,10 +26,6 @@
 - [ ] Examples
 - [ ] Unit Tests
 - [ ] Makefile Integration
-- [ ] GUI
-  - [ ] Proof-Of-Concept Implementation
-  - [ ] Implementation
-  - [ ] Documentation
 - [ ] Genode Implementation
   - [ ] Sporadic Tasks
   - [ ] Asyncron Tasks
