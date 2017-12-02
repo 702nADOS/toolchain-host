@@ -3,7 +3,7 @@ from collections.abc import Mapping
 from abc import ABCMeta
 import flatdict
 import itertools
-from taskset import TaskSet
+#from taskset import TaskSet
 from collections import Iterable
 
 class CombinedMeta(ABCMeta, MixinMeta):
@@ -45,6 +45,7 @@ class Task(Mapping, Mixin, metaclass=CombinedMeta):
     def __len__(self):
         return len(self._task)    
 
+    """
     def generate(self):
         flat = flatdict.FlatDict(dict(self._task))
 
@@ -60,7 +61,7 @@ class Task(Mapping, Mixin, metaclass=CombinedMeta):
             # mapping all keys to their values.
             flat.update(dict(zip(keys, values)))
             yield TaskSet({"taskset" : flat.as_dict()})
-            
+       """     
     
 class PeriodicTask(Task):
     _task = {

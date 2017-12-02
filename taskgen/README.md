@@ -23,6 +23,10 @@
     - [x] Tasks
     - [ ] Priority
     - [ ] Sizes
+- [x] Optimization Class
+- [ ] LiveHandler
+  - [ ] SQLiteLiveHandler
+- [ ] taskgen command line tool
 - [ ] Examples
 - [ ] Unit Tests
 - [ ] Makefile Integration

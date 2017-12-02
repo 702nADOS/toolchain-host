@@ -1,0 +1,125 @@
+#!/usr/bin/env python3
+import argparse
+import logging
+
+# inspect
+import inspect
+import pkgutil
+import importlib
+
+from live import SQLiteLiveHandler
+from multi_distributor import MultiDistributor
+from simple_distributor import Optimization
+
+from taskset import TaskSet
+from tasksets.mixins.tasks import Task
+
+def is_task(cls):
+    return inspect.isclass(cls) and issubclass(cls, Task)
+
+def command_list(args):
+
+    # load all modules from the package tasksets
+    for (module_loader, module_name, ispkg) in pkgutil.iter_modules(["tasksets"]):
+        if not ispkg:
+            module = importlib.import_module('.' + module_name, 'tasksets')
+
+            # find all classes with subclass Task
+            for class_name, obj in inspect.getmembers(module, is_task):
+                if obj.__module__ == 'tasksets.{}'.format(module_name):
+                    print('{}.{}'.format(module_name, class_name))
+
+    
+    """
+    for cls in tasksets.mixins.mixin.Mixin.__subclasses__():
+        print('mixins: {}'.format(cls.__name__))
+
+    for cls in tasksets.mixins.tasks.Task.__subclasses__():
+        print('tasks: {}'.format(cls.__name__))
+    """
+    
+
+
+def command_run(args):    
+
+    # handle verbosity
+    if args.verbosity == 0:
+        logging.basicConfig(level=logging.ERROR)
+    elif args.verbosity == 1:
+        logging.basicConfig(level=logging.WARNING)
+    elif args.verbosity == 2:
+        logging.basicConfig(level=logging.INFO)
+    else:
+        logging.basicConfig(level=logging.DEBUG)
+
+    # logging to file
+    if args.log is not None:
+        logging.basicCOnfig(filename=args.log)
+
+    # initialize distributor (always ping before)
+    distributor = MultiDistributor(args.IP, args.port, ping=True)
+
+    # initialize sqlite live handler
+    if args.sqlite is not None:
+        distributor.live_handler = SQLiteLiveHandler(args.sqlite)
+
+    # load tasksets
+    tasksets = None
+    
+    # load optimzation
+    optimization = None    
+    if args.optimzation is not None:
+        optimization = Optimization()
+        optimization.load(args.optimization)
+    
+    # start (and wait until finished)
+    distributor.start(tasksets, optimization, wait=True)
+
+    # close everything
+    distributor.close()
+    
+
+    
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    subparsers = parser.add_subparsers(dest='command')
+
+    # run -v
+    parser_run = subparsers.add_parser('run', help='runs a list of tasksets')
+    parser_run.add_argument('--log-file', metavar="FILE", dest="log",
+                            help="write log to file", type=argparse.FileType('w'))
+    parser_run.add_argument("-v", "--verbosity", action="count", default=0,
+                            help="increase output verbosity")
+    # run -p
+    parser_run.add_argument('-p', '--port', type=int, required=True, help='Port')
+    # run -l
+    source = parser_run.add_mutually_exclusive_group()
+    source.add_argument('-l', '--load', metavar="PATH",
+                        help='load tasksets from file or directory')
+    # run -t
+    source.add_argument('-t', '--taskset', help='use python taskset class')
+
+    # run -s
+    parser_run.add_argument('-s', '--sqlite', metavar="FILE",
+                            help='Store Live Requests to SQLite Database')
+
+    # run -o
+    parser_run.add_argument('-o', '--optimization', metavar="FILE",
+                            help='Run taskset with optimization')
+
+    # run [IP]
+    parser_run.add_argument('IP', nargs='+',
+                            help='IP address or a range of IP addresses (CIDR format)')
+
+    # list
+    parser_list = subparsers.add_parser('list', help='list available mixins and tasksets')
+    parser_list.add_argument('--mixins', '-m', help='list available mixin classes')
+    parser_list.add_argument('--tasksets', '-t', help='list available taskset classes')
+
+    args = parser.parse_args()
+    if args.command == 'run':
+        command_run(args)
+    elif args.command == 'list':
+        command_list(args)
+        
+    
