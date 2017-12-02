@@ -22,7 +22,7 @@ class SpecialTask(PeriodicTask, LowPriority, GenLoadFiniteBlob):
 ts = SpecialTask().generate()
 
 
-md = MultiDistributor(["192.168.1.1", "192.158.1.2"], 1024, ping=True, distributor_class=StubDistributor)
+md = MultiDistributor(["192.168.1.1"], 1024, ping=False, distributor_class=StubDistributor)
 md.start(ts)
 
 
