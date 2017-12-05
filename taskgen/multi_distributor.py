@@ -5,8 +5,9 @@ import logging
 import subprocess
 import copy
 import socket
+from queue import Queue
 from simple_distributor import SimpleDistributor, AbstractDistributor, Optimization
-from taskset import TaskSet
+from tasksets.taskset import TaskSet
 from collections.abc import Mapping
 from live import AbstractLiveHandler, LiveResult
 from ipaddress import ip_network
@@ -69,7 +70,7 @@ class MultiDistributor(Mapping):
         # TODO tasksets check
             
         # wrap tasksets into an threadsafe iterator
-        tasksets = _threadsafe_iter(tasksets)
+        tasksets = _PushBackIterator(tasksets)
         # to prevent later changes at the opimization structure, do a full copy
         # of the object
         optimization = copy.deepcopy(optimization)
@@ -119,21 +120,40 @@ class MultiDistributor(Mapping):
         return len(self._optimization)
 
 
-class _threadsafe_iter:
+class _PushBackIterator():
     """Takes an iterator/generator and makes it thread-safe by
     serializing call to the `next` method of given iterator/generator.
     """
     def __init__(self, it):
         self.it = it
         self.lock = threading.Lock()
-        
+        self.queue = Queue(maxsize=1000)
+
     def __iter__(self):
         return self
             
     def __next__(self):
+        if not self.queue.empty():
+            try:
+                return self.queue.get_nowait()
+            except Queue.Empty:
+                # ups, another distributor just stole our taskset
+                pass
+
+        # return a regular taskset
         with self.lock:
             return self.it.__next__()
-    
+
+    def put(self, taskset):
+        try:
+            self.queue.put_nowait(taskset)
+        except Queue.Full:
+            # We don't care about the missed taskset. Actually, there is a bigger
+            # problem.
+            logging("The Push-Back Queue of tasksets is full. This is a"
+                    + "indicator, that the underlying distributor is buggy"
+                    + " and is always canceling processing tasksets.")
+        
 
 class _ThreadedWrapperDistributor(threading.Thread):
     # DO NOT USE THIS CLASS. It is threaded and some attributes are not
@@ -217,10 +237,10 @@ class _ThreadedWrapperDistributor(threading.Thread):
         timestamp = time.clock()
 
         # requesting & handling callback
-        live_request = distributor.live_request()            
+        live_request = distributor.live_request()
         delay = 5.0 # check status every five second
         if self.live_handler is not None:
-            self.live_handler.__handle__(taskset, live_request)
+            self.live_handler.__handle_request__(taskset, live_request)
             # but allow a higher resolution, too
             delay = min(delay, self.live_handler.__get_delay__())
 
@@ -229,6 +249,9 @@ class _ThreadedWrapperDistributor(threading.Thread):
             self._processed_tasksets += 1
             self._running.clear()
             self._starting.set()
+            if self.live_handler is not None:
+                self.live_handler.__taskset_finish__(taskset)
+
         else:
             # do some waiting
             left = delay - (time.clock()-timestamp)
@@ -238,16 +261,6 @@ class _ThreadedWrapperDistributor(threading.Thread):
             else:
                 time.sleep(left/1000)
 
-    def _start(self, distributor):
-        # pull new taskset from queue and send it
-
-        # TODO handle empty taskset queue
-        # what happens with tasksets while connection fails
-        taskset = self._tasksets.__next__()
-
-
-        distributor.start(taskset, self._optimization)
-        return taskset
 
     def run(self):
         logging.debug("thread started")
@@ -282,30 +295,54 @@ class _ThreadedWrapperDistributor(threading.Thread):
                     self._running.clear()
                     self._stopping.clear()
                     logging.debug("idle")
-                # starting
+                    if self.live_handler is not None:
+                        self.live_handler.__taskset_stop__(taskset)
+
+                # try starting
                 elif self._starting.is_set():
-                    logging.debug("starting")
-                    taskset = self._start(distributor)
-                    self._idle.clear()
-                    self._running.set()
                     self._starting.clear()
-                    logging.debug("running")
+                    self._idle.clear()
+                    try:
+                        logging.debug("starting")
+                        # pull taskset from queue and execute it.
+                        taskset = self._tasksets.__next__()
+                        distributor.start(taskset, self._optimization)
+                        if self.live_handler is not None:
+                            self.live_handler.__taskset_start__(taskset)
+                        self._running.set()
+                        logging.debug("running")
+                    except StopIteration:
+                        # all tasksets are processed
+                        self._closing.set()
+
                 # idle
-                elif not self.is_running():
+                elif not self._running.is_set():
                     time.sleep(0.1)
 
                 # as long as we are running, do live requests.
-                elif self.is_running():
+                elif self._running.is_set():
                     self._live_request(distributor, taskset)
 
                 # How did we come here???
                 else:
-                    logging.critical("Reached some unknown state")
+                    logging.critical("Distributor reached some unknown state.")
                 
             # clear and finally close
             distributor.clear()
+
+            # finally, the last taskset is not finished, so it is pushed back            
         except socket.error as e:
             logging.critical(e)
+            # the current taskset is pushed back, so another distributor might
+            # process it
+            if taskset is not None:
+                self._tasksets.put(taskset)
+
+            # notify live handler about the stop.
+            if self.live_handler is not None:
+                        self.live_handler.__taskset_stop__(taskset)
+
+
         finally:
             distributor.close()
             self._closed = True

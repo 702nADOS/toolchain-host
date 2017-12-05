@@ -3,9 +3,22 @@ from collections.abc import MutableMapping
 
 class AbstractLiveHandler(metaclass=ABCMeta):
     @abstractmethod
-    def __handle__(self, taskset, live_result):
+    def __handle_request__(self, taskset, live_result):
         pass
-    
+
+    @abstractmethod
+    def __taskset_start__(self, taskset):
+        pass
+
+    @abstractmethod
+    def __taskset_finish__(self, taskset):
+        pass
+
+    @abstractmethod
+    def __taskset_stop__(self, taskset):
+        "canceled by user (via stop) or disconnected"
+        pass
+
     def __get_delay__(self):
         return 5.0 # default, more than 5 second is not possible
 
