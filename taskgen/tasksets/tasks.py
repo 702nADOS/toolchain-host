@@ -25,7 +25,6 @@ class Task(dict):
             "config" : None
         })
 
-    @Abstractmethod
     def __key__(self):
         pass
         

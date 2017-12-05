@@ -6,7 +6,7 @@ import os
 
 import subprocess
 from collections import Iterable
-from taskset import TaskSet
+from tasksets.taskset import TaskSet
 import logging
 import xmltodict
 from collections.abc import MutableMapping

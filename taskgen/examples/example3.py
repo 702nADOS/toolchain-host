@@ -4,21 +4,35 @@
 import sys
 sys.path.append('../')
 
-from scan_distributor import ScanDistributor
-from mixins.gen_load_finite import GenLoadFiniteBlob
-from mixins.priority import LowPriority, HighPriority
-from mixins.tasks import PeriodicTask
-from taskset import TaskSet
+from tasksets.mixins.tasks2 import PeriodicTask, SporadicTask
+from tasksets.mixins.priority import LowPriority
+from tasksets.mixins.gen_load_finite import GenLoadFiniteBlob
+from tasksets.taskset import TaskSet
+from tasksets.example1 import Example1TaskSet
 
-class SpecialTask(PeriodicTask, LowPriority, GenLoadFiniteBlob):
-    pass
-
-tasksets = mixed.generate()
-
-md = ScanDistributor(["131.159.197.0/24"], 1024)
-md.tasksets += tasksets
-md.start()
+from pprint import pprint as pp
 
 
+
+
+class TaskA(PeriodicTask, GenLoadFiniteBlob):    pass
+
+class TaskB(SporadicTask, LowPriority, GenLoadFiniteBlob):    pass 
+
+class ExampleTaskSet(TaskSet):
+    def __init__(self):
+        super().__init__()
+        # my custom TaskSet
+        self.append(TaskA())
+        
+ts_1 = Example1TaskSet()
+
+
+ts_a = ExampleTaskSet()
+
+
+
+for a in ts_1.variants():
+g    print(a.asxml())
 
 

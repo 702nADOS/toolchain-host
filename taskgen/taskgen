@@ -9,71 +9,68 @@ import importlib
 
 from live import SQLiteLiveHandler
 from multi_distributor import MultiDistributor
-from simple_distributor import Optimization
+from simple_distributor import Optimization, SimpleDistributor, StubDistributor
+from tasksets.taskset import TaskSet
+import tasksets
 
-from taskset import TaskSet
-from tasksets.mixins.tasks import Task
+def is_taskset(cls):
+    return inspect.isclass(cls) and issubclass(cls, TaskSet)
 
-def is_task(cls):
-    return inspect.isclass(cls) and issubclass(cls, Task)
+def verbosity(verbosity):
+    # handle verbosity
+    if verbosity == 0:
+        logging.basicConfig(level=logging.ERROR)
+        print("Verbosity: only errors")
+    elif verbosity == 1:
+        logging.basicConfig(level=logging.WARNING)
+        print("Verbosity: errors & warning")
+    elif verbosity == 2:
+        logging.basicConfig(level=logging.INFO)
+        print("Verbosity: errors, warning & info")
+    else:
+        logging.basicConfig(level=logging.DEBUG)
+        print("Verbosity: errors, warning, info & debug")
 
 def command_list(args):
-
     # load all modules from the package tasksets
+    print('{: <30} | {}'.format("TaskSet Class Name", "Description"))
+    print("-"*80)
     for (module_loader, module_name, ispkg) in pkgutil.iter_modules(["tasksets"]):
         if not ispkg:
             module = importlib.import_module('.' + module_name, 'tasksets')
 
-            # find all classes with subclass Task
-            for class_name, obj in inspect.getmembers(module, is_task):
+            # find all classes with subclass Taskset
+            for class_name, obj in inspect.getmembers(module, is_taskset):
                 if obj.__module__ == 'tasksets.{}'.format(module_name):
-                    print('{}.{}'.format(module_name, class_name))
-
-    
-    """
-    for cls in tasksets.mixins.mixin.Mixin.__subclasses__():
-        print('mixins: {}'.format(cls.__name__))
-
-    for cls in tasksets.mixins.tasks.Task.__subclasses__():
-        print('tasks: {}'.format(cls.__name__))
-    """
-    
+                    path = module_name + "." + class_name
+                    doc = "" if obj.__doc__ is None else obj.__doc__
+                    print('{: <30} | {: <50}'.format(path, doc))
 
 
 def command_run(args):    
-
-    # handle verbosity
-    if args.verbosity == 0:
-        logging.basicConfig(level=logging.ERROR)
-    elif args.verbosity == 1:
-        logging.basicConfig(level=logging.WARNING)
-    elif args.verbosity == 2:
-        logging.basicConfig(level=logging.INFO)
-    else:
-        logging.basicConfig(level=logging.DEBUG)
-
+    verbosity(args.verbosity)
+    
     # logging to file
     if args.log is not None:
-        logging.basicCOnfig(filename=args.log)
+        logging.basicConfig(filename=args.log)
 
+         
     # initialize distributor (always ping before)
-    distributor = MultiDistributor(args.IP, args.port, ping=True)
+    distributor_class = StubDistributor if args.pretend else SimpleDistributor
+    distributor = MultiDistributor(args.IP, args.port, ping=True,
+                                   distributor_class=distributor_class)
 
     # initialize sqlite live handler
     if args.sqlite is not None:
         distributor.live_handler = SQLiteLiveHandler(args.sqlite)
 
-    # load tasksets
-    tasksets = None
-    
-    # load optimzation
-    optimization = None    
-    if args.optimzation is not None:
-        optimization = Optimization()
-        optimization.load(args.optimization)
+    # load tasksets  (right now, no parameters can be passed.)
+    module_name, class_name = args.taskset.rsplit(".", 1)
+    ts_class = getattr(importlib.import_module("tasksets."+module_name), class_name)
+    tasksets = ts_class()
     
     # start (and wait until finished)
-    distributor.start(tasksets, optimization, wait=True)
+    distributor.start(tasksets, None, wait=True)
 
     # close everything
     distributor.close()
@@ -92,12 +89,10 @@ if __name__ == '__main__':
                             help="increase output verbosity")
     # run -p
     parser_run.add_argument('-p', '--port', type=int, required=True, help='Port')
-    # run -l
-    source = parser_run.add_mutually_exclusive_group()
-    source.add_argument('-l', '--load', metavar="PATH",
-                        help='load tasksets from file or directory')
+
     # run -t
-    source.add_argument('-t', '--taskset', help='use python taskset class')
+    parser_run.add_argument('-t', '--taskset', required=True,
+                        help='use python taskset class')
 
     # run -s
     parser_run.add_argument('-s', '--sqlite', metavar="FILE",
@@ -106,15 +101,17 @@ if __name__ == '__main__':
     # run -o
     parser_run.add_argument('-o', '--optimization', metavar="FILE",
                             help='Run taskset with optimization')
-
+    
+    # run -p
+    parser_run.add_argument('--pretend', action='store_true',
+                            help='Pretend to send the tasksets.')
+    
     # run [IP]
     parser_run.add_argument('IP', nargs='+',
                             help='IP address or a range of IP addresses (CIDR format)')
 
     # list
-    parser_list = subparsers.add_parser('list', help='list available mixins and tasksets')
-    parser_list.add_argument('--mixins', '-m', help='list available mixin classes')
-    parser_list.add_argument('--tasksets', '-t', help='list available taskset classes')
+    parser_list = subparsers.add_parser('list', help='lists available tasksets')
 
     args = parser.parse_args()
     if args.command == 'run':

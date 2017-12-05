@@ -6,7 +6,7 @@ class GenLoadFiniteBlob(Mixin):
         "quota" : "1M",
         "config" : {
             "arg1" : 126546,
-            "arg2" : range(0, 10)
+            "arg2" : 1
             
         }
     }
