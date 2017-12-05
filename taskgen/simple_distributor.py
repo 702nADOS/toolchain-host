@@ -72,17 +72,19 @@ class AbstractDistributor(metaclass=ABCMeta):
     def close(self):
         pass
 
-class StubDistributor(AbstractDistributor):
-
+    
+class LogDistributor(AbstractDistributor):
+    
     def __init__(self, host, port):
-        logging.debug("stub created")
+        self.logger = logging.getLogger("LogDistributor")
+        self.logger.debug("stub created")
 
     def start(self, optimization, taskset):
-        logging.debug("start of taskset")
+        self.logger.debug("start of taskset")
         self._timestamp = time.clock()
 
     def stop(self):
-        logging.debug("stop of taskset")
+        self.logger.debug("stop of taskset")
 
     def live_request(self):
         return LiveResult({
@@ -90,7 +92,7 @@ class StubDistributor(AbstractDistributor):
         })
 
     def close(self):
-        logging.debug("connection closed")
+        self.logger.debug("connection closed")
 
         
 # This class is a pretty simple implementation for the communication with a
@@ -104,6 +106,7 @@ class SimpleDistributor(AbstractDistributor):
         # it might happen, that creating a connection fails, so __init__
         # will throw an error. But that is ok.
         self._socket = socket.create_connection((host, port))
+        self.logger = logging.getLogger("SimpleDistributor")
 
     def start(self, taskset, optimization):
         _optimaze(optimization)
@@ -114,12 +117,12 @@ class SimpleDistributor(AbstractDistributor):
 
     def stop(self):
         meta = struct.pack('I', MagicNumber.STOP)
-        logging.debug('Stopping tasks on server.')
+        self.logger.debug('Stopping tasks on server.')
         self._socket.send(meta)
         _stop(self)
 
     def live_request(self):
-        logging.debug('Requesting live data.')
+        self.logger.debug('Requesting live data.')
         # send command
         meta = struct.pack('I', MagicNumber.GET_LIVE)
         self._socket.send(meta)
@@ -133,14 +136,14 @@ class SimpleDistributor(AbstractDistributor):
         return xmltodict.parse(xml)
 	
     def close(self):
-        logging.debug('Close connection.')
+        self.logger.debug('Close connection.')
         self._socket.close();
 
     def optimize(self, optimization):
         if not isinstance(optimiziation, Optimiziation):
             raise TypeError("optimization must be of type Optimization") 
 
-        logging.debug('Sending optimiziation goal.')
+        self.logger.debug('Sending optimiziation goal.')
         # Read XML file and discard meta data.
         xml = optimiziation.dump()
         opt_ascii = xml.decode('ascii')
@@ -155,7 +158,7 @@ class SimpleDistributor(AbstractDistributor):
         self.conn.send(xml)
 
     def _clear(self):
-        logging.debug('Resetting all tasks on server.')
+        self.logger.debug('Resetting all tasks on server.')
         meta = struct.pack('I', MagicNumber.CLEAR)
         self._socket.send(meta)
         
@@ -170,7 +173,7 @@ class SimpleDistributor(AbstractDistributor):
         first_node = re.search('<\w+', tasks_ascii)
         tasks = tasks[first_node.start():]
 
-        logging.debug("Sending taskset description.")
+        self.logger.debug("Sending taskset description.")
         meta = struct.pack('II', MagicNumber.SEND_DESCS, len(self.tasks))
         self._socket.send(meta)
         self._socket.send(self.tasks)
@@ -185,7 +188,7 @@ class SimpleDistributor(AbstractDistributor):
         binaries = re.findall('<\s*pkg\s*>\s*(.+)\s*<\s*/pkg\s*>', tasks_ascii)
         binaries = list(set(binaries))
 
-        logging.debug('Sending {} binar{}.'.format(len(binaries), 'y' if
+        self.logger.debug('Sending {} binar{}.'.format(len(binaries), 'y' if
                                                    len(binaries) == 1 else 'ies'))
         
         meta = struct.pack('II', MagicNumber.SEND_BINARIES, len(binaries))
@@ -195,11 +198,11 @@ class SimpleDistributor(AbstractDistributor):
             # Wait for 'go' message.
             msg = int.from_bytes(self.conn.recv(4), 'little')
             if msg != GO_SEND:
-                logging.critical('Invalid answer received, aborting: {}'.format(msg))
+                self.logger.critical('Invalid answer received, aborting: {}'.format(msg))
                 break
 
             # TODO
-            logging.debug('Sending {}.'.format(name))
+            self.logger.debug('Sending {}.'.format(name))
             file = open(script_dir + name, 'rb').read()
             size = os.stat(script_dir + name).st_size
             meta = struct.pack('15scI', name.encode('ascii'), b'\0', size)
@@ -207,7 +210,7 @@ class SimpleDistributor(AbstractDistributor):
             self._socket.send(file)
 
     def _start(self):
-        logging.debug('Starting tasks on server.')
+        self.logger.debug('Starting tasks on server.')
         meta = struct.pack('I', MagicNumber.START)
         self._socket.send(meta)
         

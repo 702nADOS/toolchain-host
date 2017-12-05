@@ -13,16 +13,12 @@ from live import AbstractLiveHandler, LiveResult
 from ipaddress import ip_network
 from itertools import chain
 
-# TODO was passiert wenn keine tasksets mehr da sind
-# TODO was passiert mit dem taskset, wenn die verbindung abbricht
-# TODO wait_running() und closing() event check
-
 
 # die eierlegende Wohlmilchsau
-class MultiDistributor(Mapping):
+class MultiDistributor:
     def __init__(self, hosts, port, ping=True, distributor_class=SimpleDistributor):
         self._live_handler = None
-
+        self.logger = logging.getLogger('MultiDistributor')
         if isinstance(hosts, str):
             hosts = [hosts]
         elif isinstance(hosts, list) and all(isinstance(h, str) for h in hosts):
@@ -43,7 +39,6 @@ class MultiDistributor(Mapping):
 
         self._distributors = {}
         for host in hosts:
-            logging.debug("new instance")
             # start one thread per host
             self._distributors[host] = _ThreadedWrapperDistributor(
                 str(host),
@@ -59,7 +54,6 @@ class MultiDistributor(Mapping):
     def live_handler(self, live_handler):
         if not issubclass(live_handler, AbstractLiveHandler):
             raise TypeError("live_handler must be subtype of AbstractLiveHandler")
-        logging.debug("new live_handler: {}".format(live_handler))
         self._live_handler = live_handler
 
     def start(self, tasksets, optimization=None, wait=True):
@@ -76,33 +70,32 @@ class MultiDistributor(Mapping):
         optimization = copy.deepcopy(optimization)
 
         # lets inform the single distributors about their new work
-        logging.info("start of new taskset")
         for distributor in self._distributors.values():
             distributor.start(tasksets, optimization)
-
+        self.logger.debug("all distributor instances are starting.")
         if wait:
-            self.wait_running()
+            self.logger.info("waiting until all tasksets are processed.")
+            self.wait_stopping()
 
-    def stop(self):
-        logging.info("stop")
+    def stop(self, wait=True):
         for distributor in self._distributors.values():
             distributor.stop()
+        self.logger.info("all distributor instances are stopping.")
+        if wait:
+            self.logger.info("waiting until all distributor instances are stopped.")
+            self.wait_stopping()
         
-    def close(self, wait=True):
-        logging.info("close")
+    def close(self, wait=True):        
         for distributor in self._distributors.values():
             distributor.close()
-
+        self.logger.debug("all distributor instances are closing.")
         if wait:
+            self.logger.info("waiting until all distributor instances are closed")
             self.wait_closing()
-
+            
     def is_running(self):
         return any(d.is_running() for d in self._distributors.values())
-
-    def wait_running(self):
-        for d in self._distributors.values():
-            d.wait_running()
-        
+            
     def is_closed(self):
         return any(d.is_alive() for d in self._distributors.values())
 
@@ -110,14 +103,12 @@ class MultiDistributor(Mapping):
         for d in self._distributors.values():
             d.join()
 
-    def __getitem__(self, ii):
-        return self._distributors[ii].state()
+    def wait_stopping(self):
+        for d in self._distributors.values():
+            d.wait_stopping()
 
-    def __iter__(self):
+    def states(self):
         return iter(map(lambda x: x.state(), self._distributors.values()))
-
-    def __len__(self):
-        return len(self._optimization)
 
 
 class _PushBackIterator():
@@ -152,12 +143,12 @@ class _PushBackIterator():
             # problem.
             logging("The Push-Back Queue of tasksets is full. This is a"
                     + "indicator, that the underlying distributor is buggy"
-                    + " and is always canceling processing tasksets.")
-        
+                    + " and is always canceling currently processed tasksets.")
 
 class _ThreadedWrapperDistributor(threading.Thread):
     # DO NOT USE THIS CLASS. It is threaded and some attributes are not
     # thread-safe! This is a internal class for MultiDistributor
+    
     
     def __init__ (self, host, port, ping=True, distributor_class=AbstractDistributor):
         super().__init__()
@@ -172,6 +163,7 @@ class _ThreadedWrapperDistributor(threading.Thread):
         self._processed_tasksets = 0
         self._host = host
         self._port = port
+        self.logger = logging.getLogger(host)
 
         # thread-safe is not required, but we use the wait/notify feature
         self._pinging = threading.Event()
@@ -212,16 +204,18 @@ class _ThreadedWrapperDistributor(threading.Thread):
 
     def close(self):
         self._closing.set()
-    
+
     def is_running(self):
         return self._running.is_set()
-
-    def wait_running(self):
-        # TODO: except if closed
-        return self._idle.wait()
+    
+    def wait_stopping(self):
+        """ Wait until taskset processing running."""
+        self.logger.debug("waiting until distributor is stopped")
+        while self._idle.wait(0.5):
+            if not self.is_alive(): break
 
     def _ping_host(self):
-        logging.debug("start ping: {}".format(self._host))
+        self.logger.debug("start pinging.")
         received_packages = re.compile(r"(\d) received")
         ping_out = os.popen("ping -q -c2 "+self._host,"r")
         while not self._closing.is_set():
@@ -238,6 +232,7 @@ class _ThreadedWrapperDistributor(threading.Thread):
 
         # requesting & handling callback
         live_request = distributor.live_request()
+        self.logger.debug("received live request")
         delay = 5.0 # check status every five second
         if self.live_handler is not None:
             self.live_handler.__handle_request__(taskset, live_request)
@@ -251,20 +246,18 @@ class _ThreadedWrapperDistributor(threading.Thread):
             self._starting.set()
             if self.live_handler is not None:
                 self.live_handler.__taskset_finish__(taskset)
-
+            self.logger.debug("taskset is processed.")
         else:
             # do some waiting
             left = delay - (time.clock()-timestamp)
             if left < 0:
-                logging.warning("Callback takes more time than espected. Live"
+                self.logger.warning("Callback takes more time than espected. Live"
                                 + " Request is delayed by {} ms.".format(-left))
             else:
                 time.sleep(left/1000)
 
 
     def run(self):
-        logging.debug("thread started")
-
         # ping host
         if self._ping:
             self._pinging.set()
@@ -272,49 +265,52 @@ class _ThreadedWrapperDistributor(threading.Thread):
             self._pinging.clear()
 
             if not found:
-                logging.debug("no host found. exiting")
+                self.logger.debug("no host found. exiting.") 
                 self._not_found.set()
                 return
-            
+        self.logger.debug("host found. connecting...") 
         try:
             # establishing the connection is handled seperately.
             distributor = self._distributor_class(self._host, self._port)
+            self.logger.info("connection established.")
         except socket.error as e:
-            logging.critical(e)
-            self._closed = True
+            self.logger.critical(e)
+            self._closing.set()
             return
 
+        # fallback to idle mode
+        self._idle.set()
+        
         try:
             taskset = None 
             while not self._closing.is_set():
                 # stopping (is always handled before new start requests)
                 if self._stopping.is_set():
-                    logging.debug("stopping")
                     distributor.stop()
                     self._idle.set()
                     self._running.clear()
                     self._stopping.clear()
-                    logging.debug("idle")
+                    self.logger.debug("current taskset processing stopped.")
+                    self.logger.debug("switch to idle mode.")
                     if self.live_handler is not None:
                         self.live_handler.__taskset_stop__(taskset)
 
                 # try starting
                 elif self._starting.is_set():
                     self._starting.clear()
-                    self._idle.clear()
                     try:
-                        logging.debug("starting")
                         # pull taskset from queue and execute it.
                         taskset = self._tasksets.__next__()
                         distributor.start(taskset, self._optimization)
                         if self.live_handler is not None:
                             self.live_handler.__taskset_start__(taskset)
                         self._running.set()
-                        logging.debug("running")
+                        self._idle.clear()
+                        self.logger.debug("taskset processing started.")
                     except StopIteration:
                         # all tasksets are processed
-                        self._closing.set()
-
+                        self.logger.debug("all tasksets are processed.")
+                        self.logger.debug("switch to idle mode.")
                 # idle
                 elif not self._running.is_set():
                     time.sleep(0.1)
@@ -325,14 +321,12 @@ class _ThreadedWrapperDistributor(threading.Thread):
 
                 # How did we come here???
                 else:
-                    logging.critical("Distributor reached some unknown state.")
+                    self.logger.critical("Distributor reached some unknown state.")
                 
             # clear and finally close
             distributor.clear()
-
-            # finally, the last taskset is not finished, so it is pushed back            
         except socket.error as e:
-            logging.critical(e)
+            self.logger.critical(e)
             # the current taskset is pushed back, so another distributor might
             # process it
             if taskset is not None:
@@ -345,4 +339,4 @@ class _ThreadedWrapperDistributor(threading.Thread):
 
         finally:
             distributor.close()
-            self._closed = True
+            self.logger.debug("distributor regularly closed.")

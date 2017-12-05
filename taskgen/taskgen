@@ -9,7 +9,7 @@ import importlib
 
 from live import SQLiteLiveHandler
 from multi_distributor import MultiDistributor
-from simple_distributor import Optimization, SimpleDistributor, StubDistributor
+from simple_distributor import Optimization, SimpleDistributor, LogDistributor
 from tasksets.taskset import TaskSet
 import tasksets
 
@@ -17,20 +17,24 @@ def is_taskset(cls):
     return inspect.isclass(cls) and issubclass(cls, TaskSet)
 
 def verbosity(verbosity):
+    FORMAT = '%(asctime)-15s %(levelname)s [%(name)s]  %(message)s'
+
     # handle verbosity
     if verbosity == 0:
-        logging.basicConfig(level=logging.ERROR)
+        LEVEL=logging.ERROR
         print("Verbosity: only errors")
     elif verbosity == 1:
-        logging.basicConfig(level=logging.WARNING)
+        LEVEL=logging.WARNING
         print("Verbosity: errors & warning")
     elif verbosity == 2:
-        logging.basicConfig(level=logging.INFO)
+        LEVEL=logging.INFO
         print("Verbosity: errors, warning & info")
     else:
-        logging.basicConfig(level=logging.DEBUG)
+        LEVEL=logging.DEBUG
         print("Verbosity: errors, warning, info & debug")
-
+    logging.basicConfig(format=FORMAT, level=LEVEL)
+    
+        
 def command_list(args):
     # load all modules from the package tasksets
     print('{: <30} | {}'.format("TaskSet Class Name", "Description"))
@@ -51,12 +55,13 @@ def command_run(args):
     verbosity(args.verbosity)
     
     # logging to file
-    if args.log is not None:
-        logging.basicConfig(filename=args.log)
+#    if args.log is not None:
+#        logging.basicConfig(filename=args.log)
 
+    
          
     # initialize distributor (always ping before)
-    distributor_class = StubDistributor if args.pretend else SimpleDistributor
+    distributor_class = LogDistributor if args.pretend else SimpleDistributor
     distributor = MultiDistributor(args.IP, args.port, ping=True,
                                    distributor_class=distributor_class)
 
