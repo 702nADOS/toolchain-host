@@ -3,18 +3,17 @@ import code
 import struct
 import re
 import os
-
 import subprocess
 from collections import Iterable
-from tasksets.taskset import TaskSet
 import logging
 import xmltodict
-from collections.abc import MutableMapping
 from abc import ABCMeta, abstractmethod
-from live import LiveResult
 
-# stub
-import time
+from taskgen.live import LiveResult
+from taskgen.taskset import TaskSet
+from taskgen.optimization import Optimization
+from taskgen.distributor import AbstractDistributor
+
 
 # capsulation avoids attribute pollution
 class MagicNumber:
@@ -48,52 +47,6 @@ class MagicNumber:
     #Initiate task scheduling optimization.
     OPTIMIZE = 0x6F7074
 
-
-# we need some conventions, to ensure that the MultiDistributor is working
-class AbstractDistributor(metaclass=ABCMeta):
-
-    @abstractmethod
-    def __init__(self, host, port):
-        pass
-    
-    @abstractmethod
-    def start(self, optimization, taskset):
-        pass
-
-    @abstractmethod
-    def stop(self):
-        pass
-
-    @abstractmethod
-    def live_request(self):
-        pass
-
-    @abstractmethod
-    def close(self):
-        pass
-
-    
-class LogDistributor(AbstractDistributor):
-    
-    def __init__(self, host, port):
-        self.logger = logging.getLogger("LogDistributor")
-        self.logger.debug("stub created")
-
-    def start(self, optimization, taskset):
-        self.logger.debug("start of taskset")
-        self._timestamp = time.clock()
-
-    def stop(self):
-        self.logger.debug("stop of taskset")
-
-    def live_request(self):
-        return LiveResult({
-            'running' : time.clock() - self._timestamp < 0.1 # 5 seconds
-        })
-
-    def close(self):
-        self.logger.debug("connection closed")
-
         
 # This class is a pretty simple implementation for the communication with a
 # genode::Taskloader instance. There are no error handling mechanism and all
@@ -109,17 +62,17 @@ class SimpleDistributor(AbstractDistributor):
         self.logger = logging.getLogger("SimpleDistributor")
 
     def start(self, taskset, optimization):
-        _optimaze(optimization)
-        _clear(self)
-        _send_descs(taskset)
-        _send_bins(taskset)
-        _start(self)
+        self._optimaze(optimization)
+        self._clear()
+        self._send_descs(taskset)
+        self._send_bins(taskset)
+        self._start()
 
     def stop(self):
         meta = struct.pack('I', MagicNumber.STOP)
         self.logger.debug('Stopping tasks on server.')
         self._socket.send(meta)
-        _stop(self)
+        self._stop()
 
     def live_request(self):
         self.logger.debug('Requesting live data.')
@@ -136,8 +89,9 @@ class SimpleDistributor(AbstractDistributor):
         return xmltodict.parse(xml)
 	
     def close(self):
+        self._clear()
+        self._socket.close()
         self.logger.debug('Close connection.')
-        self._socket.close();
 
     def optimize(self, optimization):
         if not isinstance(optimiziation, Optimiziation):
@@ -214,43 +168,3 @@ class SimpleDistributor(AbstractDistributor):
         meta = struct.pack('I', MagicNumber.START)
         self._socket.send(meta)
         
-        
-class Optimization(MutableMapping):
-    def __init__(self):
-        self._optimization = None
-
-    def dump(self):
-        return xmltodict.unparse(self._optimization, pretty=True)
-
-    def write(self, path):
-        with open(path, 'a') as out:
-            out.write(self.dump())
-
-    def read(self, path):
-        xml = open(path,'rb').read()
-        self._optimzation = xmltodict.parse(xml)
-
-    def __len__(self):
-        return len(self._optimization)
-
-    def __getitem__(self, ii):
-        return self._optimization[ii]
-
-    def __delitem__(self, ii):
-        del self._optimization[ii]
-
-    def __setitem__(self, ii, val):
-        self._optimization[ii] = val
-
-    def __str__(self):
-        return str(self._optimization)
-
-    def insert(self, ii, val):
-        self._optimization.insert(ii, val)
-
-    def append(self, val):
-        self.insert(len(self._optimization), val)
-
-    def __iter__(self):
-        return iter(self._optimization)
-

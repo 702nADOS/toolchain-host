@@ -1,6 +1,7 @@
-from .mixin import Mixin
 
-class GenLoadFiniteBlob(Mixin):
+
+# DO NOT CHANGE, used in documentation
+class GenLoadFinite:
     _task = {
         "pkg" : "gen_load_finite",
         "quota" : "1M",

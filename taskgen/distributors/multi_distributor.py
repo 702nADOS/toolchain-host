@@ -1,3 +1,13 @@
+"""
+.. module:: useful_1
+   :platform: Unix, Windows
+   :synopsis: A useful module indeed.
+
+.. moduleauthor:: Andrew Carter <andrew@invalid.com>
+
+
+"""
+
 import os, re
 import threading
 import time
@@ -6,12 +16,15 @@ import subprocess
 import copy
 import socket
 from queue import Queue
-from simple_distributor import SimpleDistributor, AbstractDistributor, Optimization
-from tasksets.taskset import TaskSet
 from collections.abc import Mapping
-from live import AbstractLiveHandler, LiveResult
 from ipaddress import ip_network
 from itertools import chain
+
+from taskgen.distributors.simple_distributor import SimpleDistributor
+from taskgen.distributor import AbstractDistributor
+from taskgen.optimization import Optimization
+from taskgen.taskset import TaskSet
+from taskgen.live import AbstractLiveHandler, LiveResult
 
 
 # die eierlegende Wohlmilchsau
@@ -52,22 +65,25 @@ class MultiDistributor:
 
     @live_handler.setter
     def live_handler(self, live_handler):
-        if not issubclass(live_handler, AbstractLiveHandler):
-            raise TypeError("live_handler must be subtype of AbstractLiveHandler")
+        if live_handler is not None:
+            if not isinstance(live_handler, AbstractLiveHandler):
+                raise TypeError("live_handler must be subtype of AbstractLiveHandler")
         self._live_handler = live_handler
 
-    def start(self, tasksets, optimization=None, wait=True):
+    def start(self, taskset, optimization=None, wait=True):
         if optimization is not None:
             if not isinstance(optimization, Optimization):
                 raise TypeError("optimization must be of type Optimization")
+            else:
+                # to prevent later changes at the opimization structure, do a full copy
+                # of the object
+                optimization = copy.deepcopy(optimization)
 
-        # TODO tasksets check
-            
+        if taskset is None or not isinstance(taskset, TaskSet):
+            raise TypeError("taskset must be TaskSet.")
+
         # wrap tasksets into an threadsafe iterator
-        tasksets = _PushBackIterator(tasksets)
-        # to prevent later changes at the opimization structure, do a full copy
-        # of the object
-        optimization = copy.deepcopy(optimization)
+        tasksets = _PushBackIterator(taskset.variants())
 
         # lets inform the single distributors about their new work
         for distributor in self._distributors.values():
@@ -232,7 +248,6 @@ class _ThreadedWrapperDistributor(threading.Thread):
 
         # requesting & handling callback
         live_request = distributor.live_request()
-        self.logger.debug("received live request")
         delay = 5.0 # check status every five second
         if self.live_handler is not None:
             self.live_handler.__handle_request__(taskset, live_request)
@@ -323,8 +338,6 @@ class _ThreadedWrapperDistributor(threading.Thread):
                 else:
                     self.logger.critical("Distributor reached some unknown state.")
                 
-            # clear and finally close
-            distributor.clear()
         except socket.error as e:
             self.logger.critical(e)
             # the current taskset is pushed back, so another distributor might

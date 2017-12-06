@@ -1,11 +1,12 @@
 import xmltodict
 import os
 from collections.abc import MutableSequence
-from .tasks import Task
 from collections import defaultdict
 import flatdict
 import itertools
 from collections import Iterable
+
+from taskgen.task import Task
 
 class TaskSet:
     def __init__(self, taskset = {}):

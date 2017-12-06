@@ -22,17 +22,7 @@ class AbstractLiveHandler(metaclass=ABCMeta):
     def __get_delay__(self):
         return 5.0 # default, more than 5 second is not possible
 
-    
-class SQLiteLiveHandler(AbstractLiveHandler):
-    def __handle__(self, taskset, live_result):
-        print(live_result)
-
-    
         
-class QueueLiveHandler(AbstractLiveHandler):
-    def __handle__(self, taskset, live_result):
-        print(live_result)
-
 class LiveResult(MutableMapping):
     def __init__(self, live = None):
         self._live = live
