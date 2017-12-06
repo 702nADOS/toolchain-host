@@ -37,7 +37,7 @@ genode-Taskloader instances. taskgen is shipped with a command line tool.
 
 run the following command for listing all available tasksets:
 
-```Python
+```bash
 ./taskgen list --taskset
 ```
 
@@ -45,7 +45,7 @@ We want to distribute the `example.ExampleTaskSet` task-set to one destination
 instance. There is no need for real genode instances, the `--pretend` flag
 replaces the actual connection by a stub.
 
-```Python
+```bash
 ./taskgen run -vv --pretend -t example.ExampleTaskSet -p 1234 172.25.0.1
 ```
 

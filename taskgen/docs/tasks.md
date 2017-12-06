@@ -5,7 +5,7 @@ subtypes of the abstract `Task` class and serve as starting point for your
 customized task. The `Task` class inherits from the Python `dict` class.  All
 attributes of a task are accessed and altered with dictionary methods.
 
-```Python
+```python3
 from taskgen.task import PeriodicTask
 
 t = PeriodicTask()
@@ -23,7 +23,7 @@ value results in multiple variants of a task and finally multiple variants of a
 taskset. If you want to analyse, how a scheduler reacts to different values of
 one or more tasks, this is the way to go.
 
-```Python
+```python3
 from taskgen.task import PeriodicTask
 
 t = PeriodicTask()
@@ -46,7 +46,7 @@ again. Specific behaviors, like a high priority, are summarized in building
 blocks, called mixins. They are located in the [mixins](../mixins) directory.
 
 
-```Python
+```python3
 from taskgen.mixins.priority import HighPriority
 from taskgen.mixins.gen_load_finite import GenLoadFinite
 from taskgen.task import PeriodicTask
@@ -57,7 +57,7 @@ class MyTask(HighPriority, GenLoadFinite, PeriodicTask):
 
 Now, this task can be appended to a task-set instance.
 
-```Python
+```python3
 ts_4 = TaskSet()
 ts_4.append( MyTask())
 ```

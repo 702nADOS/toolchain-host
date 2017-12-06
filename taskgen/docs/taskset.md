@@ -5,7 +5,7 @@ is a subclass of `taskset.TaskSet` and a container for `tasks.Task` classes.
 Task-sets do not behave like a list or dictionary. Only an append method and
 the concatenation operator are supported. This has some performance reasons.
 
-```Python
+```python3
 from taskgen.tasksets.example import ExampleTaskSet
 from taskgen.distributors.multi_distributor import MultiDistributor
 
@@ -21,7 +21,7 @@ The usage of task-sets is not limited to predefined implementations. It is
 possible to build custom task-set with the base class `taskset.TaskSet` and
 `Task` classes.
 
-```Python
+```python3
 from taskgen.tasksets.example import ExampleTask
 from taskgen.taskset import TaskSet
 
@@ -36,7 +36,7 @@ ts_1.append( ExampleTask())
 
 When task-sets are concatenated, all tasks are added to a new task-set instance.
 
-```Python
+```python3
 ts_2 = TaskSet()
 ts_2.append( ExampleTask())
 
@@ -50,7 +50,7 @@ variants of a Task and finally multiple variants of a TaskSet. There is no way
 to determine the actual number of variants, only if it has variants. It also can
 have infinite variants, which will keep the distributor running.
 
-```Python
+```python3
 ts = ExampleTaskSet()
 print( ts.has_variants())
 
