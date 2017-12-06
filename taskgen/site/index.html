@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="None">
+  
+  <link rel="shortcut icon" href="./img/favicon.ico">
+  <title>Home - taskgen</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="./css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="./css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="./css/highlight.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Home";
+    var mkdocs_page_input_path = "index.md";
+    var mkdocs_page_url = "/";
+  </script>
+  
+  <script src="./js/jquery-2.1.1.min.js"></script>
+  <script src="./js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="./js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="." class="icon icon-home"> taskgen</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href=".">Home</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#taskgen">taskgen</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#goals">Goals</a></li>
+        
+            <li><a class="toctree-l3" href="#getting-started">Getting started</a></li>
+        
+            <li><a class="toctree-l3" href="#project-layout">Project layout</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Usage</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="commandline/">Command Line Tool</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="api/">API</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Extension</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="mixins/">Add Mixins</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="tasks/">Add Tasks</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="tasksets/">Add Tasksets</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="live/">Add Live Handler</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="distributor/">Add Distributor</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Examples</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="ml/">Machine Learning</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href=".">taskgen</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Home</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="taskgen">taskgen</h1>
+<p><code>taskgen</code> is a taskset generation framework for the
+<a href="https://github.com/argos-research/genode-Taskloader">genode-Taskloader</a>
+component. </p>
+<h2 id="goals">Goals</h2>
+<ul>
+<li>
+<p><strong>Easy extensibility</strong> New modules like are simple to add as new classes. The
+  primary classes <code>TaskSet</code> and <code>Task</code> are represented as dictionaries, which
+  allows a direct mapping from <code>Task</code> attributes to the final xml
+  representation.</p>
+</li>
+<li>
+<p><strong>Work with Python</strong> No separate models configuration files in a declarative
+  format. Models are described in Python code, which is compact, easier to
+  debug, and allows for ease of extensibility</p>
+</li>
+<li>
+<p><strong>Large-Scale</strong> TaskSet variants up to 1 billion or even infinite taskset
+  generators are no problems. Lazy evaluation only generate as much tasksets as
+  needed at runtime.</p>
+</li>
+<li>
+<p><strong>User friendly</strong> Threading keeps waiting time low and work like ping,
+  connect, processing tasksets is done in background. A fast-responsive
+  framework is the result.</p>
+</li>
+</ul>
+<h2 id="getting-started">Getting started</h2>
+<p>The core of taskgen are the the <a href="./tasksets/">task-sets</a>. This directory
+contains abstract task-set generators and predefined out-of-the-box runnable
+task-sets like <code>TODO</code>. For more complex task-set generation, you should us the
+<a href="api/">taskgen functional API</a>. Another helpful tool is the command
+line application:</p>
+<pre><code>usage: __main__.py run [-h] [-v] [--log-file FILE] -p PORT -t CLASS [-l CLASS]
+                       [-o CLASS] [--pretend]
+                       IP [IP ...]
+</code></pre>
+
+<p>Beside a port and one or multiple IP, IP-ranges, a taskset is neccesary for
+processing. A taskset can have variants, which is means, that some attributes
+may have multiple values. Every variant is executed as single taskset at one
+destination genode instance.
+Now lets do same dry exercise and execute a taskset with its variants at
+three destination instances. There is no need for real genode instances, the
+<code>--pretend</code> flag replaces the actual connection by a stub.</p>
+<pre><code>./taskgen run --pretend -p 1234 -t TODO 172.25.0.1 172.25.0.2 172.25.0.3
+</code></pre>
+
+<h2 id="project-layout">Project layout</h2>
+<pre><code>mkdocs.yml                    # documentation configuration file
+docs/                         # documentation in markdown
+site/                         # built html documentation
+taskset.py                    # TaskSet base class implementation
+tasks.py                      # Periodic-, Sporadic-, AperiodicTask implementation
+live.py                       # live request handler implementations
+distributors/
+    simple_distributor.py     # genode distributor implementation
+    multi_distributor.py      # advanced, asyncron, multi connection distributor
+mixins/                       # direcotry for mixins (task configurations)
+    gen_load_finite.py        # binary configuration file
+    ...
+tasksets/                     # directory for taskset classes
+    ...
+lives/
+    sqlite.py                 # live request handler with sqlite support
+    ...
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="commandline/" class="btn btn-neutral float-right" title="Command Line Tool">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+        <span style="margin-left: 15px"><a href="commandline/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '.';</script>
+    <script src="./js/theme.js"></script>
+      <script src="./search/require.js"></script>
+      <script src="./search/search.js"></script>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 0.17.2
+Build Date UTC : 2017-12-06 18:56:46
+-->

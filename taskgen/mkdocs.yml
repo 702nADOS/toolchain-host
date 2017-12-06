@@ -1,0 +1,15 @@
+site_name: taskgen
+pages:
+    - Home: index.md
+    - Usage:
+      - Command Line Tool: commandline.md
+      - API: api.md
+    - Extension:
+      - Add Mixins: mixins.md
+      - Add Tasks: tasks.md
+      - Add Tasksets: tasksets.md
+      - Add Live Handler: live.md
+      - Add Distributor: distributor.md
+    - Examples:
+      - Machine Learning: ml.md
+theme: readthedocs
