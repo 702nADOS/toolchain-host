@@ -1,4 +1,4 @@
-Distributor ...
+TODO explain distributors
 
 # LogDistributor
 
@@ -18,8 +18,13 @@ advanced `MultiDistributor`.
 # MultiDistributor
 
 The `MultiDistributor` is the default distributor for communication with
-multiple genode instances. 
+multiple genode instances.
 
-TODO
+* IP ranges
+* ping
+* asyncron
+* push back, no reconnect
+* example
+
 
 
