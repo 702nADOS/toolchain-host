@@ -5,7 +5,7 @@ from taskgen.taskset import TaskSet
 
 
 # DO NOT DELETE, is an exmaple for the documentation
-class ExampleTask(PeriodicTask, LowPriority, GenLoadFinite):
+class ExampleTask(LowPriority, GenLoadFinite, PeriodicTask):
     pass
 
 
@@ -17,6 +17,5 @@ class ExampleTaskSet(TaskSet):
     def __init__(self):
         super().__init__()
 
-        self.append(TaskA())
-        self.append(TaskB())
-        self.append(TaskA())
+        self.append(ExampleTask())
+

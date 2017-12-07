@@ -12,5 +12,5 @@ class LowPriority:
     def __init__(self):
         super().__init__()
         super().update({
-            "priority" : range(0,10)            
+            "priority" : range(0,10)
         })

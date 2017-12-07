@@ -84,7 +84,7 @@ class MultiDistributor:
 
         # wrap tasksets into an threadsafe iterator
         tasksets = _PushBackIterator(taskset.variants())
-
+        
         # lets inform the single distributors about their new work
         for distributor in self._distributors.values():
             distributor.start(tasksets, optimization)
@@ -210,10 +210,10 @@ class _ThreadedWrapperDistributor(threading.Thread):
         }
     
     def start(self, tasksets, optimization=None):
-        self._stopping.set() # not necessary
         self._tasksets = tasksets
         self._optimization = optimization
         self._starting.set()
+        self._idle.clear()
         
     def stop(self):
         self._stopping.set()
@@ -225,10 +225,11 @@ class _ThreadedWrapperDistributor(threading.Thread):
         return self._running.is_set()
     
     def wait_stopping(self):
-        """ Wait until taskset processing running."""
         self.logger.debug("waiting until distributor is stopped")
-        while self._idle.wait(0.5):
-            if not self.is_alive(): break
+        while self.is_alive():
+            if self._idle.wait(0.5):
+               break
+
 
     def _ping_host(self):
         self.logger.debug("start pinging.")
@@ -326,6 +327,8 @@ class _ThreadedWrapperDistributor(threading.Thread):
                         # all tasksets are processed
                         self.logger.debug("all tasksets are processed.")
                         self.logger.debug("switch to idle mode.")
+                        self._idle.set()
+                        
                 # idle
                 elif not self._running.is_set():
                     time.sleep(0.1)
