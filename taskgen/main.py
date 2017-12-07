@@ -109,7 +109,7 @@ def command_run(args):
 
     
 def main():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(prog="taskgen")
     subparsers = parser.add_subparsers(dest='command')
 
     # run
@@ -125,13 +125,13 @@ def main():
 
     # run -t
     parser_run.add_argument('-t', '--taskset', required=True, metavar="CLASS",
-                        help='use python taskset class')
+                        help='Select a taskset class.')
     # run -l
     parser_run.add_argument('-l', '--live', metavar="CLASS",
-                            help='Select a handler for live request results')
+                            help='Select a handler for live request results.')
     # run -o
     parser_run.add_argument('-o', '--optimization', metavar="CLASS",
-                            help='Select an optimization class')
+                            help='Select an optimization class.')
     # run --pretend
     parser_run.add_argument('--pretend', action='store_true',
                             help='Pretend to send the tasksets.')
@@ -144,11 +144,14 @@ def main():
     group_list = parser_list.add_mutually_exclusive_group(required=True)
 
     # list -t
-    group_list.add_argument('-t', '--taskset', action='store_true')
+    group_list.add_argument('-t', '--taskset', action='store_true',
+                            help="print all available taskset classes.")
     # list -o
-    group_list.add_argument('-o', '--optimization', action='store_true')
+    group_list.add_argument('-o', '--optimization', action='store_true',
+                            help="print all available optimization classes.")
     # list -l
-    group_list.add_argument('-l', '--live', action='store_true')    
+    group_list.add_argument('-l', '--live', action='store_true',
+                            help="print all available live requesth handler.")
 
     # parse
     args = parser.parse_args()

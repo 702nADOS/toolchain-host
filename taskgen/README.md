@@ -35,7 +35,20 @@ pip3 install --user -r ./requirements.txt
 The core of taskgen is the distribution of task-sets to running
 genode-Taskloader instances. taskgen is shipped with a command line tool.
 
-run the following command for listing all available tasksets:
+Option 1:
+
+```bash
+cd ..
+python3 -m taskgen --help
+```
+
+Option2:
+
+```bash
+./taskgen --help
+```
+
+Use the tool to list all available tasksets:
 
 ```bash
 ./taskgen list --taskset
@@ -58,3 +71,4 @@ replaces the actual connection by a stub.
 * [Optimization](docs/optimization.md)
 * [Live Request Handler](docs/live.md)
 * [Dictionary to XML format](docs/dict2xml.md)
+

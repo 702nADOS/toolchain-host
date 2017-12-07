@@ -1,3 +1,3 @@
-from taskgen.application import main
+from taskgen.main import main
 
 main()
