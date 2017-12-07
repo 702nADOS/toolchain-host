@@ -10,11 +10,11 @@ script_dir = os.path.dirname(os.path.realpath(__file__)) + '/'
 
 class Dom0_session:
 	"""Manager for a connection to the dom0 server."""
-	def __init__(self, host='192.168.217.20', port=3001):
+	def __init__(self, host='192.168.218.20', port=3001):
 		"""Initialize connection."""
 		self.connect(host, port)
 
-	def connect(self, host='192.168.217.20', port=3001):
+	def connect(self, host='192.168.218.20', port=3001):
 		"""Connect to the Genode dom0 server."""
 		self.conn = socket.create_connection((host, port))
 		print('Connected.')
