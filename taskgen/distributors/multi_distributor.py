@@ -24,13 +24,13 @@ from taskgen.distributors.simple_distributor import SimpleDistributor
 from taskgen.distributor import AbstractDistributor
 from taskgen.optimization import Optimization
 from taskgen.taskset import TaskSet
-from taskgen.live import AbstractLiveHandler, LiveResult
+from taskgen.live import AbstractLiveHandler, DefaultLiveHandler
 
 
 # die eierlegende Wohlmilchsau
 class MultiDistributor:
     def __init__(self, hosts, port, ping=True, distributor_class=SimpleDistributor):
-        self._live_handler = None
+        
         self.logger = logging.getLogger('MultiDistributor')
         if isinstance(hosts, str):
             hosts = [hosts]
@@ -59,18 +59,9 @@ class MultiDistributor:
                 ping,
                 distributor_class)
 
-    @property
-    def live_handler(self):
-        return self._live_handler
-
-    @live_handler.setter
-    def live_handler(self, live_handler):
-        if live_handler is not None:
-            if not isinstance(live_handler, AbstractLiveHandler):
-                raise TypeError("live_handler must be subtype of AbstractLiveHandler")
-        self._live_handler = live_handler
-
-    def start(self, taskset, optimization=None, wait=True):
+    def start(self, taskset, optimization=None, live_handler =
+              DefaultLiveHandler(), wait=True):
+        
         if optimization is not None:
             if not isinstance(optimization, Optimization):
                 raise TypeError("optimization must be of type Optimization")
@@ -78,7 +69,10 @@ class MultiDistributor:
                 # to prevent later changes at the opimization structure, do a full copy
                 # of the object
                 optimization = copy.deepcopy(optimization)
-
+                
+        if not isinstance(live_handler, AbstractLiveHandler):
+            raise TypeError("live_handler must be of type AbstractLiveHandler")
+    
         if taskset is None or not isinstance(taskset, TaskSet):
             raise TypeError("taskset must be TaskSet.")
 
@@ -87,7 +81,7 @@ class MultiDistributor:
         
         # lets inform the single distributors about their new work
         for distributor in self._distributors.values():
-            distributor.start(tasksets, optimization)
+            distributor.start(tasksets, optimization, live_handler)
         self.logger.debug("all distributor instances are starting.")
         if wait:
             self.logger.info("waiting until all tasksets are processed.")
@@ -209,9 +203,10 @@ class _ThreadedWrapperDistributor(threading.Thread):
             }
         }
     
-    def start(self, tasksets, optimization=None):
+    def start(self, tasksets, optimization, live_handler):
         self._tasksets = tasksets
         self._optimization = optimization
+        self._live_handler = live_handler
         self._starting.set()
         self._idle.clear()
         
@@ -230,18 +225,19 @@ class _ThreadedWrapperDistributor(threading.Thread):
             if self._idle.wait(0.5):
                break
 
-
     def _ping_host(self):
         self.logger.debug("start pinging.")
         received_packages = re.compile(r"(\d) received")
+
         ping_out = os.popen("ping -q -c2 "+self._host,"r")
         while not self._closing.is_set():
             line = ping_out.readline()
-            if not line: break
+            if not line:
+                break
             n_received = re.findall(received_packages,line)
             if n_received:
                 return int(n_received[0]) > 0
-            return False
+        return False
 
     def _live_request(self, distributor, taskset):
         # measure the time
@@ -249,23 +245,20 @@ class _ThreadedWrapperDistributor(threading.Thread):
 
         # requesting & handling callback
         live_request = distributor.live_request()
-        delay = 5.0 # check status every five second
-        if self.live_handler is not None:
-            self.live_handler.__handle_request__(taskset, live_request)
-            # but allow a higher resolution, too
-            delay = min(delay, self.live_handler.__get_delay__())
+        is_running = self._live_handler.__handle_request__(taskset, live_request)
 
-        if not live_request.__is_running__():
+        if not is_running:
             # processing of taskset is done
             self._processed_tasksets += 1
             self._running.clear()
             self._starting.set()
-            if self.live_handler is not None:
-                self.live_handler.__taskset_finish__(taskset)
+            if self._live_handler is not None:
+                self._live_handler.__taskset_finish__(taskset)
             self.logger.debug("taskset is processed.")
         else:
             # do some waiting
-            left = delay - (time.clock()-timestamp)
+            delay = self._live_handler.__get_delay__()
+            left = delay*1000 - (time.clock()-timestamp)
             if left < 0:
                 self.logger.warning("Callback takes more time than espected. Live"
                                 + " Request is delayed by {} ms.".format(-left))
@@ -308,8 +301,7 @@ class _ThreadedWrapperDistributor(threading.Thread):
                     self._stopping.clear()
                     self.logger.debug("current taskset processing stopped.")
                     self.logger.debug("switch to idle mode.")
-                    if self.live_handler is not None:
-                        self.live_handler.__taskset_stop__(taskset)
+                    self._live_handler.__taskset_stop__(taskset)
 
                 # try starting
                 elif self._starting.is_set():
@@ -318,8 +310,7 @@ class _ThreadedWrapperDistributor(threading.Thread):
                         # pull taskset from queue and execute it.
                         taskset = self._tasksets.__next__()
                         distributor.start(taskset, self._optimization)
-                        if self.live_handler is not None:
-                            self.live_handler.__taskset_start__(taskset)
+                        self._live_handler.__taskset_start__(taskset)
                         self._running.set()
                         self._idle.clear()
                         self.logger.debug("taskset processing started.")
@@ -349,8 +340,7 @@ class _ThreadedWrapperDistributor(threading.Thread):
                 self._tasksets.put(taskset)
 
             # notify live handler about the stop.
-            if self.live_handler is not None:
-                        self.live_handler.__taskset_stop__(taskset)
+            self._live_handler.__taskset_stop__(taskset)
 
 
         finally:

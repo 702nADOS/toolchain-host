@@ -14,9 +14,7 @@ class Task(dict):
         super().update( {
             # default values
             "id" : "test",
-            "numberofjobs" : None,
             "priority" : None,
-            "deadline" : None,
 
             # blob values
             "quota" : None,

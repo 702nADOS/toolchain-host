@@ -3,16 +3,17 @@ import code
 import struct
 import re
 import os
+import sys
 import subprocess
 from collections import Iterable
 import logging
 import xmltodict
 from abc import ABCMeta, abstractmethod
 
-from taskgen.live import LiveResult
 from taskgen.taskset import TaskSet
 from taskgen.optimization import Optimization
 from taskgen.distributor import AbstractDistributor
+import taskgen
 
 
 # capsulation avoids attribute pollution
@@ -60,10 +61,13 @@ class SimpleDistributor(AbstractDistributor):
         # will throw an error. But that is ok.
         self._socket = socket.create_connection((host, port))
         self.logger = logging.getLogger("SimpleDistributor")
-
-    def start(self, taskset, optimization):
-        self._optimaze(optimization)
+        self.logger.debug("Connection establishment")
+    def start(self, taskset, optimization=None):
         self._clear()
+
+        if optimization is not None:
+            self._optimaze(optimization)
+
         self._send_descs(taskset)
         self._send_bins(taskset)
         self._start()
@@ -84,9 +88,8 @@ class SimpleDistributor(AbstractDistributor):
         xml = b''
         while len(xml) < size:
             xml += self._socket.recv(size)
-            xml.decode('utf-8')[:-1]
-            # convert xml to dictionary
-        return xmltodict.parse(xml)
+
+        return xml.decode('utf-8')[:-1]
 	
     def close(self):
         self._clear()
@@ -121,23 +124,23 @@ class SimpleDistributor(AbstractDistributor):
         if not isinstance(taskset, TaskSet):
             raise TypeError("taskset must be type TaskSet") 
 
-        tasks = taskset.dump()
-        tasks_ascii = tasks.decode('ascii')
+        tasks = taskset.asxml()
+        tasks_ascii = tasks #.encode('ascii')
         # Genode XML parser can't handle a lot of header things, so skip them.
         first_node = re.search('<\w+', tasks_ascii)
         tasks = tasks[first_node.start():]
 
         self.logger.debug("Sending taskset description.")
-        meta = struct.pack('II', MagicNumber.SEND_DESCS, len(self.tasks))
+        meta = struct.pack('II', MagicNumber.SEND_DESCS, len(tasks))
         self._socket.send(meta)
-        self._socket.send(self.tasks)
+        self._socket.send(tasks.encode("ascii"))
         
     def _send_bins(self, taskset):
         if not isinstance(taskset, TaskSet):
             raise TypeError("taskset must be type TaskSet") 
 
-        tasks = taskset.dump()
-        tasks_ascii = tasks.decode('ascii')
+        tasks = taskset.asxml()
+        tasks_ascii = tasks
         # TODO need some fixing (we have the possibility to parse the dictionary structure)
         binaries = re.findall('<\s*pkg\s*>\s*(.+)\s*<\s*/pkg\s*>', tasks_ascii)
         binaries = list(set(binaries))
@@ -148,17 +151,19 @@ class SimpleDistributor(AbstractDistributor):
         meta = struct.pack('II', MagicNumber.SEND_BINARIES, len(binaries))
         self._socket.send(meta)
 
-        for name in self.binaries:
+        # get the path to the bin folder
+        bin_path = taskgen.__path__[0] + "/bin/"
+        
+        for name in binaries:
             # Wait for 'go' message.
-            msg = int.from_bytes(self.conn.recv(4), 'little')
-            if msg != GO_SEND:
+            msg = int.from_bytes(self._socket.recv(4), 'little')
+            if msg != MagicNumber.GO_SEND:
                 self.logger.critical('Invalid answer received, aborting: {}'.format(msg))
                 break
 
-            # TODO
             self.logger.debug('Sending {}.'.format(name))
-            file = open(script_dir + name, 'rb').read()
-            size = os.stat(script_dir + name).st_size
+            file = open(bin_path + name, 'rb').read()
+            size = os.stat(bin_path + name).st_size
             meta = struct.pack('15scI', name.encode('ascii'), b'\0', size)
             self._socket.send(meta)
             self._socket.send(file)

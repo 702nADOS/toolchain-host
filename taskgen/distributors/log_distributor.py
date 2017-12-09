@@ -1,7 +1,6 @@
 import logging
 import time
 
-from taskgen.live import LiveResult
 from taskgen.taskset import TaskSet
 from taskgen.distributor import AbstractDistributor
 
@@ -56,7 +55,8 @@ class LogDistributor(AbstractDistributor):
 
     def _print(self,  obj):
         print(COLORS_FG[self.index])
-        print(obj)
+        print("taskset size: {} bytes".format(len(obj.encode("utf8"))))
+#        print(obj)
         print(COLOR_RESET)
 
 

@@ -19,3 +19,12 @@ class ExampleTaskSet(TaskSet):
 
         self.append(ExampleTask())
 
+
+class HugeTaskSet(TaskSet):
+    """A simple example class"""
+    def __init__(self):
+        super().__init__()
+
+        for x in range(0, 10000):
+            self.append(ExampleTask())
+        

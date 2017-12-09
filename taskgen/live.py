@@ -1,9 +1,13 @@
 from abc import ABCMeta, abstractmethod
-from collections.abc import MutableMapping
+import xmltodict
+import logging
 
 class AbstractLiveHandler(metaclass=ABCMeta):
+
+    # return: False for not running anymore
+    #         True for still running, continue
     @abstractmethod
-    def __handle_request__(self, taskset, live_result):
+    def __handle_request__(self, taskset, live_xml):
         pass
 
     @abstractmethod
@@ -16,51 +20,39 @@ class AbstractLiveHandler(metaclass=ABCMeta):
 
     @abstractmethod
     def __taskset_stop__(self, taskset):
-        "canceled by user (via stop) or disconnected"
+        pass
+
+    @abstractmethod
+    def __get_delay__(self):
+        pass
+
+class DefaultLiveHandler(AbstractLiveHandler):
+    def __init__(self):
+        self._logger = logging.getLogger("LiveHandler")
+    
+    def __handle_request__(self, taskset, live_xml):
+        taskset.counter += 1
+        try:
+            live_dict = xmltodict.parse(live_xml)
+            tasks = live_dict['live']['task-descriptions']['task']
+            self._logger.debug("successfully parsed result of live request")
+        except e:
+            # this happens sometimes...
+            self._logger.debug("unable to parse live request result.")
+
+        # cancel taskset after 5 live requests
+        return taskset.counter < 5
+    
+    def __taskset_start__(self, taskset):
+        taskset.counter = 1
+
+    def __taskset_finish__(self, taskset):
+        pass
+
+    def __taskset_stop__(self, taskset):
         pass
 
     def __get_delay__(self):
-        return 5.0 # default, more than 5 second is not possible
+        # send a request every 5 seconds
+        return 5.0
 
-        
-class LiveResult(MutableMapping):
-    def __init__(self, live = None):
-        self._live = live
-
-    def dump(self):
-        return xmltodict.unparse(self._live, pretty=True)
-
-    def write(self, path):
-        with open(path, 'a') as out:
-            out.write(self.dump())
-
-    def __is_running__(self):
-        return self._live['running']
-            
-    def read(self, path):
-        xml = open(path,'rb').read()
-        self._optimzation = xmltodict.parse(xml)
-
-    def __len__(self):
-        return len(self._live)
-
-    def __getitem__(self, ii):
-        return self._live[ii]
-
-    def __delitem__(self, ii):
-        del self._live[ii]
-
-    def __setitem__(self, ii, val):
-        self._live[ii] = val
-
-    def __str__(self):
-        return str(self._live)
-
-    def insert(self, ii, val):
-        self._live.insert(ii, val)
-
-    def append(self, val):
-        self.insert(len(self._live), val)
-
-    def __iter__(self):
-        return iter(self._live)
