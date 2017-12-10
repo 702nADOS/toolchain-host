@@ -35,7 +35,7 @@ class Hey2Task(PeriodicTask):
             "quota" : "1M",
             "pkg" : "hey",
             "config" : {
-                "arg1" : 126546
+                "arg1" : range(1,10)
             }
         })
 

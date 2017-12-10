@@ -35,12 +35,15 @@ class DefaultLiveHandler(AbstractLiveHandler):
         try:
             live_dict = xmltodict.parse(live_xml)
             tasks = live_dict['live']['task-descriptions']['task']
-            self._logger.debug("successfully parsed result of live request")
+            self.__prehandled_request__(taskset, tasks)
         except:
             self._logger.critical("unable to parse live request result.")
 
         # cancel taskset after 5 live requests
         return taskset.counter < 5
+
+    def __prehandled_request__(self, taskset, task_descriptions):
+        pass
     
     def __taskset_start__(self, taskset):
         taskset.counter = 1

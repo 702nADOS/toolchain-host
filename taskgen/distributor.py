@@ -181,6 +181,8 @@ class _TaskSetQueue():
         self.lock = threading.Lock()
         self.queue = Queue(maxsize=1000)
         self.in_progress = 0
+        self.processed = 0
+        self.logger = logging.getLogger("Distributor")
         
     def get(self):
         # return a regular taskset
@@ -196,7 +198,7 @@ class _TaskSetQueue():
 
             taskset = self.it.__next__()
             self.in_progress += 1
-            return tasket
+            return taskset
             
     def empty(self):
         with self.lock:
@@ -216,6 +218,8 @@ class _TaskSetQueue():
     def done(self):
         with self.lock:
             self.in_progress -= 1
+            self.processed += 1
+            self.logger.info("{} taskset variant(s) processed".format(self.processed))
         
     def put(self, taskset):
         with self.lock:
@@ -225,7 +229,7 @@ class _TaskSetQueue():
             except Queue.Full:
                 # We don't care about the missed taskset. Actually, there is a bigger
                 # problem:
-                logging.critical("The Push-Back Queue of tasksets is full. This is a"
+                self.logger.critical("The Push-Back Queue of tasksets is full. This is a"
                     + "indicator, that the underlying session is buggy"
                     + " and is always canceling currently processed tasksets.")
 
@@ -296,7 +300,7 @@ class _WrapperSession(threading.Thread):
         if not is_running:
             self._multi._live_handler.__taskset_finish__(self._taskset)
             self._multi._tasksets.done()  # notify about the finished taskset
-            self.logger.info("Taskset variant is successfully processed")
+            self.logger.debug("Taskset variant is successfully processed")
         else:
             # do some waiting
             delay = self._multi._live_handler.__get_delay__()
@@ -349,7 +353,7 @@ class _WrapperSession(threading.Thread):
         except socket.error as e:
             self.logger.critical(e)
             
-            self.logger.info("Taskset variant is pushed back to queue due to" +
+            self.logger.debug("Taskset variant is pushed back to queue due to" +
                              " a critical error")
             if self._taskset is not None:
                 self._multi._tasksets.put(self._taskset)
