@@ -2,12 +2,9 @@
 import logging
 import sys
 sys.path.append('../../')
-
+import time
 from taskgen.tasksets.hey import HeyTaskSet
-
-from taskgen.distributors.multi_distributor import MultiDistributor
-from taskgen.distributors.log_distributor import LogDistributor
-from taskgen.distributors.simple_distributor import SimpleDistributor
+from taskgen.distributor import Distributor
 
 from pprint import pprint as pp
 
@@ -17,10 +14,13 @@ logging.basicConfig(level=logging.DEBUG)
 
 ts = HeyTaskSet()
 
-d = MultiDistributor(["172.25.1.5"], 3001)
+d = Distributor(["172.25.1.5"], 3001)
 
 d.start(ts)
 
 
+print("proof: done")
 
+d.close()
 
+print("proof: closed")

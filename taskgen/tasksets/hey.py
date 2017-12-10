@@ -25,9 +25,9 @@ class Hey2Task(PeriodicTask):
         super().__init__()
         self.update({
             "id" : 2,
-            "executiontime" : 2000,
-            "criticaltime" : 1000,
-            "deadline" : 1000,
+            "executiontime" : 99999999,
+            "criticaltime" : 0,
+            "deadline" : 0,
             "priority" : 128,
             "period" : 0,
             "offset" : 0,
@@ -44,5 +44,4 @@ class HeyTaskSet(TaskSet):
     def __init__(self):
         super().__init__()
 
-        self.append(Hey1Task())
         self.append(Hey2Task())

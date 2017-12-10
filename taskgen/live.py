@@ -36,7 +36,7 @@ class DefaultLiveHandler(AbstractLiveHandler):
             live_dict = xmltodict.parse(live_xml)
             tasks = live_dict['live']['task-descriptions']['task']
             self._logger.debug("successfully parsed result of live request")
-        except e:
+        except:
             # this happens sometimes...
             self._logger.debug("unable to parse live request result.")
 

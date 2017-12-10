@@ -1,8 +1,7 @@
 import logging
 import time
-
 from taskgen.taskset import TaskSet
-from taskgen.distributor import AbstractDistributor
+from taskgen.distributor import AbstractSession
 
 from pprint import pprint
 
@@ -25,17 +24,17 @@ COLORS_FG = [
 ]
 COLOR_RESET = '\033[0m'
 
-class LogDistributor(AbstractDistributor):
+class StdIOSession(AbstractSession):
     
     def __init__(self, host, port):
-        self.logger = logging.getLogger("LogDistributor")
+        self.logger = logging.getLogger("StdIOSession")
         self.logger.debug("stub created")
 
         # select color
         global COUNTER
         self.index = COUNTER % len(COLORS_FG)
         COUNTER = COUNTER + 1
-
+        
     def start(self, taskset, optimization):
         self.logger.debug("start of taskset")
         self._timestamp = time.clock()

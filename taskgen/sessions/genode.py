@@ -9,10 +9,9 @@ from collections import Iterable
 import logging
 import xmltodict
 from abc import ABCMeta, abstractmethod
-
+from taskgen.distributor import AbstractSession
 from taskgen.taskset import TaskSet
 from taskgen.optimization import Optimization
-from taskgen.distributor import AbstractDistributor
 import taskgen
 
 
@@ -54,14 +53,14 @@ class MagicNumber:
 # errors are passed on to the caller. Furthmore, the communication is not
 # asyncron, which means that every call is blocking. Look at the
 # MultiDistributor and ScanDistributor for a more extended version.
-class SimpleDistributor(AbstractDistributor):
+class GenodeSession(AbstractSession):
 
     def __init__(self, host, port):
-        # it might happen, that creating a connection fails, so __init__
-        # will throw an error. But that is ok.
         self._socket = socket.create_connection((host, port))
-        self.logger = logging.getLogger("SimpleDistributor")
+        self.logger = logging.getLogger("GenodeSession")
         self.logger.debug("Connection establishment")
+        self._socket.settimeout(10.0) # wait 10 seconds for responses...
+        
     def start(self, taskset, optimization=None):
         self._clear()
 
@@ -73,11 +72,12 @@ class SimpleDistributor(AbstractDistributor):
         self._start()
 
     def stop(self):
-        meta = struct.pack('I', MagicNumber.STOP)
-        self.logger.debug('Stopping tasks on server.')
-        self._socket.send(meta)
         self._stop()
 
+    def close(self):
+#        self._clear()  what if the connection is dead...
+        self._close()
+        
     def live_request(self):
         self.logger.debug('Requesting live data.')
         # send command
@@ -90,17 +90,12 @@ class SimpleDistributor(AbstractDistributor):
             xml += self._socket.recv(size)
 
         return xml.decode('utf-8')[:-1]
-	
-    def close(self):
-        self._clear()
-        self._socket.close()
-        self.logger.debug('Close connection.')
 
     def optimize(self, optimization):
         if not isinstance(optimiziation, Optimiziation):
             raise TypeError("optimization must be of type Optimization") 
 
-        self.logger.debug('Sending optimiziation goal.')
+        self.logger.debug('Send optimiziation goal.')
         # Read XML file and discard meta data.
         xml = optimiziation.dump()
         opt_ascii = xml.decode('ascii')
@@ -111,11 +106,20 @@ class SimpleDistributor(AbstractDistributor):
         xml = xml[first_node.start():]
         meta = struct.pack('II', MagicNumber.OPTIMIZE, len(xml))
 
-        self.conn.send(meta)
-        self.conn.send(xml)
+        self._socket.send(meta)
+        self._socket.send(xml)
 
+    def _close(self):
+        self._socket.close()
+        self.logger.debug('Close connection.')
+        
+    def _stop(self):
+        meta = struct.pack('I', MagicNumber.STOP)
+        self.logger.debug('Stop tasks on server.')
+        self._socket.send(meta)
+        
     def _clear(self):
-        self.logger.debug('Resetting all tasks on server.')
+        self.logger.debug('Clear tasks on server.')
         meta = struct.pack('I', MagicNumber.CLEAR)
         self._socket.send(meta)
         
