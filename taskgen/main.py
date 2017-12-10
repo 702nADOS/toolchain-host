@@ -8,33 +8,24 @@ import pkgutil
 import importlib
 
 
-from taskgen.distributors.multi_distributor import MultiDistributor
-from taskgen.distributors.simple_distributor import SimpleDistributor
-from taskgen.distributors.log_distributor import LogDistributor
+from taskgen.distributor import Distributor, AbstractSession
+from taskgen.sessions.genode import GenodeSession
+
 from taskgen.taskset import TaskSet
 from taskgen.optimization import Optimization
-from taskgen.live import AbstractLiveHandler
+from taskgen.live import AbstractLiveHandler, DefaultLiveHandler
 
 if __name__ == '__main__':
     main()
 
-def handle_logging(args):
-    FORMAT = '%(asctime)-15s %(levelname)s [%(name)s]  %(message)s'
 
-    # handle verbosity
-    if args.verbosity == 0:
-        LEVEL=logging.ERROR
-        print("Verbosity: only errors")
-    elif args.verbosity == 1:
-        LEVEL=logging.WARNING
-        print("Verbosity: errors & warning")
-    elif args.verbosity == 2:
-        LEVEL=logging.INFO
-        print("Verbosity: errors, warning & info")
-    else:
-        LEVEL=logging.DEBUG
-        print("Verbosity: errors, warning, info & debug")
-    logging.basicConfig(format=FORMAT, level=LEVEL, filename=args.log)
+
+
+FORMAT = '%(asctime)-15s %(levelname)s [%(name)s]  %(message)s'
+
+def handle_logging(args):
+    _level = logging.DEBUG if args.debug else logging.INFO
+    logging.basicConfig(format=FORMAT, filename=args.log, level=_level)
     
     
 def print_classes(class_type, submodule):
@@ -66,18 +57,26 @@ def command_list(args):
         print('{: <30} | {}'.format("Optimization classes", "Description"))
         print("-"*80)
         print_classes(Optimization, "optimizations")
+    if args.session:
+        print('{: <30} | {}'.format("Session classes", "Description"))
+        print("-"*80)
+        print_classes(AbstractSession, "sessions")
 
 
-def initialize_class(path, submodule):
+def load_class(path, submodule):
     if path is None:
         return None
     
     # submodules might be tasksets, optimization, lives
     module_name, class_name = "taskgen.{}.{}".format(submodule, path).rsplit(".", 1)
-    ts_class = getattr(importlib.import_module(module_name), class_name)
+    return getattr(importlib.import_module(module_name), class_name)
     # TODO handle constructor parameters
     # TODO handle not found
-    return ts_class()
+
+def initialize_class(path, submodule):
+    _class =load_class(path, submodule)
+    if _class is not None:
+        return _class()
     
 def command_run(args):    
     handle_logging(args)
@@ -89,22 +88,36 @@ def command_run(args):
     optimization = initialize_class(args.optimization, "optimizations")
 
     # load live handler
-    live_handler = initialize_class(args.live, "lives")
-
-    # initialize distributor
-    if args.pretend:
-        distributor = MultiDistributor(args.IP, args.port, ping=False,
-                                       distributor_class=LogDistributor)
+    if args.live:
+        live_handler = initialize_class(args.live, "lives")
     else:
-        distributor = MultiDistributor(args.IP, args.port)
+        live_handler = DefaultLiveHandler()
 
+    # session class
+    if args.session:
+        session = load_class(args.session, "sessions")
+    else:
+        session = GenodeSession
+
+    try:
+        # initialize distributor
+        distributor = Distributor(args.IP,
+                                  args.port,
+                                  session,
+                                  rescan = True,
+                                  max_starter = 20, # max pinging threads
+                                  max_duration = 60, # be finished in 60 seconds
+                                  max_ping = 4) # ping max. 4 seconds
     
-    # start (and wait until finished)
-    distributor.live_handler = live_handler
-    distributor.start(tasksets, optimization, wait=True)
+        # start (and wait until finished)
+        distributor.start(tasksets, optimization, live_handler, wait=True)
 
-    # close everything
-    distributor.close()
+        # TODO print current state
+    except KeyboardInterrupt:
+        # CTRL-C
+        pass
+    finally:
+        distributor.close()
     
 
     
@@ -114,15 +127,15 @@ def main():
 
     # run
     parser_run = subparsers.add_parser('run', help='runs a list of tasksets')
-    # run -v
-    parser_run.add_argument("-v", "--verbosity", action="count", default=0,
-                            help="increase output verbosity")
+    # run -d
+    parser_run.add_argument("-d", "--debug", action='store_true',
+                            help="Print debugging information.")
     # run --log-file
     parser_run.add_argument('--log-file', metavar="FILE", dest="log",
                             help="write log to file", type=argparse.FileType('w'))
     # run -p
-    parser_run.add_argument('-p', '--port', type=int, required=True, help='Port')
-
+    parser_run.add_argument('-p', '--port', default=3001, type=int,
+                            help='Port, default is port number 3001.')
     # run -t
     parser_run.add_argument('-t', '--taskset', required=True, metavar="CLASS",
                         help='Select a taskset class.')
@@ -132,9 +145,9 @@ def main():
     # run -o
     parser_run.add_argument('-o', '--optimization', metavar="CLASS",
                             help='Select an optimization class.')
-    # run --pretend
-    parser_run.add_argument('--pretend', action='store_true',
-                            help='Pretend to send the tasksets.')
+    # run -s
+    parser_run.add_argument('-s', '--session', metavar="CLASS",
+                            help='Select a session class. Default: GenodeSession')
     # run [IP]
     parser_run.add_argument('IP', nargs='+',
                             help='IP address or a range of IP addresses (CIDR format)')
@@ -152,6 +165,9 @@ def main():
     # list -l
     group_list.add_argument('-l', '--live', action='store_true',
                             help="print all available live requesth handler.")
+    # list -s
+    group_list.add_argument('-s', '--session', action='store_true',
+                            help="print all available session classes.")
 
     # parse
     args = parser.parse_args()
