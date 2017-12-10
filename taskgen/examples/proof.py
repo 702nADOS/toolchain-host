@@ -14,13 +14,11 @@ logging.basicConfig(level=logging.DEBUG)
 
 ts = HeyTaskSet()
 
-d = Distributor(["172.25.1.5"], 3001)
+d = Distributor("172.25.1.0/24")
 
 d.start(ts)
 
 
-print("proof: done")
-
 d.close()
 
-print("proof: closed")
+

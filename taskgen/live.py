@@ -28,7 +28,7 @@ class AbstractLiveHandler(metaclass=ABCMeta):
 
 class DefaultLiveHandler(AbstractLiveHandler):
     def __init__(self):
-        self._logger = logging.getLogger("LiveHandler")
+        self._logger = logging.getLogger("DefaultLiveHandler")
     
     def __handle_request__(self, taskset, live_xml):
         taskset.counter += 1
@@ -37,8 +37,7 @@ class DefaultLiveHandler(AbstractLiveHandler):
             tasks = live_dict['live']['task-descriptions']['task']
             self._logger.debug("successfully parsed result of live request")
         except:
-            # this happens sometimes...
-            self._logger.debug("unable to parse live request result.")
+            self._logger.critical("unable to parse live request result.")
 
         # cancel taskset after 5 live requests
         return taskset.counter < 5

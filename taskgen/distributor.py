@@ -6,9 +6,9 @@ import logging
 import subprocess
 import copy
 import socket
-from queue import LifoQueue, Empty, Queue
+from queue import Empty, Queue
 from collections.abc import Mapping
-from ipaddress import ip_network
+from ipaddress import ip_network, ip_address
 from itertools import chain
 from math import ceil
 
@@ -46,29 +46,20 @@ from taskgen.sessions.genode import GenodeSession
 class Distributor:
     
     def __init__(self,
-                 host_ranges,
-                 port,
+                 destinations,
+                 port=3001,
                  session=GenodeSession,
                  rescan = True,
                  max_starter = 20,
                  max_duration = 60,
                  max_ping = 4):
 
-        if isinstance(host_ranges, str):
-            host_ranges = [host_ranges]
-        elif isinstance(host_ranges, list) and all(isinstance(h, str) for h in
-                                                   host_ranges):
-            pass
-        else:
-            raise TypeError("host_ranges must be [str] or str.")
-        
         if not isinstance(port, int):
             raise TypeError("port must be int")
 
         if not issubclass(session, AbstractSession):
             raise TypeError("session must be subtype of AbstractSession")
 
-        self._pool = LifoQueue()
         self._sessions = {}
         self._starter = []
         self._port = port
@@ -80,25 +71,46 @@ class Distributor:
         self._max_starter = max_starter
         self._max_duration = max_duration
         self._max_ping = max_ping
-        self._start_pool(host_ranges)
         self._rescan = rescan
-        
-    def _start_pool(self, host_ranges):
-        for host_range in host_ranges:
-#            for host in ip_network(host_range).hosts():
-            host = host_range
-            self._pool.put(str(host))
 
+        # build pool of IP destination addresses
+        self._pool = Queue()
+        if isinstance(destinations, str):
+            self._append_pool(destinations)
+        elif isinstance(destinations, list):
+            for destination in destinations:
+                self._append_pool(destination)
+        else:
+            raise TypeError("destinations must be [str] or str.")
+
+        # initialize pinging and connecting of destinations
+        self._init_pool()
+        
+        
+    def _append_pool(self, destination):
+        # try to parse as single ip address
+        try:
+            ip = ip_address(destination)
+            self._pool.put(str(ip))
+            return
+        except ValueError:
+            pass
+        # parse as ip range or raise error
+        for ip in ip_network(destination).hosts():
+            self._pool.put(str(ip))
+
+
+    def _init_pool(self):
+        # calculate number of starter threads
         size = self._pool.qsize()
         duration = size * self._max_ping
         count =  duration / self._max_duration
         count = ceil(min(self._max_starter, count))
-        self.logger.info("start {} threads for pinging".format(count))
+        self.logger.info("Start {} thread(s) for pinging".format(count))
         for c in range(0, count):
             starter = _Starter(self)
             starter.start()
             self._starter.append(starter)
-
 
     def _append_session(self, host):
         session = _WrapperSession(host, self)
@@ -126,28 +138,30 @@ class Distributor:
         # lets inform the single sessions about their new work
         self._restart_counter += 1
         self._running.set()
-        self.logger.debug("all distributor instances are starting.")
+        self.logger.info("Start processing taskset")
         if wait: self.wait_finished()
 
     def stop(self, wait=True):
         self._running.clear()
-        self.logger.info("all distributor instances are stopping.")
+        self.logger.info("Stop processing taskset")
         if wait: self.wait_stopped()
         
     def close(self, wait=True):
         self._closing.set()
+        self.logger.info("Closing connections...")
         if wait: self.wait_closed()
 
     def wait_closed(self):
-        self.logger.debug("waiting for closed starter threads")
+        self.logger.info("Waiting until ping threads are stopped")
         for starter in self._starter:
             starter.join()
             
-        self.logger.debug("waiting for closed session threads")
+        self.logger.info("Waiting until sessions are closed")
         for session in self._sessions.values():
             session.join()
-
+        
     def wait_stopped(self):
+        self.logger.info("Waiting until session processings are stopped")
         for session in self._sessions.values():
             session.wait_stopped()
 
@@ -187,7 +201,7 @@ class _TaskSetQueue():
     def empty(self):
         with self.lock:
             # in progress?
-            if self.in_progress:
+            if self.in_progress > 0:
                 return False
             # in queue?
             if not self.queue.empty():
@@ -210,28 +224,30 @@ class _TaskSetQueue():
                 self.in_progress -= 1
             except Queue.Full:
                 # We don't care about the missed taskset. Actually, there is a bigger
-                # problem.
-                logging("The Push-Back Queue of tasksets is full. This is a"
+                # problem:
+                logging.critical("The Push-Back Queue of tasksets is full. This is a"
                     + "indicator, that the underlying session is buggy"
                     + " and is always canceling currently processed tasksets.")
 
             
-        
+
+
+# tries to be quiet.
+# * only debug information or critical messages
 class _WrapperSession(threading.Thread):
     
     def __init__ (self, host, multi):
         super().__init__()
         self._host = host
         self._multi = multi
-        self.logger = logging.getLogger("Session({})".format(host))
+        self.logger = logging.getLogger("Distributor({})".format(host))
         self._restart_counter = 0
-
+        self._taskset = None
         # thread-safe is not required, but we use the wait/notify feature
         self._running = False
 
     def _internal_stop(self):
         self._session.stop()
-        self.logger.debug("session stopped")
         if self._taskset is not None:
             self._multi._live_handler.__taskset_stop__(self._taskset)
         self._multi._tasksets.put(self._taskset)
@@ -259,13 +275,15 @@ class _WrapperSession(threading.Thread):
             self._taskset = self._multi._tasksets.get()
             self._session.start(self._taskset, self._multi._optimization)
             self._multi._live_handler.__taskset_start__(self._taskset)
-            self.logger.debug("taskset processing started.")
+            self.logger.debug("Taskset variant processing started.")
             self._restart_counter = self._multi._restart_counter
             self._running = True
+            return True
         except StopIteration:
             # all tasksets are processed
-            self.logger.debug("all tasksets are processed.")
+            self.logger.debug("All taskset variants are processed")
             self._running = False
+            return False
 
     def _internal_live_request(self):
         # measure the time
@@ -278,23 +296,24 @@ class _WrapperSession(threading.Thread):
         if not is_running:
             self._multi._live_handler.__taskset_finish__(self._taskset)
             self._multi._tasksets.done()  # notify about the finished taskset
-            self.logger.debug("taskset is processed.")
+            self.logger.info("Taskset variant is successfully processed")
         else:
             # do some waiting
             delay = self._multi._live_handler.__get_delay__()
             left = delay*1000 - (time.clock()-timestamp)
             if left < 0:
-                self.logger.warning("Callback takes more time than espected. Live"
+                self.logger.critical("Callback takes more time than espected. Live"
                                 + " Request is delayed by {} ms.".format(-left))
             else:
                 time.sleep(left/1000)
+
         return is_running
             
     def run(self):
         # try to connect
         try:
             self._session = self._multi._session(self._host, self._multi._port)
-            self.logger.info("connection established.")
+            self.logger.info("Connection established.")
         except socket.error as e:
             self.logger.critical(e)
             self._multi._pool.put(self._host)
@@ -308,40 +327,40 @@ class _WrapperSession(threading.Thread):
 
                 # restart or still running
                 if self._should_restart() or self._running:
-                    self._internal_start()
+                    # try to start next taskset
+                    if not self._internal_start():
+                        continue
 
                     # live requests
                     while not self._should_close() and not self._should_restart():
                         # returns False, if taskset is finished. leave the loop.
                         if not self._internal_live_request():
                             break
-                    
+
                 # idle
                 elif not self._running:
-                    print("should_close: {}".format(self._should_close()))
                     time.sleep(0.1)
 
                 else:
                     time.sleep(1)
-                    self.logger.critical("reached some unknown state")
+                    self.logger.critical("Reached some unknown state")
 
             self._internal_stop()
         except socket.error as e:
             self.logger.critical(e)
-            # the current taskset is pushed back, so another session can process
-            # it
+            
+            self.logger.info("Taskset variant is pushed back to queue due to" +
+                             " a critical error")
             if self._taskset is not None:
                 self._multi._tasksets.put(self._taskset)
 
             # notify live handler about the stop.
             self._multi._live_handler.__taskset_stop__(self._taskset)
-
+            
         finally:
             self._session.close()
             # push host back in pool
             self._multi._pool.put(self._host)
-
-
 
             
 class _Starter(threading.Thread):
@@ -352,7 +371,7 @@ class _Starter(threading.Thread):
         self.logger = logging.getLogger("Distributor")
 
     def _ping(self, host):
-        self.logger.debug("start pinging {}".format(host))
+#        self.logger.debug("Start pinging {}".format(host))
         
         received_packages = re.compile(r"(\d) received")
         ping_out = os.popen("ping -q -W {} -c2 {}".format(self._multi._max_ping,
@@ -371,11 +390,10 @@ class _Starter(threading.Thread):
                 host = self._multi._pool.get(True, 2) # block for 2 seconds
                 if self._ping(host):
                     # try to connect
-                    self.logger.info("found {}".format(host))
+                    self.logger.info("Found {}".format(host))
                     self._multi._append_session(host)
                 else:
                     # put back to pool
-                    self.logger.debug("not found {}".format(host))
                     self._multi._pool.put(host)
             except Empty:
                 pass
