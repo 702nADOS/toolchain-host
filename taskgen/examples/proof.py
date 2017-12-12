@@ -12,13 +12,11 @@ from pprint import pprint as pp
 logging.basicConfig(level=logging.DEBUG)
 
 
+
 ts = HeyTaskSet()
 
 d = Distributor("172.25.1.0/24")
 
-d.start(ts)
-
-
+d.start(ts, wait=False)
 d.close()
-
 
