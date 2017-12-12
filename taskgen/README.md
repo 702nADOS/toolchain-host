@@ -77,12 +77,12 @@ Pay attention, the documentation is not up to date due to several changes.
 
 # ToDo List
 
-[ ] Makefile Integration
-    [ ] new task build directory (`taskgen/bin`)
-    [ ] taskgen requirements
-[ ] Refactor Distributor (move ping functionality to Session)
-[ ] Update Documentation
-[ ] Replace Live & Profile Requests by **Th3 Aw3soMe Push**
+- [ ] Makefile Integration
+  - [ ] new task build directory (`taskgen/bin`)
+  - [ ] taskgen requirements
+- [ ] Refactor Distributor (move ping functionality to Session)
+- [ ] Update Documentation
+- [ ] Replace Live & Profile Requests by **Th3 Aw3soMe Push**
 
 # Branches
 * `taskgen` supports the current live request functionality.
