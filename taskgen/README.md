@@ -55,14 +55,16 @@ Use the tool to list all available tasksets:
 ```
 
 We want to distribute the `example.ExampleTaskSet` task-set to one destination
-instance. There is no need for real genode instances, the `--pretend` flag
-replaces the actual connection by a stub.
+instance. 
 
 ```bash
-./taskgen run -vv --pretend -t example.ExampleTaskSet -p 1234 172.25.0.1
+./taskgen run -d -t example.ExampleTaskSet -p 1234 172.25.0.1
 ```
 
 # Documentation
+
+Pay attention, the documentation is not up to date due to several changes.
+
 * [Command line](docs/commandline.md)
 * [Distributors](docs/distributor.md)
 * [Task-Sets](docs/taskset.md)
@@ -71,4 +73,18 @@ replaces the actual connection by a stub.
 * [Optimization](docs/optimization.md)
 * [Live Request Handler](docs/live.md)
 * [Dictionary to XML format](docs/dict2xml.md)
+
+
+# ToDo List
+
+[ ] Makefile Integration
+    [ ] new task build directory (`taskgen/bin`)
+    [ ] taskgen requirements
+[ ] Refactor Distributor (move ping functionality to Session)
+[ ] Update Documentation
+[ ] Replace Live & Profile Requests by **Th3 Aw3soMe Push**
+
+# Branches
+* `taskgen` supports the current live request functionality.
+* `push` replaces live/profile requests by push logging.
 
