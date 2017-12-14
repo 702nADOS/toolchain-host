@@ -50,10 +50,6 @@ class AbstractSession(metaclass=ABCMeta):
 # GenodeSession depends on AbstractSession...
 from taskgen.sessions.genode import PingSession
 
-
-class RestartEvent:
-    pass
-
 class Distributor:
     
     def __init__(self,

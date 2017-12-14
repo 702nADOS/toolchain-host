@@ -31,7 +31,7 @@ class Task(dict):
         else:
             return f(self[d])
         
-    def is_runnable(self):
+    def is_complete(self):
         # searches for None in _task
         return not self._iterate_dict(self, lambda x: x is None)
 
@@ -50,6 +50,10 @@ class PeriodicTask(Task):
 
     def __key__(self):
         return "periodictask"
+
+    
+"""
+# Not supported and implemented at genode site.
 
 class SporadicTask(Task):
     def __init__(self):
@@ -73,4 +77,4 @@ class AperiodicTask(Task):
 
     def __key__(self):
         return "aperiodictask"
-
+"""

@@ -31,8 +31,8 @@ class TaskSet:
     def has_variants(self):
         return any(map(lambda x: x.has_variants(), self))
 
-    def is_runnable(self):
-        return all(map(lambda x: x.is_runnable(), self))
+    def is_complete(self):
+        return all(map(lambda x: x.is_complete(), self))
 
     def variants(self):
         flat = flatdict.FlatDict(self._taskset,None, dict,True)
