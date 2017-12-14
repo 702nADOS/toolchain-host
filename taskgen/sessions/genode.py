@@ -13,7 +13,7 @@ from taskgen.distributor import AbstractSession
 from taskgen.taskset import TaskSet
 from taskgen.optimization import Optimization
 import taskgen
-
+import time
 
 # capsulation avoids attribute pollution
 class MagicNumber:
@@ -47,14 +47,15 @@ class MagicNumber:
     #Initiate task scheduling optimization.
     OPTIMIZE = 0x6F7074
 
-        
+
+    
 # This class is a pretty simple implementation for the communication with a
 # genode::Taskloader instance. There are no error handling mechanism and all
 # errors are passed on to the caller. Furthmore, the communication is not
 # asyncron, which means that every call is blocking. Look at the
 # MultiDistributor and ScanDistributor for a more extended version.
 class GenodeSession(AbstractSession):
-
+    
     def __init__(self, host, port):
         self._socket = socket.create_connection((host, port))
         self.logger = logging.getLogger("GenodeSession")
@@ -63,7 +64,8 @@ class GenodeSession(AbstractSession):
         
     def start(self, taskset, optimization=None):
         self._clear()
-
+        # TODO clear recv buffer
+        
         if optimization is not None:
             self._optimaze(optimization)
 
@@ -78,24 +80,12 @@ class GenodeSession(AbstractSession):
 #        self._clear()  what if the connection is dead...
         self._close()
         
-    def live_request(self):
-        self.logger.debug('Requesting live data.')
-        # send command
-        meta = struct.pack('I', MagicNumber.GET_LIVE)
-        self._socket.send(meta)
-        # receive xml
-        size = int.from_bytes(self._socket.recv(4), 'little')
-        xml = b''
-        while len(xml) < size:
-            xml += self._socket.recv(size)
-
-        return xml.decode('utf-8')[:-1]
 
     def optimize(self, optimization):
         if not isinstance(optimiziation, Optimiziation):
             raise TypeError("optimization must be of type Optimization") 
 
-        self.logger.debug('Send optimiziation goal.')
+        self.logger.debug('Send optimiziaton goal.')
         # Read XML file and discard meta data.
         xml = optimiziation.dump()
         opt_ascii = xml.decode('ascii')
@@ -122,8 +112,7 @@ class GenodeSession(AbstractSession):
         self.logger.debug('Clear tasks on server.')
         meta = struct.pack('I', MagicNumber.CLEAR)
         self._socket.send(meta)
-        
-    
+            
     def _send_descs(self, taskset):
         if not isinstance(taskset, TaskSet):
             raise TypeError("taskset must be type TaskSet") 
@@ -138,6 +127,25 @@ class GenodeSession(AbstractSession):
         meta = struct.pack('II', MagicNumber.SEND_DESCS, len(tasks))
         self._socket.send(meta)
         self._socket.send(tasks.encode("ascii"))
+
+    def event(self):
+        # buffered reader
+        # find xml file, read
+        # parse to dict
+        # return
+        time.sleep(4)
+        return { 'running' : True }
+
+        """
+        # receive xml
+        size = int.from_bytes(self._socket.recv(4), 'little')
+        xml = b''
+        while len(xml) < size:
+            xml += self._socket.recv(size)
+
+        return xml.decode('utf-8')[:-1]
+        """
+
         
     def _send_bins(self, taskset):
         if not isinstance(taskset, TaskSet):
@@ -177,3 +185,20 @@ class GenodeSession(AbstractSession):
         meta = struct.pack('I', MagicNumber.START)
         self._socket.send(meta)
         
+
+
+class PingSession(GenodeSession):
+        
+    # overwrite the availiblity check and replace it with a ping.
+    def is_available(host):
+        received_packages = re.compile(r"(\d) received")
+        ping_out = os.popen("ping -q -W {} -c2 {}".format(4, host),"r")
+        while True:
+            line = ping_out.readline()
+            if not line:
+                break
+            n_received = re.findall(received_packages,line)
+            if n_received:
+                return int(n_received[0]) > 0
+
+

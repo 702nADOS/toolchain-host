@@ -25,4 +25,4 @@ class AbstractEventHandler(metaclass=ABCMeta):
 
     
 def taskset_is_processing(event):
-    return random.randint(0,10) == 0
+    return random.randint(0,4) == 0

@@ -9,11 +9,11 @@ import importlib
 
 
 from taskgen.distributor import Distributor, AbstractSession
-from taskgen.sessions.genode import GenodeSession
+from taskgen.sessions.genode import PingSession
 
 from taskgen.taskset import TaskSet
 from taskgen.optimization import Optimization
-from taskgen.live import AbstractLiveHandler, DefaultLiveHandler
+from taskgen.event import AbstractEventHandler
 
 if __name__ == '__main__':
     main()
@@ -25,7 +25,7 @@ FORMAT = '%(asctime)-15s %(levelname)s [%(name)s]  %(message)s'
 
 def handle_logging(args):
     _level = logging.DEBUG if args.debug else logging.INFO
-    logging.basicConfig(format=FORMAT, filename=args.log, level=_level)
+    logging.basicConfig(format=FORMAT, level=_level)
     
     
 def print_classes(class_type, submodule):
@@ -49,10 +49,10 @@ def command_list(args):
         print('{: <30} | {}'.format("TaskSet Class Name", "Description"))
         print("-"*80)
         print_classes(TaskSet, "tasksets")
-    if args.live:
-        print('{: <30} | {}'.format("Live Handlers", "Description"))
+    if args.event:
+        print('{: <30} | {}'.format("Event classes", "Description"))
         print("-"*80)
-        print_classes(AbstractLiveHandler, "lives")
+        print_classes(AbstractLogger, "events")
     if args.optimization:
         print('{: <30} | {}'.format("Optimization classes", "Description"))
         print("-"*80)
@@ -87,30 +87,27 @@ def command_run(args):
     # load optimization
     optimization = initialize_class(args.optimization, "optimizations")
 
-    # load live handler
-    if args.live:
-        live_handler = initialize_class(args.live, "lives")
+    # load logger
+    if args.event:
+        event_handler = initialize_class(args.event, "events")
     else:
-        live_handler = DefaultLiveHandler()
+        event_handler = None
 
     # session class
     if args.session:
-        session = load_class(args.session, "sessions")
+        session_class = load_class(args.session, "sessions")
     else:
-        session = GenodeSession
+        session_class = PingSession
 
     try:
         # initialize distributor
         distributor = Distributor(args.IP,
                                   args.port,
-                                  session,
-                                  rescan = True,
-                                  max_starter = 20, # max pinging threads
-                                  max_duration = 60, # be finished in 60 seconds
-                                  max_ping = 4) # ping max. 4 seconds
-    
+                                  session_class)
+        distributor.event_handler = event_handler
+        
         # start (and wait until finished)
-        distributor.start(tasksets, optimization, live_handler, wait=True)
+        distributor.start(tasksets, optimization, wait=True)
 
         # TODO print current state
     except KeyboardInterrupt:
@@ -130,18 +127,15 @@ def main():
     # run -d
     parser_run.add_argument("-d", "--debug", action='store_true',
                             help="Print debugging information.")
-    # run --log-file
-    parser_run.add_argument('--log-file', metavar="FILE", dest="log",
-                            help="write log to file", type=argparse.FileType('w'))
     # run -p
     parser_run.add_argument('-p', '--port', default=3001, type=int,
                             help='Port, default is port number 3001.')
     # run -t
     parser_run.add_argument('-t', '--taskset', required=True, metavar="CLASS",
                         help='Select a taskset class.')
-    # run -l
-    parser_run.add_argument('-l', '--live', metavar="CLASS",
-                            help='Select a handler for live request results.')
+    # run -e
+    parser_run.add_argument('-e', '--event', metavar="CLASS",
+                            help='Select a event handler for incoming events of processed tasksets.')
     # run -o
     parser_run.add_argument('-o', '--optimization', metavar="CLASS",
                             help='Select an optimization class.')
@@ -162,9 +156,9 @@ def main():
     # list -o
     group_list.add_argument('-o', '--optimization', action='store_true',
                             help="print all available optimization classes.")
-    # list -l
-    group_list.add_argument('-l', '--live', action='store_true',
-                            help="print all available live requesth handler.")
+    # list -e
+    group_list.add_argument('-e', '--event', action='store_true',
+                            help="print all available event handlers.")
     # list -s
     group_list.add_argument('-s', '--session', action='store_true',
                             help="print all available session classes.")

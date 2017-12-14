@@ -24,7 +24,7 @@ class Hey2Task(PeriodicTask):
     def __init__(self):
         super().__init__()
         self.update({
-            "id" : 2,
+            "id" : range(0, 10),
             "executiontime" : 99999999,
             "criticaltime" : 0,
             "deadline" : 0,
@@ -35,7 +35,7 @@ class Hey2Task(PeriodicTask):
             "quota" : "1M",
             "pkg" : "hey",
             "config" : {
-                "arg1" : range(1,10)
+                "arg1" : 1
             }
         })
 
