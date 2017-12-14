@@ -406,7 +406,7 @@ class _WrapperSession(threading.Thread):
             # if this was the last processing session, you will get notified
             # about missing sessions.
             if not self._tasksets.empty() and len(self._sessions) == 0:
-                self._logger.critical("No session is left for processing further" +
+                self._logger.warning("No session is left for processing further" +
                                       " taskset variants. Waiting for new sessions.")
         finally:
             session.close()

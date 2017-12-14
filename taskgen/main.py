@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import argparse
-import logging
+import logging, coloredlogs
 
 # inspect
 import inspect
@@ -21,11 +21,10 @@ if __name__ == '__main__':
 
 
 
-FORMAT = '%(asctime)-15s %(levelname)s [%(name)s]  %(message)s'
-
 def handle_logging(args):
-    _level = logging.DEBUG if args.debug else logging.INFO
-    logging.basicConfig(format=FORMAT, level=_level)
+    _level = 'DEBUG' if args.debug else 'INFO'
+    _fmt = '%(asctime)s %(name)s %(levelname)s %(message)s'
+    coloredlogs.install(level=_level, fmt=_fmt)
     
     
 def print_classes(class_type, submodule):
