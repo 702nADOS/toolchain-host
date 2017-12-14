@@ -281,6 +281,7 @@ class _WrapperSession(threading.Thread):
         self._running = False
         self._restart_lock = threading.Lock()
         self._run = False
+        self._restart = False
 
     def thread_start(self):
         threading.Thread.start(self)

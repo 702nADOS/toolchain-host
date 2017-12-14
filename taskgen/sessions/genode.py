@@ -153,7 +153,7 @@ class GenodeSession(AbstractSession):
         self._socket.send(meta)
 
         # get the path to the bin folder
-        bin_path = taskgen.__path__[0] + "/bin/"
+        bin_path = "/home/fischejo/university/informatik/in2261-bachelor/bsc-taskgen/toolchain-host/taskgen/bin/"
         
         for name in binaries:
             # Wait for 'go' message.

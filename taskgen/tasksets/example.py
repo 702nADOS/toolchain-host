@@ -1,11 +1,11 @@
-from taskgen.task import PeriodicTask
+from taskgen.task import Task
 from taskgen.mixins.priority import LowPriority
 from taskgen.mixins.gen_load_finite import GenLoadFinite
 from taskgen.taskset import TaskSet
 
 
 # DO NOT DELETE, is an exmaple for the documentation
-class ExampleTask(LowPriority, GenLoadFinite, PeriodicTask):
+class ExampleTask(LowPriority, GenLoadFinite, Task):
     pass
 
 

@@ -43,7 +43,7 @@ class StdIOSession(AbstractSession):
     def stop(self):
         self.logger.debug("stop of taskset")
 
-    def live_request(self):
+    def event(self):
         running = time.clock() - self._timestamp
         return LiveResult({
             'running' : running < 0.1 # 1 seconds

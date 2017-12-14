@@ -39,7 +39,6 @@ class Hey2Task(Task):
             }
         })
 
-
 class HeyTaskSet(TaskSet):
     def __init__(self):
         super().__init__()

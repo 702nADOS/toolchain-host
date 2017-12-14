@@ -72,16 +72,16 @@ def load_class(path, submodule):
     # TODO handle constructor parameters
     # TODO handle not found
 
-def initialize_class(path, submodule):
+def initialize_class(path, submodule, params=[]):
     _class =load_class(path, submodule)
     if _class is not None:
-        return _class()
+        return _class(*params)
     
 def command_run(args):    
     handle_logging(args)
     
     # load tasksets  (right now, no parameters can be passed.)
-    tasksets = initialize_class(args.taskset, "tasksets")
+    tasksets = initialize_class(args.taskset[0], "tasksets", args.taskset[1:])
 
     # load optimization
     optimization = initialize_class(args.optimization, "optimizations")
@@ -131,7 +131,7 @@ def main():
                             help='Port, default is port number 3001.')
     # run -t
     parser_run.add_argument('-t', '--taskset', required=True, metavar="CLASS",
-                        help='Select a taskset class.')
+                            nargs='+', help='Select a taskset class.')
     # run -e
     parser_run.add_argument('-e', '--event', metavar="CLASS",
                             help='Select a event handler for incoming events of processed tasksets.')
