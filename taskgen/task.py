@@ -13,17 +13,23 @@ class Task(dict):
         super().__init__()
         super().update( {
             # default values
-            "id" : "test",
+            "id" : None,
             "priority" : None,
 
             # blob values
             "quota" : None,
             "pkg" : None,
-            "config" : None
+            "config" : None,
+
+            # periodic task
+            "period" : None,
+
+            # "offset" : None, unused at genode side.
+            
         })
 
     def __key__(self):
-        pass
+        return "periodictask"
         
     def _iterate_dict(self, d, f):
         if isinstance(d, dict):
@@ -31,29 +37,18 @@ class Task(dict):
         else:
             return f(self[d])
         
-    def is_complete(self):
-        # searches for None in _task
-        return not self._iterate_dict(self, lambda x: x is None)
+#    def is_complete(self):
+#        # searches for None in _task
+#        return not self._iterate_dict(self, lambda x: x is None)
 
-    def has_variants(self):
+#    def has_variants(self):
         # searches for Iterable in _task and ignores strings
-        return self._iterate_dict(self, lambda x: isinstance(x, Iterable)
-                                   and not isinstance(x, str))
-
-class PeriodicTask(Task):
-    def __init__(self):
-        super().__init__()
-        super().update( {
-            "period" : None,
-            "offset" : None
-        })
-
-    def __key__(self):
-        return "periodictask"
-
+#        return self._iterate_dict(self, lambda x: isinstance(x, Iterable)
+#                                   and not isinstance(x, str))
+ 
     
 """
-# Not supported and implemented at genode site.
+# Not supported and implemented at genode side.
 
 class SporadicTask(Task):
     def __init__(self):

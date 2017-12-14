@@ -1,7 +1,7 @@
-from taskgen.task import PeriodicTask
+from taskgen.task import Task
 from taskgen.taskset import TaskSet
 
-class Hey1Task(PeriodicTask):
+class Hey1Task(Task):
     def __init__(self):
         super().__init__()
         self.update({
@@ -20,7 +20,7 @@ class Hey1Task(PeriodicTask):
             }
         })
 
-class Hey2Task(PeriodicTask):
+class Hey2Task(Task):
     def __init__(self):
         super().__init__()
         self.update({

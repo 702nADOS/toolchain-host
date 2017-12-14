@@ -117,16 +117,11 @@ class GenodeSession(AbstractSession):
         if not isinstance(taskset, TaskSet):
             raise TypeError("taskset must be type TaskSet") 
 
-        tasks = taskset.asxml()
-        tasks_ascii = tasks #.encode('ascii')
-        # Genode XML parser can't handle a lot of header things, so skip them.
-        first_node = re.search('<\w+', tasks_ascii)
-        tasks = tasks[first_node.start():]
-
+        description = taskset.description()
         self.logger.debug("Sending taskset description.")
-        meta = struct.pack('II', MagicNumber.SEND_DESCS, len(tasks))
+        meta = struct.pack('II', MagicNumber.SEND_DESCS, len(description))
         self._socket.send(meta)
-        self._socket.send(tasks.encode("ascii"))
+        self._socket.send(description.encode("ascii"))
 
     def event(self):
         # buffered reader
@@ -151,14 +146,8 @@ class GenodeSession(AbstractSession):
         if not isinstance(taskset, TaskSet):
             raise TypeError("taskset must be type TaskSet") 
 
-        tasks = taskset.asxml()
-        tasks_ascii = tasks
-        # TODO need some fixing (we have the possibility to parse the dictionary structure)
-        binaries = re.findall('<\s*pkg\s*>\s*(.+)\s*<\s*/pkg\s*>', tasks_ascii)
-        binaries = list(set(binaries))
-
-        self.logger.debug('Sending {} binar{}.'.format(len(binaries), 'y' if
-                                                   len(binaries) == 1 else 'ies'))
+        binaries = taskset.binaries()
+        self.logger.debug('Sending {} binary file(s).'.format(len(binaries)))
         
         meta = struct.pack('II', MagicNumber.SEND_BINARIES, len(binaries))
         self._socket.send(meta)
