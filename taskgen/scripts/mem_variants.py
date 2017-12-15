@@ -10,9 +10,9 @@ import time
 import psutil
 import subprocess
 import time
+import os
 
-#sys.path.append('../../')
-task_count = 100000
+sys.path.append('../../')
 
 def _call(session_count, task_count, variant_count):
     cmd = 'python3 -m taskgen run'.split(' ')
@@ -51,5 +51,6 @@ def _call_all(session_range, task_range, variant_range):
 
 
 _call_all(range(1,2), range(1,2), range(1,2))
-_call_all(range(1,2), range(1,5), range(1,5))
-_call_all(range(1,40), range(10,100, 10), range(10,100, 10))
+#_call_all(range(1,2), range(1,5), range(1,5))
+_call_all(range(1,3), range(5,11), range(1,5))
+#_call_all(range(1,40), range(10,100, 10), range(10,100, 10))

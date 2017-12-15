@@ -9,7 +9,6 @@ from collections import Iterable
 
 from taskgen.task import Task
 
-
 class TaskSet:
     def __init__(self, taskset = {}):
         self._taskset = defaultdict(list, taskset)
@@ -37,6 +36,7 @@ class TaskSet:
 #        return all(map(lambda x: x.is_complete(), self))
 
     def variants(self):
+
         flat = flatdict.FlatDict(self._taskset,None, dict,True)
 
         # make everything to an iterator, except iterators. Pay attention:
@@ -44,13 +44,13 @@ class TaskSet:
         iters = map(lambda x: [x] if not isinstance(x, Iterable) or
                     isinstance(x, str) else x, flat.itervalues())
         keys = flat.keys()
-
+        
         # generator for [TaskSet]
         for values in itertools.product(*iters):
             # update dictionary with the new combined values. This is done by
             # mapping all keys to their values.
             flat.update(dict(zip(keys, values)))
-
+            
             # create new taskset (pay attention: there are no references to a
             # Task object anymore, only dicts).
             yield TaskSet(flat.as_dict())
