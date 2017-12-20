@@ -75,7 +75,6 @@ class GenodeSession(AbstractSession):
         except socket.error:
             pass
         self._close()
-        
 
     def optimize(self, optimization):
         if not isinstance(optimiziation, Optimiziation):
@@ -156,9 +155,8 @@ class GenodeSession(AbstractSession):
         meta = struct.pack('II', MagicNumber.SEND_BINARIES, len(binaries))
         self._socket.send(meta)
 
-        # TODO
         # get the path to the bin folder
-        bin_path = "/home/fischejo/university/informatik/in2261-bachelor/bsc-taskgen/toolchain-host/taskgen/bin/"
+        root_path = os.path.dirname(sys.modules['__main__'].__file__)
         
         for name in binaries:
             # Wait for 'go' message.
@@ -168,8 +166,9 @@ class GenodeSession(AbstractSession):
                 break
 
             self.logger.debug('Sending {}.'.format(name))
-            file = open(bin_path + name, 'rb').read()
-            size = os.stat(bin_path + name).st_size
+            path = "{}/bin/{}".format(root_path, name)
+            file = open(path, 'rb').read()
+            size = os.stat(path).st_size
             meta = struct.pack('15scI', name.encode('ascii'), b'\0', size)
             self._socket.send(meta)
             self._socket.send(file)
