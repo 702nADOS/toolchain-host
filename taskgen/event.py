@@ -21,8 +21,3 @@ class AbstractEventHandler(metaclass=ABCMeta):
     @abstractmethod
     def __taskset_stop__(self, taskset):
         pass
-
-def taskset_is_processing(event):
-    if event:
-        print(event)
-    return True #random.randint(0,4) == 0

@@ -1,14 +1,14 @@
 from taskgen.event import AbstractEventHandler
 
 
-class SqliteHandler(AbstractEventHandler):
+class StdOutHandler(AbstractEventHandler):
 
     def __init__(self):
-        self._logger = logging.getLogger("SqliteHandler")
+        self._logger = logging.getLogger("StdOutHandler")
 
         
     def __taskset_event__(self, taskset, event):
-        pass
+        print(event)
     
     def __taskset_start__(self, taskset):
         pass

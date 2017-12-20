@@ -13,7 +13,7 @@ from math import ceil
 
 from taskgen.optimization import Optimization
 from taskgen.taskset import TaskSet
-from taskgen.event import AbstractEventHandler, taskset_is_processing
+from taskgen.event import AbstractEventHandler
 from taskgen.session import AbstractSession
 from taskgen.sessions.genode import PingSession
 
@@ -244,7 +244,7 @@ class _WrapperSession(threading.Thread):
         self._close = close
         self._session_class = session_class
         self._logger = logging.getLogger("Distributor({})".format(host))
-
+        
         self._taskset = None
         self._running = False
         self._restart_lock = threading.Lock()
@@ -300,15 +300,17 @@ class _WrapperSession(threading.Thread):
             self._taskset = None
         self._running = False
 
-
         
     def _internal_event_handling(self, session):
         # requesting & handling callback
-        event = session.event()
-
+        profile = session.event()
+        events = profile['profile']['events']['event']
         if self.event_handler is not None:
-            self.event_handler.__taskset_event__(self._taskset, event)
-        target_running = taskset_is_processing(event)
+            for event in events:
+                self.event_handler.__taskset_event__(self._taskset, event)
+            
+        # TODO
+        target_running = True
 
         if not target_running:
             if self.event_handler is not None:
