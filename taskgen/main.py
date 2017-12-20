@@ -40,25 +40,19 @@ def print_classes(class_type, submodule):
                 if obj.__module__ == module_path:
                     #class_path = module_path + "." + class_name
                     class_path = module_name + "." + class_name
-                    class_doc = "" if obj.__doc__ is None else obj.__doc__
-                    print('{: <30} | {: <50}'.format(class_path, class_doc))
+                    class_doc = "\n" if obj.__doc__ is None else obj.__doc__
+                    class_doc = class_doc.splitlines()
+                    print('{}{: <30}{} {}'.format('\033[1m', class_path, '\033[0m', class_doc[0]))
+
         
 def command_list(args):
     if args.taskset:
-        print('{: <30} | {}'.format("TaskSet Class Name", "Description"))
-        print("-"*80)
         print_classes(TaskSet, "tasksets")
     if args.event:
-        print('{: <30} | {}'.format("Event classes", "Description"))
-        print("-"*80)
-        print_classes(AbstractLogger, "events")
+        print_classes(AbstractEventHandler, "events")
     if args.optimization:
-        print('{: <30} | {}'.format("Optimization classes", "Description"))
-        print("-"*80)
         print_classes(Optimization, "optimizations")
     if args.session:
-        print('{: <30} | {}'.format("Session classes", "Description"))
-        print("-"*80)
         print_classes(AbstractSession, "sessions")
 
 

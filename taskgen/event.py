@@ -22,7 +22,7 @@ class AbstractEventHandler(metaclass=ABCMeta):
     def __taskset_stop__(self, taskset):
         pass
 
-
-    
 def taskset_is_processing(event):
-    return False #random.randint(0,4) == 0
+    if event:
+        print(event)
+    return True #random.randint(0,4) == 0

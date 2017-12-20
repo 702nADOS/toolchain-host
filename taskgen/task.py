@@ -9,9 +9,8 @@ from collections import Iterable
 #    pass
 
 class Task(dict):
-    def __init__(self):
-        super().__init__()
-        super().update( {
+    def __init__(self, *attrs):
+        super().__init__({
             # default values
             "id" : None,
             "priority" : None,
@@ -23,10 +22,21 @@ class Task(dict):
 
             # periodic task
             "period" : None,
-
-            # "offset" : None, unused at genode side.
             
+            "numberofjobs" : 1
+            # "offset" : None, unused at genode side.
         })
+
+        # add inital attributes
+        for attr in attrs:
+            if callable(attr):
+                attr = attr()
+#            if not isinstance(attr, dict):
+#                raise ValueError("An attribute for a task must be dict.")
+            super().update(attr)
+
+
+        
 
     def __key__(self):
         return "periodictask"

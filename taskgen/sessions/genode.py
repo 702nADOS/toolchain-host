@@ -9,7 +9,7 @@ from collections import Iterable
 import logging
 import xmltodict
 from abc import ABCMeta, abstractmethod
-from taskgen.distributor import AbstractSession
+from taskgen.session import AbstractSession
 from taskgen.taskset import TaskSet
 from taskgen.optimization import Optimization
 import taskgen
@@ -38,12 +38,6 @@ class MagicNumber:
     # Stop all tasks.
     STOP = 0x514DE6
 
-    # Request profiling info as xml.
-    GET_PROFILE = 0x159D1
-    
-    # Request live info as xml
-    GET_LIVE = 0x159D2
-    
     #Initiate task scheduling optimization.
     OPTIMIZE = 0x6F7074
 
@@ -63,8 +57,7 @@ class GenodeSession(AbstractSession):
         self._socket.settimeout(10.0) # wait 10 seconds for responses...
         
     def start(self, taskset, optimization=None):
-        self._clear()
-        # TODO clear recv buffer
+#       self._clear() # bug: https://github.com/argos-research/genode-Taskloader/issues/4
         
         if optimization is not None:
             self._optimaze(optimization)
@@ -77,7 +70,10 @@ class GenodeSession(AbstractSession):
         self._stop()
 
     def close(self):
-#        self._clear()  what if the connection is dead...
+        try:
+            self._clear()
+        except socket.error:
+            pass
         self._close()
         
 
@@ -117,31 +113,39 @@ class GenodeSession(AbstractSession):
         if not isinstance(taskset, TaskSet):
             raise TypeError("taskset must be type TaskSet") 
 
-        description = taskset.description()
+        description = taskset.description().encode("ascii")
+        
         self.logger.debug("Sending taskset description.")
         meta = struct.pack('II', MagicNumber.SEND_DESCS, len(description))
         self._socket.send(meta)
-        self._socket.send(description.encode("ascii"))
-
-    def event(self):
-        # buffered reader
-        # find xml file, read
-        # parse to dict
-        # return
-        time.sleep(4)
-        return { 'running' : True }
-
-        """
-        # receive xml
-        size = int.from_bytes(self._socket.recv(4), 'little')
-        xml = b''
-        while len(xml) < size:
-            xml += self._socket.recv(size)
-
-        return xml.decode('utf-8')[:-1]
-        """
+        self._socket.send(description)
 
         
+    def event(self):
+        # wait for a new event
+        try:
+            timeout = self._socket.gettimeout()
+            self._socket.settimeout(0.0) # Non blocking
+            data = self._socket.recv(4)
+            size = int.from_bytes(data, 'little')
+        except:
+            return None
+        finally:
+            self._socket.settimeout(timeout)
+
+        # receive event
+        self.logger.debug('Receiveing new event.')
+        data = self._socket.recv(size)
+
+        # parse event
+        try:
+            ascii = data.decode("ascii").replace('\x00', '')
+            return xmltodict.parse(ascii)
+        except:
+            self.logger.error('Event data not parseable.')
+            return None
+        
+    
     def _send_bins(self, taskset):
         if not isinstance(taskset, TaskSet):
             raise TypeError("taskset must be type TaskSet") 
@@ -152,6 +156,7 @@ class GenodeSession(AbstractSession):
         meta = struct.pack('II', MagicNumber.SEND_BINARIES, len(binaries))
         self._socket.send(meta)
 
+        # TODO
         # get the path to the bin folder
         bin_path = "/home/fischejo/university/informatik/in2261-bachelor/bsc-taskgen/toolchain-host/taskgen/bin/"
         

@@ -1,7 +1,7 @@
 import logging
 import time
 from taskgen.taskset import TaskSet
-from taskgen.session import AbstractSession
+from taskgen.distributor import AbstractSession
 
 from pprint import pprint
 
@@ -24,7 +24,7 @@ COLORS_FG = [
 ]
 COLOR_RESET = '\033[0m'
 
-class StdIOSession(AbstractSession):
+class FileSession(AbstractSession):
     
     def __init__(self, host, port):
         self.logger = logging.getLogger("StdIOSession")
@@ -39,6 +39,7 @@ class StdIOSession(AbstractSession):
         self.logger.debug("start of taskset")
         self._timestamp = time.clock()
         self._print(taskset.description())
+        self._write(taskset.description())
 
     def stop(self):
         self.logger.debug("stop of taskset")
@@ -52,6 +53,10 @@ class StdIOSession(AbstractSession):
     def close(self):
         self.logger.debug("connection closed")
 
+    def _write(self, obj):
+        with open("taskset.xml", "w") as f: 
+            f.write(obj)
+        
     def _print(self,  obj):
         print(COLORS_FG[self.index])
         print("taskset size: {} bytes".format(len(obj.encode("utf8"))))
