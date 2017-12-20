@@ -54,11 +54,15 @@ Use the tool to list all available tasksets:
 ./taskgen list --taskset
 ```
 
-We want to distribute the `example.ExampleTaskSet` task-set to one destination
-instance. 
+Task-sets in `example.*` are good starting points for testing and exploring
+taskgen.
+
+We want to distribute the `example.Hey0TaskSet` task-set to one destination
+instance. The `stdio.StdIOSession` session prints the task-set to stdout,
+instead of sending it over the network. 
 
 ```bash
-./taskgen run -d -t example.ExampleTaskSet -p 1234 172.25.0.1
+./taskgen run -d -t example.Hey0TaskSet -s stdio.StdIOSession 172.25.0.1
 ```
 
 # Documentation
@@ -76,15 +80,10 @@ Pay attention, the documentation is not up to date due to several changes.
 
 
 # ToDo List
-
-- [ ] Makefile Integration
-  - [ ] new task build directory (`taskgen/bin`)
-  - [ ] taskgen requirements
-- [ ] Refactor Distributor (move ping functionality to Session)
+- [x] Refactor Distributor (move ping functionality to Session)
 - [ ] Update Documentation
-- [ ] Replace Live & Profile Requests by **Th3 Aw3soMe Push**
+- [x] Replace Live & Profile Requests by **Th3 Aw3soMe Push**
 
 # Branches
 * `taskgen` supports the current live request functionality.
 * `push` replaces live/profile requests by push logging.
-

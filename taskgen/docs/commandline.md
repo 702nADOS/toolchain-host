@@ -3,9 +3,26 @@ multiple destination instances.
 
 ```bash
 $ ./taskgen run --help
-usage: taskgen run [-h] [-v] [--log-file FILE] -p PORT -t CLASS [-l CLASS]
-                   [-o CLASS] [--pretend]
+usage: taskgen run [-h] [-d] [-p PORT] -t CLASS [CLASS ...] [-e CLASS]
+                   [-o CLASS] [-s CLASS]
                    IP [IP ...]
+
+positional arguments:
+  IP                    IP address or a range of IP addresses (CIDR format)
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d, --debug           Print debugging information.
+  -p PORT, --port PORT  Port, default is port number 3001.
+  -t CLASS [CLASS ...], --taskset CLASS [CLASS ...]
+                        Select a taskset class.
+  -e CLASS, --event CLASS
+                        Select a event handler for incoming events of
+                        processed tasksets.
+  -o CLASS, --optimization CLASS
+                        Select an optimization class.
+  -s CLASS, --session CLASS
+                        Select a session class. Default: GenodeSession
 ```
 
 | Command | Parameter          | Description                                |
@@ -13,18 +30,18 @@ usage: taskgen run [-h] [-v] [--log-file FILE] -p PORT -t CLASS [-l CLASS]
 | list    | -h, --help         | show this help message                     |
 | list    | -t, --taskset      | print all available taskset  classes       |
 | list    | -o, --optimization | print all available optimization classses  |
-| list    | -l, --live         | print all available live request handler   |
+| list    | -e, --event        | print all available event handler          |
+| list    | -s, --session      | print all available session classes        |
 
 | Command | Parameter                      | Description                                         |
 | ------- | ------------------------------ | --------------------------------------------------- |
 | run     | -h, --help                     | show this help message                              |
-| run     | -v, --verbosity                | increase output verbosity                           |
-| run     | --log-file FILE                | write log to file                                   |
-| run     | -p PORT, --port PORT           | destination port                                    |
+| run     | -d, --debug                    | print debug information to stdout                   |
+| run     | -p PORT, --port PORT           | destination port. default: 3001                     |
 | run     | -t CLASS, --taskset CLASS      | select a taskset class                              |
 | run     | -o CLASS, --optimization CLASS | select an optimization class                        |
-| run     | -l CLASS, --live CLASS         | select a live request handler                       |
-| run     | --pretend                      | pretend to send the taskset                         |
+| run     | -e CLASS, --event CLASS        | select a event handler class                        |
+| run     | -s CLASS, --session CLASS      | select a session class. default: PingSession        |
 | run     | IP [IP ...]                    | IP address or a range of IP addresses (CIDR format) |
 
 
@@ -36,64 +53,62 @@ established, all host are pinged. IP ranges are defined as
 format. 
 
 ```bash
-./taskgen run -t example.ExampleTaskSet -p 1234 172.25.0.0/24
+./taskgen run -t example.Hey0TaskSet 172.25.0.0/24
 ```
 
 Connect to multiple IP addresses or IP ranges:
 
 ```bash
-./taskgen run -t example.ExampleTaskSet -p 1234 172.25.0.0/24 172.26.0.0/24
+./taskgen run -t example.Hey0TaskSet 172.25.0.0/24 172.26.0.0/24
 ```
 
-Write log to file:
+Enable debug information:
 
 ```bash
-./taskgen run --log-file log.txt -t example.ExampleTaskSet -p 1234 172.25.0.1
+./taskgen run -d -t example.Hey0TaskSet 172.25.0.1
 ```
 
-Increase verbosity:
+Pretend the connection with `StdIOSession`:
+
+When using the `stdio.StdIOSession` session, no real connection is established
+and the actual task-sets are printed to stdout.
 
 ```bash
-./taskgen run -vvv -t example.ExampleTaskSet -p 1234 172.25.0.1
+./taskgen run  -t example.Hey0TaskSet -s stdio.StdIOSession 172.25.0.1
 ```
 
-Pretend the connection:
-
-When the `--pretend` option is used, no real connection is established and the
-SimpleDistributor is replaced with the LogDistributor. The actual sent xml files
-are printed to stdout.
-
+Event Handlers handle incoming event logs:
 ```bash
-./taskgen run --pretend -t example.ExampleTaskSet -p 1234 172.25.0.1
-```
-
-Choose a Live Request Handler:
-
-```bash
-./taskgen run -l sqlite.SQLiteLiveHandler -p 1234 172.25.0.1
+./taskgen run -e sqlite.SQLiteLiveHandler 172.25.0.1
 ```
 
 Choose an optimization:
 
 ```bash
-./taskgen run -o fairness.Fairness -p 1234 172.25.0.1
+./taskgen run -o fairness.Fairness 172.25.0.1
 ```
 
 List all available task-sets:
 
 ```bash
-./taskgen list -t
+./taskgen list --taskset
 ```
 
 List all available optimizations:
 
 ```bash
-./taskgen list -o
+./taskgen list --optimization
 ```
 
-List all available live request handlers:
+List all available event handlers:
 
 ```bash
-./taskgen list -l
+./taskgen list --event
+```
+
+List all available sessions:
+
+```bash
+./taskgen list --session
 ```
 
