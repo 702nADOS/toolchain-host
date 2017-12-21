@@ -86,12 +86,12 @@ instead of sending it over the network.
 # Documentation
 * [Overview](docs/overview.md) **up-to-date**
 * [Command line](docs/commandline.md) **up-to-date**
-* [Distributors](docs/distributor.md) **outdated**
+* [Distributors](docs/distributor.md) **up-to-date**
 * [Task-Sets](docs/taskset.md) **outdated**
 * [Tasks](docs/tasks.md) **outdated**
 * [Attributes](docs/attributes.md) **outdated**
-* [Optimization](docs/optimization.md)
-* [Event Handlers](docs/event.md) **outdated**
+* [Optimization](docs/optimization.md) **up-to-date**
+* [Event Handlers](docs/event.md) **up-to-date**
 * [Sessions](docs/session.md) **outdated**
 
 # Internals

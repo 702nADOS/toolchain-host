@@ -4,7 +4,11 @@ Distributor
 The `Distributor` class glues everything together in place. It scans IP ranges
 for available sessions, automatically manages open connections to sessions,
 distributes task-sets and task-set variants to connected target systems and pass
-on incoming events to event handlers.
+on incoming events to event handlers.  
+
+Is is possible to hand over a list of IP ranges. Each IP range is described with
+the [CIDR](https://de.wikipedia.org/wiki/Classless_Inter-Domain_Routing) format.  
+
 
 Example Script
 --------------
@@ -42,14 +46,6 @@ distributor.close(wait=False)
 print("closing all connections")
 distributor.wait_closed()
 ```
-
-
-Methods
--------
-
-| Distributor(destination, port=3001, sessionclass=PingSession, startthreads = 15)  |
-|-----------------------------------------------------------------------------------|
-| destination                                         |                        blub |
 
 
 
