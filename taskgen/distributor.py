@@ -13,7 +13,7 @@ from math import ceil
 
 from taskgen.optimization import Optimization
 from taskgen.taskset import TaskSet
-from taskgen.event import AbstractEventHandler
+from taskgen.event import AbstractEventHandler, DefaultEventHandler
 from taskgen.session import AbstractSession
 from taskgen.sessions.genode import PingSession
 
@@ -39,7 +39,7 @@ class Distributor:
         self.logger = logging.getLogger('Distributor')
         self._close_event = threading.Event()
         self._pool = Queue()
-        self._event_handler = None
+        self._event_handler = DefaultEventHandler()
         self._run = False
         self._tasksets = None
         self._optimization = None
@@ -294,27 +294,24 @@ class _WrapperSession(threading.Thread):
     def _internal_stop(self, session):
         session.stop()
         if self._taskset is not None :
-            if self.event_handler is not None:
-                self.event_handler.__taskset_stop__(self._taskset)
+            self.event_handler.__taskset_stop__(self._taskset)
             self._tasksets.put(self._taskset)
             self._taskset = None
         self._running = False
 
         
     def _internal_event_handling(self, session):
-        # requesting & handling callback
-        profile = session.event()
-        events = profile['profile']['events']['event']
-        if self.event_handler is not None:
-            for event in events:
-                self.event_handler.__taskset_event__(self._taskset, event)
-            
-        # TODO
-        target_running = True
+        # get an event.
+        event = session.event()
 
+        if event is None:
+            # keep going until an event occures
+            return True
+
+        target_running = self.event_handler.__taskset_event__(self._taskset,
+                                                              event)
         if not target_running:
-            if self.event_handler is not None:
-                self.event_handler.__taskset_finish__(self._taskset)
+            self.event_handler.__taskset_finish__(self._taskset)
             self._tasksets.done(self._taskset)  # notify about the finished taskset
             self._logger.debug("Taskset variant is successfully processed")
             
@@ -362,8 +359,7 @@ class _WrapperSession(threading.Thread):
                 self._logger.debug("Taskset variant is pushed back to queue due to" +
                                    " a critical error")
                 # notify live handler about the stop.
-                if self.event_handler is not None:
-                    self.event_handler.__taskset_stop__(self._taskset)
+                self.event_handler.__taskset_stop__(self._taskset)
 
             # push host back in pool (only, if there was an error). A closing
             # event does not trigger the push back to the host pool.

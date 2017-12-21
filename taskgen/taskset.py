@@ -1,5 +1,5 @@
 import xmltodict
-from collections.abc import MutableSequence
+from collections.abc import Iterable
 from abc import ABCMeta, abstractmethod
 import itertools
 import random
@@ -9,15 +9,21 @@ from taskgen.task import Task
 
 
 
-class TaskSet:
+class TaskSet(Iterable):
     def __init__(self, tasks=[]):
         self._tasks = tasks
         self._cached_xml = None 
-        
+        self._task_counter = 0
+
+    def __iter__(self):
+        return self._tasks.__iter__()
+    
     def __str__(self):
         return self._tasks.__str__()
         
     def append(self, task):
+        task.id = self._task_counter
+        self._task_counter += 1
         self._tasks.append(task)
 
     def variants(self):
@@ -38,7 +44,7 @@ class TaskSet:
         return self._cached_xml        
 
     def binaries(self):
-        return map(lambda x: x.binary(), self._tasks)
+        return list(map(lambda x: x.binary(), self._tasks))
 
     
 

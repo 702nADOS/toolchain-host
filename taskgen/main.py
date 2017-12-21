@@ -13,7 +13,7 @@ from taskgen.sessions.genode import PingSession
 
 from taskgen.taskset import TaskSet
 from taskgen.optimization import Optimization
-from taskgen.event import AbstractEventHandler
+from taskgen.event import AbstractEventHandler, DefaultEventHandler
 
 if __name__ == '__main__':
     main()
@@ -84,7 +84,7 @@ def command_run(args):
     if args.event:
         event_handler = initialize_class(args.event, "events")
     else:
-        event_handler = None
+        event_handler = DefaultEventHandler()
 
     # session class
     if args.session:

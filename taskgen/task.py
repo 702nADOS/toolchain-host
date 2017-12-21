@@ -27,6 +27,9 @@ class Task(dict):
             # "offset" : None, unused at genode side.
         })
 
+        # stores all events at runtime
+        self.events = {}
+        
         # add inital attributes
         for attr in attrs:
             if callable(attr):
@@ -35,6 +38,13 @@ class Task(dict):
 #                raise ValueError("An attribute for a task must be dict.")
             super().update(attr)
 
+    @property
+    def id(self):
+        return self['id']
+            
+    @id.setter
+    def id(self, _id):
+        self['id'] = _id
 
     def variants(self):
         flat = flatdict.FlatDict(self,None, dict,True)
@@ -55,5 +65,3 @@ class Task(dict):
 
     def binary(self):
         return self['pkg']
-            
-    

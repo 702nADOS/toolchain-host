@@ -57,7 +57,7 @@ class GenodeSession(AbstractSession):
         self._socket.settimeout(10.0) # wait 10 seconds for responses...
         
     def start(self, taskset, optimization=None):
-#       self._clear() # bug: https://github.com/argos-research/genode-Taskloader/issues/4
+        self._clear()
         
         if optimization is not None:
             self._optimaze(optimization)
@@ -124,7 +124,7 @@ class GenodeSession(AbstractSession):
         # wait for a new event
         try:
             timeout = self._socket.gettimeout()
-            self._socket.settimeout(0.0) # Non blocking
+            self._socket.settimeout(0.1) # Non blocking
             data = self._socket.recv(4)
             size = int.from_bytes(data, 'little')
         except:
@@ -133,8 +133,10 @@ class GenodeSession(AbstractSession):
             self._socket.settimeout(timeout)
 
         # receive event
-        self.logger.debug('Receiveing new event.')
-        data = self._socket.recv(size)
+        self.logger.debug('Receiveing new event of {} bytes.'.format(size))
+        data = b''
+        while len(data) < size:
+            data += self._socket.recv(1024)
 
         # parse event
         try:

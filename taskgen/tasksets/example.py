@@ -12,11 +12,11 @@ class Hey0TaskSet(TaskSet):
         super().__init__()
         task = Task({
             "id" : 1,
-            "executiontime" : 10000,
-            "criticaltime" : 2000,
+            "executiontime" : 1000,
+            "criticaltime" : 1000,
             "priority" : 10,
-            "period" : 1000,
-            "numberofjobs" : 3,
+            "period" : 2000,
+            "numberofjobs" : 0,
             "quota" : "1M",
             "pkg" : "hey",
             "config" : {}
