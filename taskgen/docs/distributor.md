@@ -13,7 +13,7 @@ the [CIDR](https://de.wikipedia.org/wiki/Classless_Inter-Domain_Routing) format.
 Example Script
 --------------
 
-```Python3
+```Python
 from taskgen.tasksets.hey import Hey1TaskSet
 from taskgen.distributor import Distributor
 from taskgen.optimizations.fairness import Fairness

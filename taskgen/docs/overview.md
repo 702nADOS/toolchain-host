@@ -32,7 +32,7 @@ General Workflow
 These steps can be done by using the [command line tool](commandline.md) or
 by writing a python script and using the module's classes:
 
-```Python3
+```Python
 from taskgen.tasksets.hey import Hey1TaskSet
 from taskgen.distributor import Distributor
 from taskgen.optimizations.fairness import Fairness

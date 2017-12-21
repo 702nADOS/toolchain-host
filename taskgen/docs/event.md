@@ -11,7 +11,7 @@ processing continues or should stop.
 | `events.sql.SqliteHandler` | Stores incoming events to a sqlite database. |
 | `events.csv.CsvHandler` | Stores incoming events to a csv file. |
 
-```python3
+```python
 from taskgen.distributor import Distributor
 from taskgen.sql import SqliteHandler
 
@@ -63,7 +63,7 @@ task-set processing. In general, `DefaultEventHandler` already keeps track of it
 and you only need to pass through the value inside `__taskset_event__`.
 
 
-```Python3
+```Python
 from taskgen.event import DefaultEventHandler
 
 class YourHandler(DefaultEventHandler):
