@@ -84,14 +84,15 @@ instead of sending it over the network.
 ```
 
 # Documentation
-
-* [Command line](docs/commandline.md)
+* [Overview](docs/overview.md) **up-to-date**
+* [Command line](docs/commandline.md) **up-to-date**
 * [Distributors](docs/distributor.md) **outdated**
 * [Task-Sets](docs/taskset.md) **outdated**
 * [Tasks](docs/tasks.md) **outdated**
 * [Attributes](docs/attributes.md) **outdated**
 * [Optimization](docs/optimization.md)
-* [Event](docs/event.md) **outdated**
+* [Event Handlers](docs/event.md) **outdated**
+* [Sessions](docs/session.md) **outdated**
 
 # Internals
 
