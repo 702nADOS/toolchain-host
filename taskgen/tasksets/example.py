@@ -111,7 +111,7 @@ class Hey6TaskSet(AttributeTaskSet):
     def __init__(self):
         super().__init__(
             hey.HelloWorld,
-            priority.Variants(),
+            priority.Variants,
             period.Custom(5)
         )
 

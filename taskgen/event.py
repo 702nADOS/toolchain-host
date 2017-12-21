@@ -23,6 +23,4 @@ class AbstractEventHandler(metaclass=ABCMeta):
         pass
 
 def taskset_is_processing(event):
-    if event:
-        print(event)
-    return True #random.randint(0,4) == 0
+    return False #random.randint(0,4) == 0

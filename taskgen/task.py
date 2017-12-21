@@ -3,7 +3,7 @@ from abc import ABCMeta, abstractmethod
 import flatdict
 import itertools
 from collections import Iterable
-
+import flatdict
 
 #class CombinedMeta(ABCMeta, MixinMeta):
 #    pass
@@ -36,50 +36,24 @@ class Task(dict):
             super().update(attr)
 
 
-        
+    def variants(self):
+        flat = flatdict.FlatDict(self,None, dict,True)
 
-    def __key__(self):
-        return "periodictask"
+        # make everything to an iterator, except iterators. Pay attention:
+        # strings are wrapped with an iterator again.
+        iters = map(lambda x: [x] if not isinstance(x, Iterable) or
+                    isinstance(x, str) else x, flat.itervalues())
+        keys = flat.keys()
         
-    def _iterate_dict(self, d, f):
-        if isinstance(d, dict):
-            return any([self._iterate_dict(k, f) for k in d])
-        else:
-            return f(self[d])
-        
-#    def is_complete(self):
-#        # searches for None in _task
-#        return not self._iterate_dict(self, lambda x: x is None)
+        for values in itertools.product(*iters):
+            # update dictionary with the new combined values. This is done by
+            # mapping all keys to their values.
+            flat.update(dict(zip(keys, values)))
+            
+            # create new task
+            yield Task(flat.as_dict())
 
-#    def has_variants(self):
-        # searches for Iterable in _task and ignores strings
-#        return self._iterate_dict(self, lambda x: isinstance(x, Iterable)
-#                                   and not isinstance(x, str))
- 
+    def binary(self):
+        return self['pkg']
+            
     
-"""
-# Not supported and implemented at genode side.
-
-class SporadicTask(Task):
-    def __init__(self):
-        super().__init__()
-        super().update( {
-            "inter_arrival" : None
-        })
-
-    def __key__(self):
-        return "sporadictask"
-
-
-
-    
-class AperiodicTask(Task):
-    def __init__(self):
-        super().__init__()
-        super().update( {
-            "inter_arrival" : 0
-        })
-
-    def __key__(self):
-        return "aperiodictask"
-"""
