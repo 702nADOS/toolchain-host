@@ -6,10 +6,10 @@ processing continues or should stop.
 
 | Event Handler Class | Description |
 | --- | --- |
-| event.AbstractEventHandler | If you want to handle the task-set continue-logic by yourself, this might be the starting point. |
-| event.DefaultEventHandler | Updates tasks with incoming event data and stop task-set processing if all tasks are terminated. |
-| events.sql.SqliteHandler | Stores incoming events to a sqlite database. |
-| events.csv.CsvHandler | Stores incoming events to a csv file. |
+| `event.AbstractEventHandler` | If you want to handle the task-set continue-logic by yourself, this might be the starting point. |
+| `event.DefaultEventHandler` | Updates tasks with incoming event data and stop task-set processing if all tasks are terminated. |
+| `events.sql.SqliteHandler` | Stores incoming events to a sqlite database. |
+| `events.csv.CsvHandler` | Stores incoming events to a csv file. |
 
 ```python3
 from taskgen.distributor import Distributor
@@ -39,7 +39,7 @@ An event has the xml format:
 
 Which is translated with [xmltodict](xmltodict.md) to a dictionary object.
 
-```Python3
+```Python
 {
     "profile": {
         "events": {
