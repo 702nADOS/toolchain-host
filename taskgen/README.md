@@ -7,8 +7,17 @@ component.
 
 # Status
 
-* All components are implemented and works. 
+* All components are implemented and work. 
 * Tasks with multiple jobs are not handled well [issue](https://github.com/argos-research/genode-Taskloader/issues/5).
+
+# Todos
+
+- [ ] Update Documentation
+- [ ] Solve [issue](https://github.com/argos-research/genode-Taskloader/issues/5).
+- [ ] Implementation of [SqliteEventHandler](events/sqlite.py)
+- [ ] Implementation of [CsvEventHandler](events/csv.py)
+- [ ] Machine Learning Show Case
+- [ ] Benchmarks
 
 # Goals
 - **Easy extensibility** New modules like are simple to add as new classes. The
@@ -24,8 +33,8 @@ component.
   generators are no problems. Lazy evaluation only generate as much tasksets as
   needed at runtime.
   
-- **User friendly** Threading keeps waiting time low and work like ping,
-  connect, processing tasksets is done in background. A fast-responsive
+- **User friendly** Threading keeps waiting time low and work, like ping,
+  connect, processing tasksets, is done in background. A fast-responsive
   framework is the result.
 
 
@@ -77,12 +86,12 @@ instead of sending it over the network.
 # Documentation
 
 * [Command line](docs/commandline.md)
-* [Distributors](docs/distributor.md)
-* [Task-Sets](docs/taskset.md)
-* [Tasks](docs/tasks.md)
-* [Attributes](docs/attributes.md)
+* [Distributors](docs/distributor.md) **outdated**
+* [Task-Sets](docs/taskset.md) **outdated**
+* [Tasks](docs/tasks.md) **outdated**
+* [Attributes](docs/attributes.md) **outdated**
 * [Optimization](docs/optimization.md)
-* [Event](docs/event.md)
+* [Event](docs/event.md) **outdated**
 
 # Internals
 
