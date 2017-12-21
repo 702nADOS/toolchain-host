@@ -1,30 +1,75 @@
-TODO explain distributors
+Distributor
+===========
 
-# LogDistributor
+The `Distributor` class glues everything together in place. It scans IP ranges
+for available sessions, automatically manages open connections to sessions,
+distributes task-sets and task-set variants to connected target systems and pass
+on incoming events to event handlers.
 
-The `LogDistributor` is a stub implementation for the low level communication
-with a genode instance. Combined with the `MultiDistributor`, it helps you
-debugging. Instead of sending all task-sets, the xml representation is printed
-to stdout.
+Example Script
+--------------
 
-# SimpleDistributor
+```Python3
+from taskgen.tasksets.hey import Hey1TaskSet
+from taskgen.distributor import Distributor
+from taskgen.optimizations.fairness import Fairness
+from taskgen.events.csv import CsvHandler
 
-The `SimpleDistributor` represents the most simple implementation of a
-distributor. It connects to one genode instance and processes one taskset. It is
-able to start, stop, close and send live requests. Please do not use this
-distributor directly, it only abstracts the low level communication for the more
-advanced `MultiDistributor`.
+# attempt connecting to hosts of two ip ranges.
+distributor = Distributor(["172.25.1.0/24", 172.49.1.0/24])
 
-# MultiDistributor
+# save all events to `events.csv`
+event_handler = CsvHandler("events.csv")
+distributor.event_handler = event_handler
 
-The `MultiDistributor` is the default distributor for communication with
-multiple genode instances.
+# create taskset
+taskset = Hey1TaskSet()
 
-* IP ranges
-* ping
-* asyncron
-* push back, no reconnect
-* example
+# start distributing taskset and do not block until finished.
+distributor.start(taskset, wait=False)
+print("taskset processing started")
+
+# start stopping all target systems.
+distributor.stop(wait=True)
+print("taskset processing stopped.")
+
+# start processing tasksets with optimization again.
+optimization = Fairness()
+distributor.start(taskset, optimization, wait=True)
+
+# closing all connections after taskset is finished.
+distributor.close(wait=False)
+print("closing all connections")
+distributor.wait_closed()
+```
 
 
+Methods
+-------
+
+| Distributor(destination, port=3001, sessionclass=PingSession, startthreads = 15)  |
+|-----------------------------------------------------------------------------------|
+| destination                                         |                        blub |
+
+
+
+
+Behavior
+--------
+
+* **IP ranges:** When IP ranges are handed over to the distributor, they are
+  placed in a pool of hosts. If the availability check for a host, for example:
+  ping, is successful, a connection to the host will be established.
+
+* **No available connection:** The Distributor waits until a connected becomes
+  available, connects and starts sending task-sets.
+  
+* **A connection timed out** The current processed task-set is pushed back to a
+  processing queue. The host is placed in the host pool again and an
+  availability check is repeated later.
+  
+* **Distributor is closed by user** The event handler is informed about then
+  task-set cancel, all task-sets of the target plattforms are stopped,
+  connections are closed and threads are stopped.
+  
 
