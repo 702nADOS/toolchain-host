@@ -5,6 +5,11 @@ A taskset generation framework for the
 component.
 
 
+# Status
+
+* All components are implemented and works. 
+* Tasks with multiple jobs are not handled well [issue](https://github.com/argos-research/genode-Taskloader/issues/5).
+
 # Goals
 - **Easy extensibility** New modules like are simple to add as new classes. The
   primary classes `TaskSet` and `Task` are represented as dictionaries, which
@@ -30,6 +35,10 @@ component.
 pip3 install --user -r ./requirements.txt
 ```
 
+taskgen only works with:
+
+* [push_profile](https://github.com/argos-research/genode-Taskloader/tree/push_profile) branch of genode-Taskloader
+* [networker_thread](https://github.com/argos-research/genode-dom0-HW/tree/networker_thread) branch of genode-dom0-HW
 
 # Getting started
 The core of taskgen is the distribution of task-sets to running
@@ -67,23 +76,17 @@ instead of sending it over the network.
 
 # Documentation
 
-Pay attention, the documentation is not up to date due to several changes.
-
 * [Command line](docs/commandline.md)
 * [Distributors](docs/distributor.md)
 * [Task-Sets](docs/taskset.md)
 * [Tasks](docs/tasks.md)
-* [Mixins](docs/mixins.md)
+* [Attributes](docs/attributes.md)
 * [Optimization](docs/optimization.md)
-* [Live Request Handler](docs/live.md)
+* [Event](docs/event.md)
+
+# Internals
+
 * [Dictionary to XML format](docs/dict2xml.md)
+* [Implementation](docs/implementation.md)
+* [Coding Style](docs/coding.md)
 
-
-# ToDo List
-- [x] Refactor Distributor (move ping functionality to Session)
-- [ ] Update Documentation
-- [x] Replace Live & Profile Requests by **Th3 Aw3soMe Push**
-
-# Branches
-* `taskgen` supports the current live request functionality.
-* `push` replaces live/profile requests by push logging.
