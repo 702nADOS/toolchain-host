@@ -16,8 +16,14 @@ component.
 - [ ] Solve [issue](https://github.com/argos-research/genode-Taskloader/issues/5).
 - [ ] Implementation of [SqliteEventHandler](events/sqlite.py)
 - [ ] Implementation of [CsvEventHandler](events/csv.py)
+- [ ] Implementation of [StdIOSession](sessions.stdio.py)
+- [ ] Implementation of [FileSession](sessions.file.py)
 - [ ] Machine Learning Show Case
 - [ ] Benchmarks
+- [ ] pydocs
+  - [ ] Distributor
+  - [ ] AbstractSession
+  - [ ] AbstractEventHandler
 
 # Goals
 - **Easy extensibility** New modules like are simple to add as new classes. The
@@ -50,6 +56,7 @@ taskgen only works with:
 * [networker_thread](https://github.com/argos-research/genode-dom0-HW/tree/networker_thread) branch of genode-dom0-HW
 
 # Getting started
+
 The core of taskgen is the distribution of task-sets to running
 genode-Taskloader instances. taskgen is shipped with a command line tool.
 
@@ -89,14 +96,10 @@ instead of sending it over the network.
 * [Distributors](docs/distributor.md) **up-to-date**
 * [Task-Sets](docs/taskset.md) **outdated**
 * [Tasks](docs/tasks.md) **outdated**
-* [Attributes](docs/attributes.md) **outdated**
+* [Attributes](docs/attributes.md) **up-to-date**
 * [Optimization](docs/optimization.md) **up-to-date**
 * [Event Handlers](docs/event.md) **up-to-date**
-* [Sessions](docs/session.md) **outdated**
-
-# Internals
-
-* [Dictionary to XML format](docs/dict2xml.md)
-* [Implementation](docs/implementation.md)
-* [Coding Style](docs/coding.md)
+* [Sessions](docs/session.md) **up-to-date**
+* [Dictionary to XML format](docs/dict2xml.md) **outdated**
+* [Coding Style](docs/coding.md) **outdated**
 
