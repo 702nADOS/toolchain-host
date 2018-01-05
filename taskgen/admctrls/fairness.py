@@ -1,7 +1,7 @@
-from taskgen.optimization import Optimization
+from taskgen.admctrl import AdmCtrlData
 
 # TO NOT CHANGE, used in documentation
-class Fairness(Optimization):
+class Fairness(AdmCtrlData):
     """ Fairness Optimization class exmaple"""
     def __init__(self):
         super().__init({

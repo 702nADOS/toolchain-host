@@ -17,8 +17,10 @@ component.
 ## Version 1.0
 
 - [x] Rename `EventHandler` to `Monitor` *reason: more common and less chars*
-- [ ] Rename `Attribute` to `Task-Block` *reason: no meaning conflicts*
-- [ ] Rename `Optimization` to `AdmCtrlData` *reason: advisors' decision*
+- [x] Rename `Attribute` to `Task-Block` *reason: no meaning conflicts*
+- [x] Rename `Optimization` to `AdmCtrl` *reason: advisors' decision*
+- [ ] Add optional passthrough of attributes to Sessions and Distributor
+  *pending next meeting*  
 - [ ] Solve
   [issue](https://github.com/argos-research/genode-Taskloader/issues/5).
 - [ ] Add simpler task-set, which works with current implementation of
@@ -28,7 +30,8 @@ component.
   - [ ] AbstractSession
   - [ ] AbstractEventHandler
 - [ ] Update Documentation
-  
+- [ ] Move xml parsing to Sessions
+
 ## Version 1.1
 
 - [ ] Replace `Thread` implementation with python's multi processing.
@@ -41,6 +44,7 @@ component.
 - [ ] Implementation of [FileSession](sessions.file.py)
 
 ## Version 1.3
+
 
 - [ ] Machine Learning Show Case
 - [ ] Benchmarks

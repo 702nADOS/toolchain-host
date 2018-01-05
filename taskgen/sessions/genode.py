@@ -11,9 +11,10 @@ import xmltodict
 from abc import ABCMeta, abstractmethod
 from taskgen.session import AbstractSession
 from taskgen.taskset import TaskSet
-from taskgen.optimization import Optimization
+from taskgen.admctrl import AdmCtrl
 import taskgen
 import time
+import json
 
 # capsulation avoids attribute pollution
 class MagicNumber:
@@ -56,11 +57,11 @@ class GenodeSession(AbstractSession):
         self.logger.debug("Connection establishment")
         self._socket.settimeout(10.0) # wait 10 seconds for responses...
         
-    def start(self, taskset, optimization=None):
+    def start(self, taskset, admctrl=None):
         self._clear()
         
-        if optimization is not None:
-            self._optimaze(optimization)
+        if admctrl is not None:
+            self._optimize(admctrl)
 
         self._send_descs(taskset)
         self._send_bins(taskset)
@@ -76,13 +77,13 @@ class GenodeSession(AbstractSession):
             pass
         self._close()
 
-    def optimize(self, optimization):
-        if not isinstance(optimiziation, Optimiziation):
-            raise TypeError("optimization must be of type Optimization") 
+    def optimize(self, admctrl):
+        if not isinstance(admctrl, AdmCtrl):
+            raise TypeError("admctrl must be of type AdmCtrl") 
 
         self.logger.debug('Send optimiziaton goal.')
         # Read XML file and discard meta data.
-        xml = optimiziation.dump()
+        xml = admctrl.asxml()
         opt_ascii = xml.decode('ascii')
 
         # TODO make use of the new optimiziation class
@@ -141,7 +142,10 @@ class GenodeSession(AbstractSession):
         # parse event
         try:
             ascii = data.decode("ascii").replace('\x00', '')
-            return xmltodict.parse(ascii)
+            xml = xmltodict.parse(ascii)
+            print(json.dumps(xml))
+            print(ascii)
+            return xml
         except:
             self.logger.error('Event data not parseable.')
             return None

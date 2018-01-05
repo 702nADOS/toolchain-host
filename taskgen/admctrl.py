@@ -1,5 +1,5 @@
 import xmltodict
 
-class Optimization(dict):
+class AdmCtrl(dict):
     def asxml(self):
         return xmltodict.unparse(self, pretty=True)

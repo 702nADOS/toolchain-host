@@ -1,3 +1,18 @@
+# Tasks
+
+* basics
+  * key-value pairs
+  * dictionary
+  
+
+## Variants
+
+
+
+## Attributes
+
+
+
 # Basics
 
 The three task classes `PeriodicTask`, `SporadicTask` and `AperiodicTask` are
@@ -37,31 +52,3 @@ assert t.has_variants() True
 When it comes to the transmission of a task-set to a genode instance, a `Task`
 is translated to a xml representation. All dictionary attributes, even nested
 dictionaries, are directly mapped to a xml element.
-
-
-# Mixins
-
-If you need a specific task, you do not have to redefine all behaviors again and
-again. Specific behaviors, like a high priority, are summarized in building
-blocks, called mixins. They are located in the [mixins](../mixins) directory.
-
-
-```python3
-from taskgen.mixins.priority import HighPriority
-from taskgen.mixins.gen_load_finite import GenLoadFinite
-from taskgen.task import PeriodicTask
-
-class MyTask(HighPriority, GenLoadFinite, PeriodicTask):
-    pass
-```
-
-Now, this task can be appended to a task-set instance.
-
-```python3
-ts_4 = TaskSet()
-ts_4.append( MyTask())
-```
-
-Keep in mind, that the base class is always listed as the rightmost
-class.
-

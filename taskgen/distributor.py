@@ -11,7 +11,7 @@ from ipaddress import ip_network, ip_address
 from itertools import chain
 from math import ceil
 
-from taskgen.optimization import Optimization
+from taskgen.admctrl import AdmCtrl
 from taskgen.taskset import TaskSet
 from taskgen.monitor import AbstractMonitor, DefaultMonitor
 from taskgen.session import AbstractSession
@@ -42,7 +42,7 @@ class Distributor:
         self._monitor = DefaultMonitor()
         self._run = False
         self._tasksets = None
-        self._optimization = None
+        self._admctrl = None
         
         # build pool of IP destination addresses
         if isinstance(destinations, str):
@@ -90,7 +90,7 @@ class Distributor:
                     session.monitor = self.monitor
                     # start session
                     if self._run:
-                        session.start(self._tasksets, self._optimization)
+                        session.start(self._tasksets, self._admctrl)
                     session.thread_start()
                     self._sessions.append(session)
                 else:
@@ -112,21 +112,21 @@ class Distributor:
             session.monitor = monitor
 
             
-    def start(self, taskset, optimization=None, wait=True):
+    def start(self, taskset, admctrl=None, wait=True):
 
         if taskset is None or not isinstance(taskset, TaskSet):
             raise TypeError("taskset must be TaskSet.")
 
-        if optimization is not None:
-            if not isinstance(optimization, Optimization):
-                raise TypeError("optimization must be of type Optimization")
+        if admctrl is not None:
+            if not isinstance(admctrl, AdmCtrl):
+                raise TypeError("admctrl must be of type AdmCtrl")
 
         # wrap tasksets into an threadsafe iterator
         self._tasksets = _TaskSetQueue(taskset.variants())
-        self._optimization = optimization
+        self._admctrl = admctrl
         self._run = True
         for session in self._sessions:
-            session.start(self._tasksets, optimization)
+            session.start(self._tasksets, admctrl)
         if wait: self.wait_finished()
 
     def stop(self, wait=True):
@@ -244,7 +244,7 @@ class _WrapperSession(threading.Thread):
         self._close = close
         self._session_class = session_class
         self._logger = logging.getLogger("Distributor({})".format(host))
-        
+        self._admctrl = None
         self._taskset = None
         self._running = False
         self._restart_lock = threading.Lock()
@@ -258,10 +258,10 @@ class _WrapperSession(threading.Thread):
         while self._running and self._run and not self._close.is_set():
             time.sleep(0.5)
 
-    def start(self, tasksets, optimization):
+    def start(self, tasksets, admctrl):
         with self._restart_lock:
             self._tasksets = tasksets
-            self._optimization = optimization
+            self._admctrl = admctrl
             self._restart = True
             self._run = True
 
@@ -273,10 +273,10 @@ class _WrapperSession(threading.Thread):
         try:
             with self._restart_lock:
                 tasksets = self._tasksets
-                optimization = self._optimization
+                admctrl = self._admctrl
                 
             self._taskset = tasksets.get()
-            session.start(self._taskset, optimization)
+            session.start(self._taskset, admctrl)
             if self.monitor is not None:
                 self.monitor.__taskset_start__(self._taskset)
                 

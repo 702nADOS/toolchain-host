@@ -12,7 +12,7 @@ from taskgen.distributor import Distributor, AbstractSession
 from taskgen.sessions.genode import PingSession
 
 from taskgen.taskset import TaskSet
-from taskgen.optimization import Optimization
+from taskgen.admctrl import AdmCtrl
 from taskgen.monitor import AbstractMonitor, DefaultMonitor
 
 if __name__ == '__main__':
@@ -44,14 +44,14 @@ def print_classes(class_type, submodule):
                     class_doc = class_doc.splitlines()
                     print('{}{: <30}{} {}'.format('\033[1m', class_path, '\033[0m', class_doc[0]))
 
-        
+
 def command_list(args):
     if args.taskset:
         print_classes(TaskSet, "tasksets")
     if args.monitor:
         print_classes(AbstractMonitor, "monitors")
-    if args.optimization:
-        print_classes(Optimization, "optimizations")
+    if args.admctrl:
+        print_classes(AdmCtrl, "admctrls")
     if args.session:
         print_classes(AbstractSession, "sessions")
 
@@ -77,8 +77,8 @@ def command_run(args):
     # load tasksets  (right now, no parameters can be passed.)
     tasksets = initialize_class(args.taskset[0], "tasksets", args.taskset[1:])
 
-    # load optimization
-    optimization = initialize_class(args.optimization, "optimizations")
+    # load admctrl
+    admctrl = initialize_class(args.admctrl, "admctrls")
 
     # load monitor
     if args.monitor:
@@ -100,7 +100,7 @@ def command_run(args):
         distributor.monitor = monitor
         
         # start (and wait until finished)
-        distributor.start(tasksets, optimization, wait=True)
+        distributor.start(tasksets, admctrl, wait=True)
 
         # TODO print current state
     except KeyboardInterrupt:
@@ -129,9 +129,9 @@ def main():
     # run -m
     parser_run.add_argument('-m', '--monitor', metavar="CLASS",
                             help='Select a monitor for incoming events of processed tasksets.')
-    # run -o
-    parser_run.add_argument('-o', '--optimization', metavar="CLASS",
-                            help='Select an optimization class.')
+    # run -a
+    parser_run.add_argument('-a', '--admctrl', metavar="CLASS",
+                            help='Select an admctrl class.')
     # run -s
     parser_run.add_argument('-s', '--session', metavar="CLASS",
                             help='Select a session class. Default: GenodeSession')
@@ -146,9 +146,9 @@ def main():
     # list -t
     group_list.add_argument('-t', '--taskset', action='store_true',
                             help="print all available taskset classes.")
-    # list -o
-    group_list.add_argument('-o', '--optimization', action='store_true',
-                            help="print all available optimization classes.")
+    # list -a
+    group_list.add_argument('-a', '--admctrl', action='store_true',
+                            help="print all available admctrl (Admission Controller) classes.")
     # list -m
     group_list.add_argument('-m', '--monitor', action='store_true',
                             help="print all available monitors.")
