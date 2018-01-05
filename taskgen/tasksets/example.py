@@ -1,6 +1,6 @@
 from taskgen.task import Task
-from taskgen.taskset import TaskSet, AttributeTaskSet
-from taskgen.attrs import *
+from taskgen.taskset import TaskSet, BlockTaskSet
+from taskgen.blocks import *
 
 
 class Hey0TaskSet(TaskSet):
@@ -41,11 +41,11 @@ class Hey1TaskSet(TaskSet):
         )
         self.append(task)
         
-class Hey2TaskSet(AttributeTaskSet):
+class Hey2TaskSet(BlockTaskSet):
     """Static task with the `hey` binary.
     
     If you want to create specific tasksets with the predefinied attributes,
-    `AttributeTaskSet` might be helpful.
+    `BlockTaskSet` might be helpful.
     """
 
     def __init__(self):
@@ -56,11 +56,12 @@ class Hey2TaskSet(AttributeTaskSet):
         )
 
 
-class Hey3TaskSet(AttributeTaskSet):
+class Hey3TaskSet(BlockTaskSet):
     """Two static tasks with the `hey` binary.
     
-    `AttributeTaskSet` allows to combinate attributes. This example creates 2
-    `hey`-tasks with various period.
+    `BlockTaskSet` allows to combinate building blocks of attributes. This
+    example creates 2 `hey`-tasks with various period.
+
     """
 
     def __init__(self):
@@ -71,11 +72,12 @@ class Hey3TaskSet(AttributeTaskSet):
         )
 
         
-class Hey4TaskSet(AttributeTaskSet):
+class Hey4TaskSet(BlockTaskSet):
     """Four static tasks with the `hey` binary, various periods and priorities.
     
-    `AttributeTaskSet` allows to combinate attributes. This example creates 4
-    `hey`-tasks with various period and priorities.
+    `BlockTaskSet` allows to combinate building blocks of attributes. This
+    example creates 4 `hey`-tasks with various period and priorities.
+
     """
 
     def __init__(self):
@@ -86,11 +88,13 @@ class Hey4TaskSet(AttributeTaskSet):
         )
 
         
-class Hey5TaskSet(AttributeTaskSet):
+class Hey5TaskSet(BlockTaskSet):
     """One task with the `hey` binary and random priority.
     
-    `AttributeTaskSet` allows to combinate random attributes. Random attributes
-    are function, which returns randomly generated dicts.
+    `BlockTaskSet` allows to combinate building blocks with random
+    attributes. Random blocks are function, which returns randomly generated
+    dicts.
+
     """
 
     def __init__(self):
@@ -100,13 +104,13 @@ class Hey5TaskSet(AttributeTaskSet):
             period.Custom(5)
         )
 
-class Hey6TaskSet(AttributeTaskSet):
+class Hey6TaskSet(BlockTaskSet):
     """One task with the `hey` binary and all priority variants
     
-    `AttributeTaskSet` allows to create variants of attributes. Variant
-    attributes are function, which returns a dicts with value ranges. This
-    example creates a taskset with one task and 128 variants, which all differ
-    in the priority.
+    `BlockTaskSet` allows to create variants of building blocks. Variant blocks
+    are function, which returns a dicts with value ranges. This example creates
+    a taskset with one task and 128 variants, which all differ in the priority.
+
     """
 
     def __init__(self):
@@ -116,7 +120,7 @@ class Hey6TaskSet(AttributeTaskSet):
             period.Custom(5)
         )
 
-class Hey7TaskSet(AttributeTaskSet):
+class Hey7TaskSet(BlockTaskSet):
     """2 tasks with the `hey` binary, random period and all priority variants (2^128 variants).
     """
 

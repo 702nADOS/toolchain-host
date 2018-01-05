@@ -1,9 +1,9 @@
-from taskgen.taskset import AttributeTaskSet
-from taskgen.attrs import *
+from taskgen.taskset import BlockTaskSet
+from taskgen.blocks import *
 import random
 
 
-class Low1(AttributeTaskSet):
+class Low1(BlockTaskSet):
     """1 tasks with random priority, binaries and only low period"""
     def __init__(self, seed=None, size=1):
         random.seed(seed)
@@ -28,7 +28,7 @@ class Low1k(Low1):
     def __init__(self, seed=None):
         super().__init__(seed, 1000)
 
-class High1(AttributeTaskSet):
+class High1(BlockTaskSet):
     """1 tasks with random priorities, binaries and only high periods"""
     def __init__(self, seed=None, size=1):
         random.seed(seed)

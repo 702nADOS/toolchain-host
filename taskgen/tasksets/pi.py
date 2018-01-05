@@ -1,9 +1,9 @@
-from taskgen.taskset import AttributeTaskSet
-from taskgen.attrs import *
+from taskgen.taskset import BlockTaskSet
+from taskgen.blocks import *
 import random
 
 
-class Variants10(AttributeTaskSet):
+class Variants10(BlockTaskSet):
     """1 tasks with random priority, medium period and 10 variants of `pi` binary"""
     def __init__(self, seed=None, size=1):
         random.seed(seed)
@@ -13,7 +13,7 @@ class Variants10(AttributeTaskSet):
             period.MediumRandom
         )
 
-class Variants100(AttributeTaskSet):
+class Variants100(BlockTaskSet):
     """1 tasks with random priority, medium period and 100 variants of `pi` binary"""
     def __init__(self, seed=None, size=1):
         random.seed(seed)
@@ -23,7 +23,7 @@ class Variants100(AttributeTaskSet):
             period.MediumRandom
         )
 
-class Variants1m(AttributeTaskSet):
+class Variants1m(BlockTaskSet):
     """1 tasks with random priority, medium period and 1 million variants of `pi` binary"""
     def __init__(self, seed=None, size=1):
         random.seed(seed)
@@ -33,7 +33,7 @@ class Variants1m(AttributeTaskSet):
             period.MediumRandom
         )
 
-class ThreeVariants100(AttributeTaskSet):
+class ThreeVariants100(BlockTaskSet):
     """3 tasks with random priority, medium period and 100 variants of `pi` binary. (100^3 variants)"""
     def __init__(self, seed=None, size=1):
         random.seed(seed)

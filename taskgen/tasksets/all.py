@@ -1,15 +1,15 @@
-from taskgen.taskset import AttributeTaskSet
-from taskgen.attrs import *
+from taskgen.taskset import BlockTaskSet
+from taskgen.blocks import *
 import random
 
 
-class Random1(AttributeTaskSet):
+class Random1(BlockTaskSet):
     """One task with random priority, period and binary. No variants, not repeatable"""
     def __init__(self, _seed=None, size=1):
         random.seed(seed) # use same seed like AttributeTaskSet
         super().__init__(
             binaries.RandomList(size, 1),
-            priority.Random,
+            priority.Custom,
             period.Random,
             jobs.Random,
             seed = _seed
