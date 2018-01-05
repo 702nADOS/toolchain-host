@@ -1,10 +1,10 @@
-from taskgen.event import AbstractEventHandler
+from taskgen.monitor import AbstractMonitor
 
 
-class StdOutHandler(AbstractEventHandler):
+class CsvMonitor(AbstractMonitor):
 
-    def __init__(self):
-        self._logger = logging.getLogger("StdOutHandler")
+    def __init__(self, path="events.csv"):
+        self._logger = logging.getLogger("CsvMonitor")
 
         
     def __taskset_event__(self, taskset, event):

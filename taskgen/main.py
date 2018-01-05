@@ -13,7 +13,7 @@ from taskgen.sessions.genode import PingSession
 
 from taskgen.taskset import TaskSet
 from taskgen.optimization import Optimization
-from taskgen.event import AbstractEventHandler, DefaultEventHandler
+from taskgen.monitor import AbstractMonitor, DefaultMonitor
 
 if __name__ == '__main__':
     main()
@@ -48,8 +48,8 @@ def print_classes(class_type, submodule):
 def command_list(args):
     if args.taskset:
         print_classes(TaskSet, "tasksets")
-    if args.event:
-        print_classes(AbstractEventHandler, "events")
+    if args.monitor:
+        print_classes(AbstractMonitor, "monitors")
     if args.optimization:
         print_classes(Optimization, "optimizations")
     if args.session:
@@ -80,11 +80,11 @@ def command_run(args):
     # load optimization
     optimization = initialize_class(args.optimization, "optimizations")
 
-    # load logger
-    if args.event:
-        event_handler = initialize_class(args.event, "events")
+    # load monitor
+    if args.monitor:
+        monitor = initialize_class(args.monitor, "monitors")
     else:
-        event_handler = DefaultEventHandler()
+        monitor = DefaultMonitor()
 
     # session class
     if args.session:
@@ -97,7 +97,7 @@ def command_run(args):
         distributor = Distributor(args.IP,
                                   args.port,
                                   session_class)
-        distributor.event_handler = event_handler
+        distributor.monitor = monitor
         
         # start (and wait until finished)
         distributor.start(tasksets, optimization, wait=True)
@@ -126,9 +126,9 @@ def main():
     # run -t
     parser_run.add_argument('-t', '--taskset', required=True, metavar="CLASS",
                             nargs='+', help='Select a taskset class.')
-    # run -e
-    parser_run.add_argument('-e', '--event', metavar="CLASS",
-                            help='Select a event handler for incoming events of processed tasksets.')
+    # run -m
+    parser_run.add_argument('-m', '--monitor', metavar="CLASS",
+                            help='Select a monitor for incoming events of processed tasksets.')
     # run -o
     parser_run.add_argument('-o', '--optimization', metavar="CLASS",
                             help='Select an optimization class.')
@@ -149,9 +149,9 @@ def main():
     # list -o
     group_list.add_argument('-o', '--optimization', action='store_true',
                             help="print all available optimization classes.")
-    # list -e
-    group_list.add_argument('-e', '--event', action='store_true',
-                            help="print all available event handlers.")
+    # list -m
+    group_list.add_argument('-m', '--monitor', action='store_true',
+                            help="print all available monitors.")
     # list -s
     group_list.add_argument('-s', '--session', action='store_true',
                             help="print all available session classes.")

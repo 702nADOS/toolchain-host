@@ -4,7 +4,7 @@ import logging
 import random
 
 
-class AbstractEventHandler(metaclass=ABCMeta):
+class AbstractMonitor(metaclass=ABCMeta):
 
     # return True: if continue running
     #        False: if stop running
@@ -25,10 +25,10 @@ class AbstractEventHandler(metaclass=ABCMeta):
         pass
 
 
-class DefaultEventHandler(AbstractEventHandler):
+class DefaultMonitor(AbstractMonitor):
 
     def __init__(self):
-        self.logger = logging.getLogger("DefaultEventHandler")
+        self.logger = logging.getLogger("DefaultMonitor")
 
 
     def _get_task_by_id(self, taskset, task_id):
@@ -45,10 +45,8 @@ class DefaultEventHandler(AbstractEventHandler):
             self.logger.critical("'profile'-node of event has unknown structure"+
                                  " and can not be parsed. TaskSet stopped.")
             return False
-
-        print(events)
+        
         for event in events:
-            print(event)
             try:
                 _task_id = int(event['@task-id'])
                 _type = event['@type']
@@ -67,7 +65,7 @@ class DefaultEventHandler(AbstractEventHandler):
         # check whether any task is running
         is_running = lambda task: 'EXIT' not in task.events
         running = map(is_running, taskset)
-        return True #any(running)
+        return any(running)
 
     def __taskset_start__(self, taskset):
         pass

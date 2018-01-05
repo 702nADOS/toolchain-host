@@ -13,7 +13,7 @@ from math import ceil
 
 from taskgen.optimization import Optimization
 from taskgen.taskset import TaskSet
-from taskgen.event import AbstractEventHandler, DefaultEventHandler
+from taskgen.monitor import AbstractMonitor, DefaultMonitor
 from taskgen.session import AbstractSession
 from taskgen.sessions.genode import PingSession
 
@@ -39,7 +39,7 @@ class Distributor:
         self.logger = logging.getLogger('Distributor')
         self._close_event = threading.Event()
         self._pool = Queue()
-        self._event_handler = DefaultEventHandler()
+        self._monitor = DefaultMonitor()
         self._run = False
         self._tasksets = None
         self._optimization = None
@@ -87,7 +87,7 @@ class Distributor:
                                               self._session_class,
                                               self._pool,
                                               self._sessions)
-                    session.event_handler = self.event_handler
+                    session.monitor = self.monitor
                     # start session
                     if self._run:
                         session.start(self._tasksets, self._optimization)
@@ -99,17 +99,17 @@ class Distributor:
                 pass
 
     @property
-    def event_handler(self):
-        return self._event_handler
+    def monitor(self):
+        return self._monitor
             
-    @event_handler.setter
-    def event_handler(self, event_handler):
-        if event_handler is not None:
-            if not isinstance(event_handler, AbstractEventHandler):
-                raise TypeError("event_handler must be of type AbstractEventHandler")
-        self._event_handler = event_handler
+    @monitor.setter
+    def monitor(self, monitor):
+        if monitor is not None:
+            if not isinstance(monitor, AbstractMonitor):
+                raise TypeError("monitor must be of type AbstractMonitor")
+        self._monitor = monitor
         for session in self._sessions:
-            session.event_handler = event_handler
+            session.monitor = monitor
 
             
     def start(self, taskset, optimization=None, wait=True):
@@ -240,7 +240,7 @@ class _WrapperSession(threading.Thread):
         self._pool = pool
         self._sessions = sessions
         self._tasksets = None
-        self.event_handler = None
+        self.monitor = None
         self._close = close
         self._session_class = session_class
         self._logger = logging.getLogger("Distributor({})".format(host))
@@ -277,8 +277,8 @@ class _WrapperSession(threading.Thread):
                 
             self._taskset = tasksets.get()
             session.start(self._taskset, optimization)
-            if self.event_handler is not None:
-                self.event_handler.__taskset_start__(self._taskset)
+            if self.monitor is not None:
+                self.monitor.__taskset_start__(self._taskset)
                 
             self._logger.debug("Taskset variant processing started.")
             self._restart = False
@@ -294,7 +294,7 @@ class _WrapperSession(threading.Thread):
     def _internal_stop(self, session):
         session.stop()
         if self._taskset is not None :
-            self.event_handler.__taskset_stop__(self._taskset)
+            self.monitor.__taskset_stop__(self._taskset)
             self._tasksets.put(self._taskset)
             self._taskset = None
         self._running = False
@@ -308,10 +308,10 @@ class _WrapperSession(threading.Thread):
             # keep going until an event occures
             return True
 
-        target_running = self.event_handler.__taskset_event__(self._taskset,
+        target_running = self.monitor.__taskset_event__(self._taskset,
                                                               event)
         if not target_running:
-            self.event_handler.__taskset_finish__(self._taskset)
+            self.monitor.__taskset_finish__(self._taskset)
             self._tasksets.done(self._taskset)  # notify about the finished taskset
             self._logger.debug("Taskset variant is successfully processed")
             
@@ -359,7 +359,7 @@ class _WrapperSession(threading.Thread):
                 self._logger.debug("Taskset variant is pushed back to queue due to" +
                                    " a critical error")
                 # notify live handler about the stop.
-                self.event_handler.__taskset_stop__(self._taskset)
+                self.monitor.__taskset_stop__(self._taskset)
 
             # push host back in pool (only, if there was an error). A closing
             # event does not trigger the push back to the host pool.

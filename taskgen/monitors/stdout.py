@@ -1,7 +1,7 @@
-from taskgen.event import AbstractEventHandler
+from taskgen.monitor import AbstractMonitor
 
 
-class StdOutHandler(AbstractEventHandler):
+class StdOutMonitor(AbstractMonitor):
 
     def __init__(self):
         pass

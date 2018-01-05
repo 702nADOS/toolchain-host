@@ -12,18 +12,38 @@ component.
 
 # Todos
 
-- [ ] Update Documentation
-- [ ] Solve [issue](https://github.com/argos-research/genode-Taskloader/issues/5).
-- [ ] Implementation of [SqliteEventHandler](events/sqlite.py)
-- [ ] Implementation of [CsvEventHandler](events/csv.py)
-- [ ] Implementation of [StdIOSession](sessions.stdio.py)
-- [ ] Implementation of [FileSession](sessions.file.py)
-- [ ] Machine Learning Show Case
-- [ ] Benchmarks
+## Version 0.9 *current*
+
+## Version 1.0
+
+- [x] Rename `EventHandler` to `Monitor` *reason: more common and less chars*
+- [ ] Rename `Attribute` to `Task-Block` *reason: no meaning conflicts*
+- [ ] Rename `Optimization` to `AdmCtrlData` *reason: advisors' decision*
+- [ ] Solve
+  [issue](https://github.com/argos-research/genode-Taskloader/issues/5).
+- [ ] Add simpler task-set, which works with current implementation of
+  `genode-Taskloader`.
 - [ ] pydocs
   - [ ] Distributor
   - [ ] AbstractSession
   - [ ] AbstractEventHandler
+- [ ] Update Documentation
+  
+## Version 1.1
+
+- [ ] Replace `Thread` implementation with python's multi processing.
+
+## Version 1.2
+
+- [ ] Implementation of [SqliteEventHandler](events/sqlite.py)
+- [ ] Implementation of [CsvEventHandler](events/csv.py)
+- [ ] Implementation of [StdIOSession](sessions.stdio.py)
+- [ ] Implementation of [FileSession](sessions.file.py)
+
+## Version 1.3
+
+- [ ] Machine Learning Show Case
+- [ ] Benchmarks
 
 # Goals
 - **Easy extensibility** New modules like are simple to add as new classes. The

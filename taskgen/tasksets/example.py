@@ -1,7 +1,8 @@
 from taskgen.task import Task
 from taskgen.taskset import TaskSet, AttributeTaskSet
 from taskgen.attrs import *
-        
+
+
 class Hey0TaskSet(TaskSet):
     """Static task with the `hey` binary. 
     
