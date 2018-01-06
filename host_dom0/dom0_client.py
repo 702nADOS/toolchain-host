@@ -112,10 +112,15 @@ class Dom0_session:
 		#subprocess.call('clear', shell=True)
 		#print(xml.decode('utf-8')[:-1])
 		print('Live data of size {} saved to {}'.format(size, log_file))
-
+	def reboot(self):
+		"""Send message to reboot the server."""
+		print('Reboot.')
+		meta = struct.pack('I', magicnumbers.REBOOT)
+		self.conn.send(meta)
 
 	def close(self):
 		"""Close connection."""
+		print('Close connection.')
 		self.conn.close();
 
 
