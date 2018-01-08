@@ -35,7 +35,7 @@ class StdIOSession(AbstractSession):
         self.index = COUNTER % len(COLORS_FG)
         COUNTER = COUNTER + 1
         
-    def start(self, taskset, optimization):
+    def start(self, taskset):
         self.logger.debug("start of taskset")
         self._timestamp = time.clock()
         self._print(taskset.description())
