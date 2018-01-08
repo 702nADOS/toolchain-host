@@ -1,35 +1,29 @@
 # Tasks
 
-* basics
-  * key-value pairs
-  * dictionary
-  
+`Task` is subclass of Python's `dict` and therefore behaves the same way. All
+attributes of a task are accessed and altered with dictionary methods. 
 
-## Variants
+```Python
+from taskgen.task import Task
 
+task = Task()
+task['priority'] = 128
+task['id'] = 0
 
+# or
 
-## Attributes
+task_dict = {
+    'priority' : 128,
+    'id' : 0
+}
 
-
-
-# Basics
-
-The three task classes `PeriodicTask`, `SporadicTask` and `AperiodicTask` are
-subtypes of the abstract `Task` class and serve as starting point for your
-customized task. The `Task` class inherits from the Python `dict` class.  All
-attributes of a task are accessed and altered with dictionary methods.
-
-```python3
-from taskgen.task import PeriodicTask
-
-t = PeriodicTask()
-t['priority'] = 128
-t['id'] = "hello_world"
-...
+task = Task(task_dict)
 ```
 
-# Variants
+It is possible to build a `Task` from multiple dictionary objects. This concept
+is named task blocks and described in [Task-Blocks](./blocks.md).
+
+## Variants
 
 Every attribute in the Task can be a single value or of type `Iterable`. It is
 possible to define ranges `range(0,10)`, lists `[0,1,2,3]` or custom
@@ -38,17 +32,28 @@ value results in multiple variants of a task and finally multiple variants of a
 taskset. If you want to analyse, how a scheduler reacts to different values of
 one or more tasks, this is the way to go.
 
-```python3
-from taskgen.task import PeriodicTask
+```Python
+from taskgen.task import Task
 
-t = PeriodicTask()
-t['priority'] = range(1, 128) # generates 128 variants of the task
+task = Task()
+task['id] = range(0,100)
+task['priority'] = 42
 
-assert t.has_variants() True
+for variant in task.variants(): # generates 128 variants of the task
+    print(variant)
 ```
 
-# Xml mapping
+## Attributes
 
-When it comes to the transmission of a task-set to a genode instance, a `Task`
-is translated to a xml representation. All dictionary attributes, even nested
-dictionaries, are directly mapped to a xml element.
+Following attributes are part of every task.
+
+| Key | Type | Description |
+| --- | --- | --- |
+| `id` | Integer | Every task is identifed by an unique ID. |
+| `quota` | Integer | todo |
+| `pkg` | String | todo |
+| `config` | `dict` | todo |
+| `priority` | Integer | todo |
+| `period` | Integer | todo |
+| `numberofjobs` | Integer | todo |
+

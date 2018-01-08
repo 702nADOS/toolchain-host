@@ -6,16 +6,16 @@ Components of taskgen
   its associated value might be `25`. Tasks are implemented as python
   dictionaries.  
   
-* [**Attributes**](attributes.md) are building blocks for a task and are
-  represented with key-value pairs, too.  An Attribute is a dictionary object or
+* [**Task Blocks**](blocks.md) are building blocks for a task and are
+  represented with key-value pairs, too.  A (task) block is a dictionary object or
   a function which returns a dictionary object.  
   
 * [**Task-Sets**](taskset.md) are containers for tasks.  
 
-* [**Optimization**](optimization.md) classes contains optimization goals
+* [**Admission Control**](admctrl.md) objects contains optimization goals
   for a task-set. Optimizations are represented by python dictionaries.  
   
-* [**Event Handlers**](event.md) handle occuring events. An event is fired,
+* [**Monitors**](monitor.md) handle occuring events. An event is fired,
   whenever a task processing starts or ends.  
   
 * [**Distributor**](distributor.md) sends a task-set and its optimization
@@ -30,7 +30,6 @@ General Workflow
 ================
 
 1. Choose a task-set class
-2. Optionally choose a optimization class
 3. Optionally choose an event handler
 4. Optionally choose a session for a target platform.
 5. Start sending and processing task-set.
@@ -44,10 +43,9 @@ from taskgen.distributor import Distributor
 from taskgen.optimizations.fairness import Fairness
 
 taskset = Hey1TaskSet()
-optimization = Fairness()
 
 distributor = Distributor("172.25.1.2")
-distributor.start(taskset, optimization)
+distributor.start(taskset)
 ```
 
 For more comprehensive examples read the [documentation](.) and look at the

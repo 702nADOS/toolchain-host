@@ -28,8 +28,8 @@ component.
 - [ ] pydocs
   - [ ] Distributor
   - [ ] AbstractSession
-  - [ ] AbstractEventHandler
-- [ ] Update Documentation
+  - [ ] AbstractMonitor
+- [x] Update Documentation
 - [x] Move xml parsing to Sessions
 
 ## Version 1.1
@@ -118,12 +118,11 @@ instead of sending it over the network.
 * [Overview](docs/overview.md) **up-to-date**
 * [Command line](docs/commandline.md) **up-to-date**
 * [Distributors](docs/distributor.md) **up-to-date**
-* [Task-Sets](docs/taskset.md) **outdated**
-* [Tasks](docs/tasks.md) **outdated**
-* [Attributes](docs/attributes.md) **up-to-date**
-* [Optimization](docs/optimization.md) **up-to-date**
-* [Event Handlers](docs/event.md) **up-to-date**
+* [Task-Sets](docs/taskset.md) **up-to-date**
+* [Tasks](docs/tasks.md) **up-to-date**
+* [Task Blocks](docs/blocks.md) **up-to-date**
+* [Admission Control](docs/admctrl.md) **up-to-date**
+* [Monitors](docs/monitor.md) **up-to-date**
 * [Sessions](docs/session.md) **up-to-date**
-* [Dictionary to XML format](docs/dict2xml.md) **outdated**
-* [Coding Style](docs/coding.md) **outdated**
+* [Dictionary to XML format](docs/dict2xml.md) **up-to-date**
 
