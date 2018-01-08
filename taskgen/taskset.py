@@ -12,7 +12,6 @@ from taskgen.task import Task
 class TaskSet(Iterable):
     def __init__(self, tasks=[]):
         self._tasks = tasks
-        self._cached_xml = None 
         self._task_counter = 0
 
     def __iter__(self):
@@ -32,19 +31,14 @@ class TaskSet(Iterable):
             yield TaskSet(list(tasks_variant))
 
     def description(self):
-        if self._cached_xml is None:
-            taskset = {"taskset" : {
-                "periodictask" : self._tasks }
+        return {
+            "taskset" : {
+                "periodictask" : self._tasks
             }
-            # genode can't handle `<?xml version="1.0" encoding="utf-8"?>` at
-            # the documents beginning. `full_document=False` removes it.
-            self._cached_xml = xmltodict.unparse(taskset,
-                                                 pretty=True,
-                                                 full_document=False)
-        return self._cached_xml        
+        }
 
     def binaries(self):
-        return list(map(lambda x: x.binary(), self._tasks))
+        return set(map(lambda x: x.binary(), self._tasks))
 
     
 

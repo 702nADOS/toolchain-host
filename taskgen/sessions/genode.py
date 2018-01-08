@@ -11,7 +11,6 @@ import xmltodict
 from abc import ABCMeta, abstractmethod
 from taskgen.session import AbstractSession
 from taskgen.taskset import TaskSet
-from taskgen.admctrl import AdmCtrl
 import taskgen
 import time
 import json
@@ -56,13 +55,12 @@ class GenodeSession(AbstractSession):
         self.logger = logging.getLogger("GenodeSession")
         self.logger.debug("Connection establishment")
         self._socket.settimeout(10.0) # wait 10 seconds for responses...
-        
+
+    
     def start(self, taskset, admctrl=None):
         self._clear()
         
-        if admctrl is not None:
-            self._optimize(admctrl)
-
+        self._optimize(admctrl)
         self._send_descs(taskset)
         self._send_bins(taskset)
         self._start()
@@ -77,24 +75,26 @@ class GenodeSession(AbstractSession):
             pass
         self._close()
 
-    def optimize(self, admctrl):
-        if not isinstance(admctrl, AdmCtrl):
-            raise TypeError("admctrl must be of type AdmCtrl") 
+    def _optimize(self, admctrl):
+        if admctrl is None:
+            return
+        print(admctrl)
+        if not isinstance(admctrl, dict):
+            raise TypeError("admctrl must be of type dict") 
 
+        # convert admctrl dict to xml.
+        xml = self._dicttoxml(admctrl).encode('ascii')
+        
         self.logger.debug('Send optimiziaton goal.')
-        # Read XML file and discard meta data.
-        xml = admctrl.asxml()
-        opt_ascii = xml.decode('ascii')
-
-        # TODO make use of the new optimiziation class
-        # Genode XML parser can't handle a lot of header things, so skip them.
-        first_node = re.search('<\w+', opt_ascii)
-        xml = xml[first_node.start():]
         meta = struct.pack('II', MagicNumber.OPTIMIZE, len(xml))
-
         self._socket.send(meta)
         self._socket.send(xml)
 
+    def _dicttoxml(self, d):
+        # genode can't handle `<?xml version="1.0" encoding="utf-8"?>` at
+        # the documents beginning. `full_document=False` removes it.
+        return xmltodict.unparse(d, pretty=True, full_document=False)
+        
     def _close(self):
         self._socket.close()
         self.logger.debug('Close connection.')
@@ -112,8 +112,9 @@ class GenodeSession(AbstractSession):
     def _send_descs(self, taskset):
         if not isinstance(taskset, TaskSet):
             raise TypeError("taskset must be type TaskSet") 
-
-        description = taskset.description().encode("ascii")
+        
+        description = self._dicttoxml(taskset.description())
+        description = description.encode('ascii')
         
         self.logger.debug("Sending taskset description.")
         meta = struct.pack('II', MagicNumber.SEND_DESCS, len(description))

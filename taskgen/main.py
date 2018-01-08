@@ -10,15 +10,11 @@ import importlib
 
 from taskgen.distributor import Distributor, AbstractSession
 from taskgen.sessions.genode import PingSession
-
 from taskgen.taskset import TaskSet
-from taskgen.admctrl import AdmCtrl
 from taskgen.monitor import AbstractMonitor, DefaultMonitor
 
 if __name__ == '__main__':
     main()
-
-
 
 
 def handle_logging(args):
@@ -50,23 +46,22 @@ def command_list(args):
         print_classes(TaskSet, "tasksets")
     if args.monitor:
         print_classes(AbstractMonitor, "monitors")
-    if args.admctrl:
-        print_classes(AdmCtrl, "admctrls")
     if args.session:
         print_classes(AbstractSession, "sessions")
 
 
 def load_class(path, submodule):
+    # TODO handle constructor parameters
+    # TODO handle not found
+
     if path is None:
         return None
     
     # submodules might be tasksets, optimization, lives
     module_name, class_name = "taskgen.{}.{}".format(submodule, path).rsplit(".", 1)
     return getattr(importlib.import_module(module_name), class_name)
-    # TODO handle constructor parameters
-    # TODO handle not found
 
-def initialize_class(path, submodule, params=[]):
+def initialize_class(path, submodule, params=()):
     _class =load_class(path, submodule)
     if _class is not None:
         return _class(*params)
@@ -75,10 +70,7 @@ def command_run(args):
     handle_logging(args)
     
     # load tasksets  (right now, no parameters can be passed.)
-    tasksets = initialize_class(args.taskset[0], "tasksets", args.taskset[1:])
-
-    # load admctrl
-    admctrl = initialize_class(args.admctrl, "admctrls")
+    tasksets = initialize_class(args.taskset, "tasksets")
 
     # load monitor
     if args.monitor:
@@ -100,7 +92,7 @@ def command_run(args):
         distributor.monitor = monitor
         
         # start (and wait until finished)
-        distributor.start(tasksets, admctrl, wait=True)
+        distributor.start(tasksets,  wait=True)
 
         # TODO print current state
     except KeyboardInterrupt:
@@ -109,7 +101,6 @@ def command_run(args):
     finally:
         distributor.close()
     
-
     
 def main():
     parser = argparse.ArgumentParser(prog="taskgen")
@@ -125,13 +116,10 @@ def main():
                             help='Port, default is port number 3001.')
     # run -t
     parser_run.add_argument('-t', '--taskset', required=True, metavar="CLASS",
-                            nargs='+', help='Select a taskset class.')
+                            help='Select a taskset class.')
     # run -m
     parser_run.add_argument('-m', '--monitor', metavar="CLASS",
                             help='Select a monitor for incoming events of processed tasksets.')
-    # run -a
-    parser_run.add_argument('-a', '--admctrl', metavar="CLASS",
-                            help='Select an admctrl class.')
     # run -s
     parser_run.add_argument('-s', '--session', metavar="CLASS",
                             help='Select a session class. Default: GenodeSession')
@@ -146,9 +134,6 @@ def main():
     # list -t
     group_list.add_argument('-t', '--taskset', action='store_true',
                             help="print all available taskset classes.")
-    # list -a
-    group_list.add_argument('-a', '--admctrl', action='store_true',
-                            help="print all available admctrl (Admission Controller) classes.")
     # list -m
     group_list.add_argument('-m', '--monitor', action='store_true',
                             help="print all available monitors.")

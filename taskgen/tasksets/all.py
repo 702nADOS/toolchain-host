@@ -61,7 +61,7 @@ class Repeatable10k(Random10k):
         super().__init__(0)  # seed: 0
 
         
-class RandomSize(AttributeTaskSet):
+class RandomSize(BlockTaskSet):
     """Random taskset size with random priorities, periods, tasks and task arguments"""
     def __init__(self, _seed=None, size=1):
         random.seed(_seed)  # use the same seed like AttributeTaskSet...

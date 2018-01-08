@@ -12,7 +12,7 @@ class AbstractSession(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def start(self, taskset, admctrl):
+    def start(self, taskset, *params):
         pass
 
     @abstractmethod
