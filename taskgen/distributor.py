@@ -1,3 +1,12 @@
+"""Module for asyncron distribution of task-sets
+
+This modules provides a class for the distribution of task-sets to one or
+multiple target plattforms. The connection to a target plattform is handled by a
+session.
+
+"""
+
+
 from abc import ABCMeta, abstractmethod
 import threading
 import time
@@ -17,13 +26,32 @@ from taskgen.session import AbstractSession
 from taskgen.sessions.genode import PingSession
 
 
+
 class Distributor:
+    """Class for asycron distribution of task-sets"""
     
     def __init__(self,
                  destinations,
                  port=3001,
                  session_class=PingSession,
                  starter_threads = 15):
+        """Start connecting to target plattforms.
+
+        :param destination str, [str]: IP addresses or ranges of destination/target
+        system(s). format: CIDR.  
+
+        :param port int: Port of destination
+
+        :param session_class taskgen.session.AbstractSession: Session class,
+        which establishs the connection to the target plattform.
+
+        :param starter_threads int: Number of threads for doing the availablity
+        check of a target plattform.
+        
+        :raises TypeError: wrong parameters types
+        :raises ValueError: destination does not appear to be an IPv4 or IPv6 address
+
+        """
 
         if not isinstance(port, int):
             raise TypeError("port must be int")
@@ -60,6 +88,7 @@ class Distributor:
 
             
     def _append_pool(self, destination):
+        """Adds a range of ip addresses to the pool"""
         # try to parse as single ip address
         try:
             ip = ip_address(destination)
@@ -74,6 +103,19 @@ class Distributor:
             
     @staticmethod
     def _starter(self):
+        """Checks the availablity of a destination
+        
+        This method checks the availablity of all destination in the pool. For
+        each available destination, a thread _`WrapperSession` is started for
+        establishing a connection. The actual connection is handled by a
+        session.
+        
+        This method is only called by a seperated thread. These are started in
+        `__init__`.
+
+        """
+
+        # continue checking destination in the pool until distributor is closed.
         while not self._close_event.is_set():
             try:
                 host = self._pool.get(True, 2)
@@ -98,12 +140,28 @@ class Distributor:
             except Empty:
                 pass
 
+            
     @property
     def monitor(self):
+        """Getter method for the currently used monitor.
+        
+        :return: returns the currenctly monitor. If no monitor is set, `None` is
+        the return value.
+
+        :rtype: taskgen.monitor.AbstractMonitor or None
+
+        """
         return self._monitor
-            
+
+    
     @monitor.setter
     def monitor(self, monitor):
+        """Setter method for a monitor.
+        
+        :param monitor taskgen.monitor.AbstractMethod: Set `monitor` as handler
+        for incoming events.
+
+        """
         if monitor is not None:
             if not isinstance(monitor, AbstractMonitor):
                 raise TypeError("monitor must be of type AbstractMonitor")
@@ -113,7 +171,20 @@ class Distributor:
 
             
     def start(self, taskset, *session_params, wait=True):
+        """Starts the distribution of task-sets
 
+        :param taskset taskgen.taskset.TaskSet: a taskset for the distribution
+
+        :param session_params: optional parameters which are passed to the
+        `start` method of the actual session. Pay attention: Theses parameters
+        must be implemented by the session class. A good example is the
+        `taskgen.sessions.genode.GenodeSession`, which implements a parameter
+        for optional admission control configuration.  
+
+        :param wait bool: `False` if the method should not wait until all
+        sessions started and the method returns immediately. 
+
+        """
         if taskset is None or not isinstance(taskset, TaskSet):
             raise TypeError("taskset must be TaskSet.")
 
@@ -125,19 +196,38 @@ class Distributor:
             session.start(self._tasksets, *session_params)
         if wait: self.wait_finished()
 
+        
     def stop(self, wait=True):
+        """Stops the distribution of task-sets
+
+        :param wait bool: `False` if the method should not wait until all
+        sessions stopped and the method returns immediately.
+
+        """
         self.logger.info("Stop processing taskset")
         self._run = False
         for session in self._sessions:
             session.stop()
         if wait: self.wait_stopped()
+
         
     def close(self, wait=True):
+        """Closes all connections to distributors.
+
+        After closing this distributor the usage is exhausted. Do not call any
+        methods after.  
+
+        :param wait bool: `False` if the method should not wait until all
+        sessions are closed and the method returns immediately.
+
+        """
         self._close_event.set()
         self.logger.info("Closing connections...")
         if wait: self.wait_closed()
 
+        
     def wait_closed(self):
+        """Waits until all connections to target plattforms are closed."""        
         self.logger.info("Waiting until ping threads are stopped")
         for starter in self._starter:
             starter.join()
@@ -149,11 +239,13 @@ class Distributor:
             session.join()
         
     def wait_stopped(self):
+        """Waits until all sessions stopped processing task-sets."""        
         self.logger.info("Waiting until session processings are stopped")
         for session in self._sessions:
             session.wait_stopped()
 
     def wait_finished(self):
+        """Waits until all sessions finished processing task-sets."""
         while not self._close_event.is_set():
             if self._tasksets.empty():
                 break
@@ -207,12 +299,22 @@ class _TaskSetQueue():
                 return True
 
     def done(self, taskset):
+        """Call this method, if a task-set is finally processed.
+
+        This mechanism keeps references of currenctly processed task-sets.
+
+        """
         with self.lock:
             self.in_progress.remove(taskset)
             self.processed += 1
             self.logger.info("{} taskset variant(s) processed".format(self.processed))
         
     def put(self, taskset):
+        """Call this method, if a task-set processing is canceled.
+
+        This mechanism keeps references of currenctly processed task-sets.
+
+        """
         with self.lock:
             try:
                 self.in_progress.remove(taskset)
@@ -227,7 +329,28 @@ class _TaskSetQueue():
             
 
 class _WrapperSession(threading.Thread):
-    
+    """This class handles every connection to a target plattform asynchronously.
+
+    For each destination, which passes the availablity, a session is created and
+    maintained with help of this class. Due to the fact that multiple session
+    might exist and the main program should not be blocked, every new session is
+    initalized in its own thread.
+
+    To keep all session states independent from each other, a state machine is
+    implemented in the `run` method.
+
+    Keep in mind, the usage of this class is not intended outside of this
+    module.
+
+    Due to the internal character of this class, methods and parameters are not
+    described in more detail. 
+
+    Tasks of thes calls: 
+    * Keep each session asyncron 
+    * Handle raising errors. The whole processing of variants should not stop
+      due to a single error of a session.
+
+    """
     def __init__ (self, host, port, close, session_class, pool, sessions):
         
         super().__init__()
@@ -248,6 +371,9 @@ class _WrapperSession(threading.Thread):
         self._restart = False
 
     def thread_start(self):
+        """due to an otherwise usage of the `start` method, the method of the
+        underlying `Thread` class needs to be renamed.
+        """
         threading.Thread.start(self)
 
     def wait_stopped(self):
@@ -266,6 +392,15 @@ class _WrapperSession(threading.Thread):
 
             
     def _internal_start(self, session):
+        """Called, whenever a new task-set should be processed.
+        
+        Workflow:
+        1. try to get a new task-set.
+        2. Task-set is handled over to Session
+        3. Inform monitor about the next task-set
+        4. Set state to `running`.
+
+        """
         try:
             with self._restart_lock:
                 tasksets = self._tasksets
@@ -288,6 +423,14 @@ class _WrapperSession(threading.Thread):
 
 
     def _internal_stop(self, session):
+        """Called, whenever the distributor is stopping.
+
+        Workflow:
+        1. Session is stopped.
+        2. Inform monitor about the stop.
+        3. Set state to stopped`.
+
+        """
         session.stop()
         if self._taskset is not None :
             self.monitor.__taskset_stop__(self._taskset)
@@ -297,6 +440,17 @@ class _WrapperSession(threading.Thread):
 
         
     def _internal_event_handling(self, session):
+        """Looks for new event and handle it.
+
+        Workflow:
+        1. Qeury Session for new event
+        2. Inform monitor about the event.
+        3. Query monitor, if task-set processing is finished
+        4. If True, then:
+           1. Inform monitor about the finished task-set.
+           2. Inform internal TaskSetQueue about the finished task-set.
+        
+        """
         # get an event.
         event = session.event()
 

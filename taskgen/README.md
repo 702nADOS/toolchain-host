@@ -26,15 +26,19 @@ component.
 - [ ] Add simpler task-set, which works with current implementation of
   `genode-Taskloader`.
 - [ ] pydocs
-  - [ ] Distributor
-  - [ ] AbstractSession
-  - [ ] AbstractMonitor
+  - [x] Distributor
+  - [x] AbstractSession
+  - [x] AbstractMonitor
+  - [x] TaskSet
+  - [x] Task
 - [x] Update Documentation
 - [x] Move xml parsing to Sessions
+- [ ] Outsource variant calculation in Distributor.
 
 ## Version 1.1
 
 - [ ] Replace `Thread` implementation with python's multi processing.
+
 
 ## Version 1.2
 
