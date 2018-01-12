@@ -78,7 +78,7 @@ class GenodeSession(AbstractSession):
     def _optimize(self, admctrl):
         if admctrl is None:
             return
-        print(admctrl)
+
         if not isinstance(admctrl, dict):
             raise TypeError("admctrl must be of type dict") 
 
@@ -144,8 +144,6 @@ class GenodeSession(AbstractSession):
         try:
             ascii = data.decode("ascii").replace('\x00', '')
             xml = xmltodict.parse(ascii)
-            print(json.dumps(xml))
-            print(ascii)
             return xml
         except:
             self.logger.error('Event data not parseable.')

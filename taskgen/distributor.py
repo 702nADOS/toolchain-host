@@ -131,7 +131,6 @@ class Distributor:
                     session.monitor = self.monitor
                     # start session
                     if self._run:
-                        print(self._session_params)
                         session.start(self._tasksets, *self._session_params)
                     session.thread_start()
                     self._sessions.append(session)

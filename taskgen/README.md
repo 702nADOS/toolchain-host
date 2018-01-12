@@ -21,11 +21,11 @@ component.
 - [x] Rename `Optimization` to `AdmCtrl` *reason: advisors' decision*
 - [x] Add optional passthrough of attributes to Sessions and Distributor
   *pending next meeting*
-- [ ] Solve
+- [x] Solve
   [issue](https://github.com/argos-research/genode-Taskloader/issues/5).
-- [ ] Add simpler task-set, which works with current implementation of
+- [ ] Add simpler task-sets, which work with current implementation of
   `genode-Taskloader`.
-- [ ] pydocs
+- [x] pydocs
   - [x] Distributor
   - [x] AbstractSession
   - [x] AbstractMonitor
@@ -33,12 +33,10 @@ component.
   - [x] Task
 - [x] Update Documentation
 - [x] Move xml parsing to Sessions
-- [ ] Outsource variant calculation in Distributor.
 
 ## Version 1.1
 
 - [ ] Replace `Thread` implementation with python's multi processing.
-
 
 ## Version 1.2
 
