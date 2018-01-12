@@ -47,13 +47,45 @@ for variant in task.variants(): # generates 128 variants of the task
 
 Following attributes are part of every task.
 
+### General
+
 | Key | Type | Description |
 | --- | --- | --- |
 | `id` | Integer | Every task is identifed by an unique ID. |
+
+### Binary
+
+| Key | Type | Description |
+| --- | --- | --- |
 | `quota` | Integer | todo |
 | `pkg` | String | todo |
 | `config` | `dict` | todo |
-| `priority` | Integer | todo |
+
+### Frequency
+
+| Key | Type | Description |
+| --- | --- | --- |
 | `period` | Integer | todo |
 | `numberofjobs` | Integer | todo |
+
+### Schedulability
+
+| Key | Type | Description |
+| --- | --- | --- |
+| `priority` | Integer | todo |
+
+or
+
+| Key | Type | Description |
+| --- | --- | --- |
+| `deadline` | Integer | todo |
+
+### Unknown
+
+| Key | Type | Description |
+| --- | --- | --- |
+| `criticaltime` | Integer | todo |
+| `executiontime` | Integer | todo |
+
+
 
