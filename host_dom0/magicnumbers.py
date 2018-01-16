@@ -21,3 +21,6 @@ GET_PROFILE = 0x159D1
 
 # Request live info as xml
 GET_LIVE = 0x159D2
+
+# Reboot
+REBOOT = 0x159D3

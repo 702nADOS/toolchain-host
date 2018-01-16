@@ -10,11 +10,11 @@ script_dir = os.path.dirname(os.path.realpath(__file__)) + '/'
 
 class Dom0_session:
 	"""Manager for a connection to the dom0 server."""
-	def __init__(self, host='192.168.217.20', port=3001):
+	def __init__(self, host='10.200.40.10', port=3001):
 		"""Initialize connection."""
 		self.connect(host, port)
 
-	def connect(self, host='192.168.217.20', port=3001):
+	def connect(self, host='10.200.40.10', port=3001):
 		"""Connect to the Genode dom0 server."""
 		self.conn = socket.create_connection((host, port))
 		print('Connected.')
@@ -112,10 +112,15 @@ class Dom0_session:
 		#subprocess.call('clear', shell=True)
 		#print(xml.decode('utf-8')[:-1])
 		print('Live data of size {} saved to {}'.format(size, log_file))
-
+	def reboot(self):
+		"""Send message to reboot the server."""
+		print('Reboot.')
+		meta = struct.pack('I', magicnumbers.REBOOT)
+		self.conn.send(meta)
 
 	def close(self):
 		"""Close connection."""
+		print('Close connection.')
 		self.conn.close();
 
 

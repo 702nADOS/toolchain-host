@@ -14,4 +14,5 @@ session.start()
 time.sleep(10)
 session.live(script_dir + 'xml/' + name + '_log.xml')
 session.stop()
-
+time.sleep(1)
+session.reboot()

@@ -10,6 +10,8 @@ using namespace std;
 
 
 int main(){
+	PINF("cond_42 hello!\n");	
+	
 	unsigned int n=1000;
 
 	const Genode::Xml_node& config_node = Genode::config()->xml_node();
@@ -22,6 +24,8 @@ int main(){
 	}
 
 	unsigned int counter=0;
+
+	PINF("counting!\n");
 
 	for(unsigned int i=0;i<n;i++){
 		counter+=1;

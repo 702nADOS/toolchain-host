@@ -3,18 +3,18 @@
 <taskset xmlns="http://www.tmsxmlns.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.tmsxmlns.com taskset.xsd">
 
   <periodictask>
-    <id>2</id>
+    <id>0</id>
     <executiontime>999999999999</executiontime>
     <criticaltime>0</criticaltime>
     <ucfirmrt/>
     <uawmean>
       <size>10</size>
     </uawmean>
-    <priority>32768</priority>
+    <priority>128</priority>
     <period>0</period>
     <offset>0</offset>
     <quota>1M</quota>
-    <pkg>fp-edf-test</pkg>
+    <pkg>idle</pkg>
     <config>
       <arg1>126546</arg1>
     </config>
