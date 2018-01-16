@@ -9,19 +9,8 @@ TOOLCHAIN_BUILD_DIR ?= $(BUILD_DIR)/toolchain-$(TOOLCHAIN_TARGET)
 GENODE_BUILD_DIR    ?= $(BUILD_DIR)/genode-$(GENODE_TARGET)
 BUILD_CONF           = $(GENODE_BUILD_DIR)/etc/build.conf
 
-all: tms descs toolchain ports platform vde
+all: toolchain ports platform vde
 
-
-# ================================================================
-# TMS tool required for task descriptions.
-tms:
-	@mkdir -p tms-sim-2014-12/build
-	@cd tms-sim-2014-12/build && ../build-local.sh .. && $(MAKE) && $(MAKE) install
-
-descs:
-	@tms-sim-2014-12/build/bin/generator -o dom0_client/tasks.xml -n 3
-#
-# ================================================================
 
 
 # ================================================================
@@ -49,7 +38,7 @@ libports:
 
 # ================================================================
 # Genode build process. Rebuild subtargets as needed.
-platform: genode_build_dir tasks dom0
+platform: genode_build_dir tasks
 
 genode_build_dir:
 	tool/create_builddir $(GENODE_TARGET) BUILD_DIR=$(GENODE_BUILD_DIR)

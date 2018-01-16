@@ -1,0 +1,4 @@
+# flatdict==1.2.0 THIS version is not similar to the version 1.2.0 on github.
+git+https://github.com/gmr/flatdict.git
+xmltodict==0.11.0
+coloredlogs==7.3.1
