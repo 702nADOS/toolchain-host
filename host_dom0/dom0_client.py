@@ -5,6 +5,7 @@ import magicnumbers
 import os
 import re
 import subprocess
+import time
 
 script_dir = os.path.dirname(os.path.realpath(__file__)) + '/'
 
@@ -113,6 +114,72 @@ class Dom0_session:
 		#print(xml.decode('utf-8')[:-1])
 		print('Live data of size {} saved to {}'.format(size, log_file))
 
+	def checkpoint(self, log_file=script_dir+'checkpoint.bin'):
+		"""Get checkpoint."""
+		meta = struct.pack('I', magicnumbers.CHECKPOINT)
+		self.conn.send(meta)
+
+		#meta = struct.pack('I', magicnumbers.CHECKPOINT)
+		#self.conn.send(meta)
+
+		#msg = int.from_bytes(self.conn.recv(4), 'little')
+		#while msg != magicnumbers.CHECKPOINT:
+		#	print('Message: {}'.format(msg))
+		#	if msg == magicnumbers.DATASPACE:
+		#		print('DATASPACE')
+		#		size = int.from_bytes(self.conn.recv(4), 'little')
+		#		raw = b''
+		#		while len(raw) < size:
+		#			raw += self.conn.recv(size)
+		#		file = open(script_dir+'dataspace.bin', 'wb')
+		#		file.write(bytearray(raw))
+		#	if msg == magicnumbers.REGION_MAP:
+		#		print('REGION MAP!')
+		#		size = int.from_bytes(self.conn.recv(4), 'little')
+		#		print('Size: {}'.format(size))
+		#		raw = b''
+		#		while len(raw) < size:
+		#			raw += self.conn.recv(size)
+		#		file = open(script_dir+'region_map.bin', 'wb')
+		#		file.write(bytearray(raw))
+		#	time.sleep(0.5)
+		#	msg = int.from_bytes(self.conn.recv(4), 'little')
+
+		i=0
+		while 1:
+			size = int.from_bytes(self.conn.recv(4), 'little')
+			raw = b''
+			while len(raw) < size:
+				raw += self.conn.recv(size-len(raw))
+			file = open(script_dir+'dataspace'+str(i)+'.bin', 'wb')
+			file.write(bytearray(raw))
+			print('Saved datatspace {} of size {} saved to {}'.format(i, size, script_dir+'address_space'+str(size)+'.bin'))
+			i=i+1
+	def restore(self):
+		"""Send message to start the tasks on the server."""
+		meta = struct.pack('I', magicnumbers.RESTORE)
+		self.conn.send(meta)
+
+		size = os.stat(script_dir+'dataspace'+str(15)+'.bin').st_size
+		meta = struct.pack('!I', size)
+
+		print('Sending {}.'.format(str(15)))
+		file = open(script_dir+'dataspace'+str(15)+'.bin', 'rb').read()
+
+		self.conn.send(meta)
+		self.conn.send(file)
+
+		i=0
+		while 1:
+			size = os.stat(script_dir+'dataspace'+str(i)+'.bin').st_size
+			meta = struct.pack('!I', size)
+
+			print('Sending {}.'.format(str(i)))
+			file = open(script_dir+'dataspace'+str(i)+'.bin', 'rb').read()
+			
+			self.conn.send(meta)
+			self.conn.send(file)
+			i=i+1
 
 	def close(self):
 		"""Close connection."""
