@@ -7,7 +7,7 @@ __pycache__
 *.orig
 *.swp
 *.rej
-
+*.xml
 /build
 /contrib
 /repos/base-codezero/contrib
