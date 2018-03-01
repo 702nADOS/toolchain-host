@@ -98,6 +98,15 @@ class Dom0_session:
 		file.write(xml.decode('utf-8')[:-1])
 		print('Profiling data of size {} saved to {}'.format(size, log_file))
 
+	def receive(self, log_file=script_dir+'log.xml'):
+		size = int.from_bytes(self.conn.recv(4), 'little')
+		xml = b''
+		while len(xml) < size:
+			xml += self.conn.recv(size)
+		file = open(log_file, 'w')
+		file.write(xml.decode('utf-8')[:-1])
+		print('Profiling data of size {} saved to {}'.format(size, log_file))
+
 	def live(self, log_file=script_dir+'log.xml'):
 		"""Get profiling information about all running tasks."""
 		meta = struct.pack('I', magicnumbers.GET_LIVE)
