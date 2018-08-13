@@ -3,19 +3,19 @@
 #include <algorithm>
 #include <string>
 #include <base/printf.h>
-#include <os/config.h>
+#include <libc/component.h>
 
 int main(void)
 {
-	PINF("tumatmul: Hello!\n");
+	Genode::log("tumatmul: Hello!");
 
 	// Sieve of Erathosthenes
 	unsigned int max = 0;
-	const Genode::Xml_node& config_node = Genode::config()->xml_node();
-	config_node.sub_node("arg1").value<unsigned int>(&max);
+	/*const Genode::Xml_node& config_node = Genode::config()->xml_node();
+	config_node.sub_node("arg1").value<unsigned int>(&max);*/
 	unsigned int sqrt = static_cast<unsigned int>(std::sqrt(max));
 
-	PINF("Calculating primes up to %d.", max);
+	Genode::log("Calculating primes up to ", max);
 	std::list<unsigned int> primes;
 	for (unsigned int i = 2; i <= max; ++i)
 	{
@@ -42,8 +42,13 @@ int main(void)
 	{
 		primes_str += std::to_string(*it) + ' ';
 	}
-	PINF("Last 5 primes up to %d: %s", max, primes_str.c_str());
-	PINF("Calculated %d primes in total.", primes.size());
+	Genode::log("Last 5 primes up to ", max, primes_str.c_str());
+	Genode::log("Calculated primes in total ", primes.size());
 
 	return 0;
+}
+
+void Libc::Component::construct(Libc::Env&)
+{
+
 }

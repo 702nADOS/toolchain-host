@@ -11,9 +11,10 @@
       <size>10</size>
     </uawmean>
     <priority>128</priority>
+    <numberofjobs>1</numberofjobs>
     <period>0</period>
     <offset>0</offset>
-    <quota>1M</quota>
+    <quota>10M</quota>
     <pkg>hey</pkg>
     <config>
       <arg1>126546</arg1>

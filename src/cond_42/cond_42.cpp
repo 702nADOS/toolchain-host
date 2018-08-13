@@ -1,39 +1,34 @@
-#include <iostream>
-#include <iomanip>
-#include <cmath>
 #include <base/printf.h>
-#include <os/config.h>
-#include <sstream>
+#include <util/xml_node.h>
+#include <base/attached_rom_dataspace.h>
 
-
-using namespace std;
-
-
-int main(){
-	PINF("cond_42 hello!\n");	
+int main()
+{
+		Genode::log("cond_42 hello!");	
 	
-	unsigned int n=1000;
+		unsigned int n=1000;
 
-	const Genode::Xml_node& config_node = Genode::config()->xml_node();
-	config_node.sub_node("arg1").value<unsigned int>(&n);
+		/*Genode::Attached_rom_dataspace config(_env, "config");
+		const Genode::Xml_node& config_node = config.xml().sub_node("arg1");
+		config_node.value<unsigned int>(&n);*/
 
-	if(n==42){
-		PINF("Can not count because 42!");
+		if(n==42){
+			Genode::log("Can not count because 42!");
+
+			return 0;
+		}
+
+		unsigned int counter=0;
+
+		Genode::log("counting!");
+
+		for(unsigned int i=0;i<n;i++){
+			counter+=1;
+		}
+
+
+		Genode::log("Counted ", counter);
 
 		return 0;
-	}
-
-	unsigned int counter=0;
-
-	PINF("counting!\n");
-
-	for(unsigned int i=0;i<n;i++){
-		counter+=1;
-	}
-
-
-	PINF("Counted %d", counter);
-
-
-	return 0;
 }
+

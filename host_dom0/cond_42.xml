@@ -10,6 +10,7 @@
     <uawmean>
       <size>10</size>
     </uawmean>
+    <numberofjobs>1</numberofjobs>
     <priority>128</priority>
     <period>0</period>
     <offset>0</offset>

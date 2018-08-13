@@ -4,8 +4,7 @@
 #include <base/printf.h>
 #include <base/thread.h>
 #include <base/sleep.h>
-#include <os/config.h>
-
+#include <libc/component.h>
 
 using namespace std;
 
@@ -74,8 +73,8 @@ int main ( )
   
   unsigned int N = 1000;
   //read argument 
-  const Genode::Xml_node& config_node = Genode::config()->xml_node();
-  config_node.sub_node("arg1").value<unsigned int>(&N);
+  /*const Genode::Xml_node& config_node = Genode::config()->xml_node();
+  config_node.sub_node("arg1").value<unsigned int>(&N);*/
   
   unsigned int LDA = N+1;
 
@@ -1212,4 +1211,9 @@ void timestamp ( void )
 
   return;
 # undef TIME_SIZE
+}
+
+void Libc::Component::construct(Libc::Env&)
+{
+
 }

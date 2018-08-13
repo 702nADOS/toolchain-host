@@ -2,9 +2,8 @@
 #include <iomanip>
 #include <cmath>
 #include <base/printf.h>
-#include <os/config.h>
 #include <sstream>
-
+#include <libc/component.h>
 
 using namespace std;
 
@@ -16,8 +15,8 @@ using namespace std;
 int main(){
 	unsigned int n=50000000;
 
-	const Genode::Xml_node& config_node = Genode::config()->xml_node();
-	config_node.sub_node("arg1").value<unsigned int>(&n);
+	/*const Genode::Xml_node& config_node = Genode::config()->xml_node();
+	config_node.sub_node("arg1").value<unsigned int>(&n);*/
 	PINF("Calculating pi(e) using e=%d iterations in an inefficient way.",n);
 
 
@@ -39,4 +38,9 @@ int main(){
 
 
 	return 0;
+}
+
+void Libc::Component::construct(Libc::Env&)
+{
+
 }
