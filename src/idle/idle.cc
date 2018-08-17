@@ -1,4 +1,6 @@
+#include <iostream>
 #include <base/printf.h>
+#include <libc/component.h>
 
 int main(void)
 {
@@ -7,4 +9,9 @@ int main(void)
 	while (true);
 
 	return 0;
+}
+
+void Libc::Component::construct(Libc::Env&)
+{
+	Libc::with_libc([&] () {exit(main());});
 }

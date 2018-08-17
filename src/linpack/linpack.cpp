@@ -1215,5 +1215,5 @@ void timestamp ( void )
 
 void Libc::Component::construct(Libc::Env&)
 {
-
+	Libc::with_libc([&] () {exit(main());});
 }

@@ -13,7 +13,7 @@ using namespace std;
  */
 
 int main(){
-	unsigned int n=50000000;
+	unsigned int n=50;
 
 	/*const Genode::Xml_node& config_node = Genode::config()->xml_node();
 	config_node.sub_node("arg1").value<unsigned int>(&n);*/
@@ -42,5 +42,5 @@ int main(){
 
 void Libc::Component::construct(Libc::Env&)
 {
-
+	Libc::with_libc([&] () {exit(main());});
 }

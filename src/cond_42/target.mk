@@ -5,7 +5,7 @@ TARGET = cond_42
 
 #LIBS += is the list of libraries that are used by the target.
 #LIBS = base libc stdcxx
-LIBS = base
+LIBS = base stdcxx
 
 #SRC_CC += contains the list of .cc source files. The default search location for source codes is the directory, where the target.mk file resides.
 SRC_CC = cond_42.cpp

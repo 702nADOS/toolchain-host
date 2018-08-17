@@ -1,6 +1,8 @@
+#include <iostream>
 #include <base/printf.h>
 #include <util/xml_node.h>
 #include <base/attached_rom_dataspace.h>
+#include <libc/component.h>
 
 int main()
 {
@@ -32,3 +34,7 @@ int main()
 		return 0;
 }
 
+void Libc::Component::construct(Libc::Env&)
+{
+	Libc::with_libc([&] () {exit(main());});
+}

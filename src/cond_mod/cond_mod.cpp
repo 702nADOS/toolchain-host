@@ -1,4 +1,6 @@
+#include <iostream>
 #include <base/printf.h>
+#include <libc/component.h>
 
 int main(){
 	unsigned int n=1000;
@@ -19,4 +21,9 @@ int main(){
 
 
 	return 0;
+}
+
+void Libc::Component::construct(Libc::Env&)
+{
+	Libc::with_libc([&] () {exit(main());});
 }
