@@ -4,6 +4,7 @@
 #include <base/printf.h>
 #include <sstream>
 #include <libc/component.h>
+#include <base/child.h>
 
 using namespace std;
 

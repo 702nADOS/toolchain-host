@@ -5,7 +5,7 @@ TARGET = cond_mod
 
 #LIBS += is the list of libraries that are used by the target.
 #LIBS = base libc stdcxx
-LIBS = base stdcxx
+LIBS = base
 
 #SRC_CC += contains the list of .cc source files. The default search location for source codes is the directory, where the target.mk file resides.
 SRC_CC = cond_mod.cpp

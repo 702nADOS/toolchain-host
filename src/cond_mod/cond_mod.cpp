@@ -1,8 +1,8 @@
-#include <iostream>
 #include <base/printf.h>
-#include <libc/component.h>
+#include <base/component.h>
 
-int main(){
+void Component::construct(Genode::Env &env)
+{
 	unsigned int n=1000;
 
 	/*const Genode::Xml_node& config_node = Genode::config()->xml_node();
@@ -11,19 +11,12 @@ int main(){
 	if(n%2==0){
 		PINF("Finished!");
 
-		return 0;
+		env.parent().exit(0);
 	}
 
 	for(unsigned int i=0;i<n;i++){
 		asm("nop");
 	}
 
-
-
-	return 0;
-}
-
-void Libc::Component::construct(Libc::Env&)
-{
-	Libc::with_libc([&] () {exit(main());});
+	env.parent().exit(0);
 }

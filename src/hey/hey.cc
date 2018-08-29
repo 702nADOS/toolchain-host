@@ -1,14 +1,8 @@
-#include <iostream>
 #include <base/printf.h>
-#include <libc/component.h>
+#include <base/component.h>
 
-int main(void)
+void Component::construct(Genode::Env &env)
 {
-	PINF("hey: Hello!\n");
-	return 0;
-}
-
-void Libc::Component::construct(Libc::Env&)
-{
-	Libc::with_libc([&] () {exit(main());});
+	Genode::log("hey: Hello!");
+	env.parent().exit(0);
 }
