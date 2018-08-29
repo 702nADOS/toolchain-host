@@ -5,6 +5,7 @@
 #include <base/thread.h>
 #include <base/sleep.h>
 #include <libc/component.h>
+#include <base/attached_rom_dataspace.h>
 
 using namespace std;
 
@@ -73,8 +74,9 @@ int main ( )
   
   unsigned int N = 1000;
   //read argument 
-  /*const Genode::Xml_node& config_node = Genode::config()->xml_node();
-  config_node.sub_node("arg1").value<unsigned int>(&N);*/
+  //Genode::Attached_rom_dataspace config(env, "config");
+  //const Genode::Xml_node& config_node = config.xml().sub_node("arg1");
+  //config_node.value<unsigned int>(&N);
   
   unsigned int LDA = N+1;
 

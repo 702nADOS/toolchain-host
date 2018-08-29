@@ -1,12 +1,14 @@
 #include <base/printf.h>
 #include <base/component.h>
+#include <base/attached_rom_dataspace.h>
 
 void Component::construct(Genode::Env &env)
 {
 	unsigned int n=1000;
 
-	/*const Genode::Xml_node& config_node = Genode::config()->xml_node();
-	config_node.sub_node("arg1").value<unsigned int>(&n);*/
+	Genode::Attached_rom_dataspace config(env, "config");
+	const Genode::Xml_node& config_node = config.xml().sub_node("arg1");
+	config_node.value<unsigned int>(&n);
 
 	if(n%2==0){
 		PINF("Finished!");

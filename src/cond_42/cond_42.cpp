@@ -1,5 +1,6 @@
 #include <base/printf.h>
 #include <base/component.h>
+#include <base/attached_rom_dataspace.h>
 
 void Component::construct(Genode::Env &env)
 {
@@ -7,9 +8,9 @@ void Component::construct(Genode::Env &env)
 	
 		unsigned int n=1000;
 
-		/*Genode::Attached_rom_dataspace config(_env, "config");
+		Genode::Attached_rom_dataspace config(env, "config");
 		const Genode::Xml_node& config_node = config.xml().sub_node("arg1");
-		config_node.value<unsigned int>(&n);*/
+		config_node.value<unsigned int>(&n);
 
 		if(n==42){
 			Genode::log("Can not count because 42!");
