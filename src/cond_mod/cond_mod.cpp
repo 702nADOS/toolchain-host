@@ -14,6 +14,7 @@ void Component::construct(Genode::Env &env)
 		PINF("Finished!");
 
 		env.parent().exit(0);
+		return;
 	}
 
 	for(unsigned int i=0;i<n;i++){

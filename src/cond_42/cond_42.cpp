@@ -16,6 +16,7 @@ void Component::construct(Genode::Env &env)
 			Genode::log("Can not count because 42!");
 
 			env.parent().exit(0);
+			return;
 		}
 
 		unsigned int counter=0;
